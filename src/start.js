@@ -32,8 +32,6 @@ ioServer.on("connection",(socket)=> {
   server.connection(socket);
 });
 
-console.log("Running with ENV:",process.env);
-
 function normalizePort(val) {
     let port = parseInt(val, 10);
   

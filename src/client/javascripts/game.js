@@ -11,7 +11,9 @@ import io from 'socket.io-client';
 
 const port = process.env.npm_package_config_port
 const host = process.env.npm_package_config_host
-const BASE_URL = 'http://'+host+':'+port;
+const stats = document.getElementById('stats_pane');
+const hostname = location.host;
+const BASE_URL = 'http://'+hostname;
 
 class Game {
     constructor() {
@@ -279,7 +281,6 @@ const name = document.getElementById('name');
 const messages = document.getElementById('messages');
 const messagePrototype = document.getElementsByClassName('message')[0];
 const status = document.getElementById('status');
-const stats = document.getElementById('stats_pane');
 
 window.onload =  async () => {
     app.appendChild(game.getDisplay().getContainer());
