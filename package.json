@@ -1,0 +1,33 @@
+{
+  "name": "rogue",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A NodeJS Rogue client/server",
+  "config": {
+    "port": "3000",
+    "maps": "./test"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/start.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "author": "chrisesharp",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "parcel-bundler": "^1.12.4",
+    "rot-js": "^2.1.3",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "underscore": "^1.10.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.9.6",
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1"
+  }
+}

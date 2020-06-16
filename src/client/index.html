@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Javascript Roguelike</title>
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    </head>
+    <body bgcolor="black">
+        <div class="div-table" id="footer">
+            <div class="div-table-row">
+                <div id="playfield" align="center"></div>
+                <div class="div-table-col-left">
+                    <scroll-container  id="messages">
+                        <scroll-page class="message"></scroll-page>
+                    </scroll-container>
+                    <div class="cell-spacer"></div>
+                    <div class="stats" id="stats_pane"></div>
+                </div>
+            </div>
+            <div class="div-table-row">
+                <div class="div-table-col-left" id="name">
+                    <input class="centred" id="name_input" type="text" placeholder="Your name" >
+                    <select class="centred" id="role_input">
+                        <option selected="selected" value="warrior">Warrior</option>
+                        <option value="wizard">Wizard</option>
+                    </select>
+                </div>
+                <div class="div-table-col-right" id="status"></div>
+            </div>
+        </div>
+        <script src="javascripts/game.js"></script>
+    </body>
+</html>
