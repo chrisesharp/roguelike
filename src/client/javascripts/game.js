@@ -10,7 +10,8 @@ import { playScreen } from './screens/play.js'
 import io from 'socket.io-client';
 
 const port = process.env.npm_package_config_port
-const BASE_URL = 'http://localhost:'+port;
+const host = process.env.npm_package_config_host
+const BASE_URL = 'http://'+host+':'+port;
 
 class Game {
     constructor() {

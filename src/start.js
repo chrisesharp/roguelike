@@ -8,6 +8,7 @@ import CellGenerator from "./cell-generator.js";
 // import FileGenerator from "./file-generator.js";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');
+const host = '0.0.0.0';
 const app = express();
 app.set('port', port);
 app.use(express.json());
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 const httpServer = http.createServer(app);
-httpServer.listen(port);
+httpServer.listen(port, host);
 httpServer.on('listening', onListen);
 httpServer.on('error', onError);
 (async () => {
