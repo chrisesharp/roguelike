@@ -1,8 +1,17 @@
 "use strict";
 
 import { Tiles } from "./tile-server.js";
+import FileGenerator from "./file-generator.js";
+import CellGenerator from "./cell-generator.js";
+import MockGenerator from "../test/mock-generator.js";
 
 const MIN_REGION_SIZE = 10;
+
+const classes = { FileGenerator, CellGenerator, MockGenerator}
+
+function dynamicGenerator(generator) {
+    return classes[generator]
+}
 
 export default class Builder {
     constructor(generator, width, height, depth,  randomized) {
@@ -12,8 +21,13 @@ export default class Builder {
         this.depth = depth;
         this.tiles = new Array(this.depth);
         this.regions = new Array(depth);
-        this.generator = new generator(this.width, this.height);
+        this.generator = Builder.createGenerator(generator, width, height);
         this.fov = [];
+    }
+
+    static createGenerator(generator, width, height) {
+        let genClass = dynamicGenerator(generator);
+        return new genClass(width, height);
     }
 
     getEntrance() {

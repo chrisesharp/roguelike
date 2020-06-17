@@ -1,43 +1,14 @@
 "use strict";
 
 import Cave, { DEFAULT_SIZE } from '../src/cave';
-import Tile from '../src/client/javascripts/tile'
 import { Tiles } from '../src/tile-server';
 
-class MockGenerator {
-  constructor(width, height) {
-    this.width = width;
-    this.height = height;
-  }
 
-  generateLevel() {
-      return this.emptyMap();
-  }
-
-  emptyMap() {
-      const contents  = [
-        '####',
-        '#..#',
-        '#..#',
-        '#...',
-        '####'
-      ];
-      let map = new Array(this.height);
-      for (let y = 0; y < this.height; y++) {
-        map[y] = new Array(this.width);
-        for (let x = 0; x < this.width; x++) {
-          let tile = new Tile({char:contents[y][x],diggable:true, description:"mock wall"});
-          map[y][x] = tile;
-        }
-      }
-      return map;
-  }
-}
 const defaultTemplate = {
   "width": 4,
   "height": 5,
   "depth": 1,
-  "generator": MockGenerator,
+  "generator": "MockGenerator",
   "entrance": {'x':0,'y':0,'z':0}
 };
 let cave;

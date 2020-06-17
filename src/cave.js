@@ -8,7 +8,7 @@ export const DEFAULT_SIZE = {
     "width":50,
     "height":100,
     "depth":2,
-    "generator":FileGenerator, 
+    "generator":"FileGenerator", 
     "randFunc":(arr)=>{return arr[0];}
 };
 
@@ -25,8 +25,7 @@ export default class Cave {
         let depth = template.depth || DEFAULT_SIZE.depth;
         let generator = template.generator || DEFAULT_SIZE.generator;
         let randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
-        let ctor = template.builder || Builder;
-        return new ctor(generator, width, height, depth, randomiser);
+        return new Builder(generator, width, height, depth, randomiser);
     }
 
     getEntrance() {

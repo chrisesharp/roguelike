@@ -4,7 +4,8 @@ import express from "express";
 import http from "http";
 import io from "socket.io";
 import Server from "./server.js";
-import CellGenerator from "./cell-generator.js";
+import fs from "fs";
+// import CellGenerator from "./cell-generator.js";
 // import FileGenerator from "./file-generator.js";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');
@@ -24,9 +25,12 @@ httpServer.on('error', onError);
     routes.use(app);
 })();
 
+let filepath = process.env.npm_package_config_file || './src/defaults.json';
+let file = fs.readFileSync(filepath, 'utf8');
+let template = JSON.parse(file);
 
 let ioServer = io(httpServer);
-let server = new Server(ioServer, {generator:CellGenerator});
+let server = new Server(ioServer, template);
 
 ioServer.on("connection",(socket)=> {
   server.connection(socket);

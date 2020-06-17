@@ -3,6 +3,7 @@
 import { Color } from '../display.js';
 import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
+import  LoseScreen  from './lose.js';
 
 
 class PlayScreen  {
@@ -119,7 +120,7 @@ class PlayScreen  {
     handleInput(inputType, inputData) {
         if (this.gameEnded) {
             if (isReturnKey(inputData)) {
-                // game.switchScreen(new LoseScreen());
+                game.switchScreen(new LoseScreen());
             }
             return;
         }
