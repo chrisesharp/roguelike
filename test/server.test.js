@@ -45,7 +45,7 @@ afterAll((done) => {
 });
 
 beforeEach((done) => {
-  // Do not hardcode server port and address, square brackets are used for IPv6
+  // square brackets are used for IPv6
   socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,

@@ -5,8 +5,8 @@ import health from './health.js';
 
 const bundlerOpts = {
     hmrPort: 8080,
-    // hmrHostname: 'localhost'
 };
+
 const bundler = new Bundler('./src/client/index.html', bundlerOpts);
 
 

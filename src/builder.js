@@ -190,8 +190,7 @@ export default class Builder {
     }
 
     isEmptyFloor(x, y, z) {
-        return this.getTile(x, y, z) === Tiles.floorTile;// &&
-            // !this.getEntityAt(x, y, z);
+        return this.getTile(x, y, z) === Tiles.floorTile;
     }
 }
 
