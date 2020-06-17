@@ -5,8 +5,6 @@ import http from "http";
 import io from "socket.io";
 import Server from "./server.js";
 import fs from "fs";
-// import CellGenerator from "./cell-generator.js";
-// import FileGenerator from "./file-generator.js";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');
 const host = '0.0.0.0';

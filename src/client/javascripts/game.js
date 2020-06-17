@@ -9,8 +9,6 @@ import { startScreen } from './screens/start';
 import { playScreen } from './screens/play.js'
 import io from 'socket.io-client';
 
-const port = process.env.npm_package_config_port
-const host = process.env.npm_package_config_host
 const stats = document.getElementById('stats_pane');
 const hostname = location.host;
 const BASE_URL = 'http://'+hostname;
@@ -159,6 +157,12 @@ class Game {
 
         socket.on('update', (entity) => {
             this.player.assume(entity);
+            this.refresh();
+        });
+
+        socket.on('dead', (entity) => {
+            this.player.assume(entity);
+            this.currentScreen.setGameEnded();
             this.refresh();
         });
 

@@ -18,6 +18,7 @@ export default class Server {
 
     tryMove(entity, delta) {
         if (!entity.isAlive()) {
+            console.log("Entity dead:",entity);
             return false;
         }
         let x = entity.pos.x + delta.x;
@@ -100,7 +101,6 @@ export default class Server {
                     } else {
                         this.backend.to(socket_id).emit("dead", entity);
                     }
-                    
                 }
             }
         }
