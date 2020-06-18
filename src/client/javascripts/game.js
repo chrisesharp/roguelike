@@ -110,6 +110,10 @@ class Game {
         this.addEntity(entity);
     }
 
+    hasChangedLevel(message) {
+        return (message[0].search('level')>0);
+    }
+
     connectToServer() {
         let properties = this.updateName();
         properties.type = "player";
@@ -122,6 +126,9 @@ class Game {
         });
 
         socket.on('message', (message) => {
+            if (this.hasChangedLevel(message)) {
+                socket.emit('get_items');
+            }
             this.messages.push(message);
             this.refresh();
         });
