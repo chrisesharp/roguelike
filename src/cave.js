@@ -40,8 +40,13 @@ export default class Cave {
         return this.map;
     }
 
-    getItems() {
-        return this.items;
+    getItems(level) {
+        return Object.keys(this.items)
+            .filter(key => key.split(',')[2] === `${level})`)
+            .reduce((item, key) => {
+                item[key] = this.items[key];
+                return item;
+            }, {});
     }
 
     addItem(pos, item) {

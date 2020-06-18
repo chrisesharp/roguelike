@@ -119,4 +119,12 @@ describe('cave creation', () => {
     expect(wasSpace).toBe(Tiles.wallTile);
     done();
   });
+
+  // test('should have specified number of items', (done) => {
+  //   defaultTemplate.itemsPerFloor = 2;
+  //   let cave = new Cave(defaultTemplate);
+  //   let items = cave.getItems(0);
+  //   expect(items.length).toBe(2);
+  //   done();
+  // });
 });
