@@ -76,7 +76,10 @@ class Game {
         return this.items[key];
     }
 
-    addItemAt(x, y, z, item) {
+    addItem(item) {
+        let x = item.pos.x;
+        let y = item.pos.y;
+        let z = item.pos.z
         let key = this.key(x, y, z);
         if (this.items[key]) {
             this.items[key].push(item);
@@ -132,6 +135,16 @@ class Game {
         socket.on('map', (data) => {
           this.map = new Map(data);
           this.onMapAvailable();
+        });
+        socket.emit('get_items');
+        socket.on('items',(items) => {
+            for (let pos in items) {
+                let here = items[pos];
+                here.forEach(item => {
+                    let thing = new Entity(item);
+                    this.addItem(thing); 
+                });
+            }
         });
 
         socket.on('entities', (entities) => {

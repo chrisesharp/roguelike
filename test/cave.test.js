@@ -2,6 +2,8 @@
 
 import Cave, { DEFAULT_SIZE } from '../src/cave';
 import { Tiles } from '../src/tile-server';
+import Rock from '../src/items/rock';
+import Dagger from '../src/items/dagger';
 
 
 const defaultTemplate = {
@@ -23,10 +25,12 @@ afterAll((done) => {
 });
 
 beforeEach((done) => {
+  delete defaultTemplate['itemTypes'];
   done();
 });
 
 afterEach((done) => {
+  delete defaultTemplate['itemTypes'];
   done();
 });
 
@@ -90,13 +94,13 @@ describe('cave creation', () => {
     expect(map.getTiles()[0][0].length).toBe(map.getWidth());
     let tile = map.getTiles()[0][0][0];
     expect(tile.getChar()).toBe('#');
-    expect(tile.getForeground()).toBe('white');
+    expect(tile.getForeground()).toBe('goldenrod');
     expect(tile.getBackground()).toBe('black');
-    expect(tile.getRepresentation()).toBe('%c{white}%b{black}#%c{white}%b{black}');
+    expect(tile.getRepresentation()).toBe('%c{goldenrod}%b{black}#%c{white}%b{black}');
     expect(tile.isDiggable()).toBe(true);
     expect(tile.isWalkable()).toBe(false);
     expect(tile.isBlockingLight()).toBe(true);
-    expect(tile.getDescription()).toBe('mock wall');
+    expect(tile.getDescription()).toBe('A cave wall');
     expect(cave.getEntrance()).toEqual({'x':0,'y':0,'z':0});
     done();
   });
@@ -120,11 +124,85 @@ describe('cave creation', () => {
     done();
   });
 
-  // test('should have specified number of items', (done) => {
-  //   defaultTemplate.itemsPerFloor = 2;
-  //   let cave = new Cave(defaultTemplate);
-  //   let items = cave.getItems(0);
-  //   expect(items.length).toBe(2);
-  //   done();
-  // });
+  test('should have 0 number of items', (done) => {
+    defaultTemplate.itemsPerFloor = 0;
+    let cave = new Cave(defaultTemplate);
+    let items = cave.getItems(0);
+    expect(Object.keys(items).length).toBe(0);
+    done();
+  });
+
+  test('should have 2 number of items', (done) => {
+    defaultTemplate.itemsPerFloor = 2;
+    defaultTemplate.itemTypes = {"rock":1};
+    let cave = new Cave(defaultTemplate);
+    let items = cave.getItems(0);
+    expect(Object.keys(items).length).toBe(2);
+    delete defaultTemplate['itemTypes'];
+    done();
+  });
+
+  test('should have a dagger and a rock', (done) => {
+    defaultTemplate.itemsPerFloor = 5;
+    defaultTemplate.itemTypes = {'rock':1,'dagger':1};
+    let cave = new Cave(defaultTemplate);
+    let items = cave.getItems(0);
+    let hasDagger = false;
+    let hasRock = false;
+    Object.keys(items).forEach(key => {
+      items[key].forEach( item => {
+        if (item instanceof Rock) {
+          hasRock = true;
+        }
+        if (item instanceof Dagger) {
+          hasDagger = true;
+        }
+      });
+    });
+    expect(hasRock).toBe(true);
+    expect(hasDagger).toBe(true);
+    delete defaultTemplate['itemTypes'];
+    done();
+  });
+
+  test('should have a two daggers where non-existent types requested', (done) => {
+    defaultTemplate.itemsPerFloor = 2;
+    defaultTemplate.itemTypes = {'dagger':1,'non-thing':1};
+    let cave = new Cave(defaultTemplate);
+    let items = cave.getItems(0);
+    let hasDagger = 0;
+    Object.keys(items).forEach(key => {
+      items[key].forEach( item => {
+        if (item instanceof Dagger) {
+          hasDagger++;
+        }
+      });
+    });
+    expect(hasDagger).toBe(2);
+    delete defaultTemplate['itemTypes'];
+    done();
+  });
+
+  test('should have two daggers and no rocks', (done) => {
+    defaultTemplate.itemsPerFloor = 2;
+    defaultTemplate.itemTypes = {'rock':0,'dagger':1};
+    let cave = new Cave(defaultTemplate);
+    let items = cave.getItems(0);
+    let hasDagger = 0;
+    let hasRock = 0;
+    Object.keys(items).forEach(key => {
+      items[key].forEach( item => {
+        if (item instanceof Rock) {
+          hasRock++;
+        }
+        if (item instanceof Dagger) {
+          hasDagger++;
+        }
+      });
+    });
+    expect(hasRock).toBe(0);
+    expect(hasDagger).toBe(2);
+    delete defaultTemplate['itemTypes'];
+    done();
+  });
 });

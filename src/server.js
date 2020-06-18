@@ -135,7 +135,6 @@ export default class Server {
         });
 
         socket.on("get_items", () => {
-            console.log("get items at level ",this.connections[socket.id].pos.z);
             socket.emit("items", this.cave.getItems(this.connections[socket.id].pos.z));
         });
 

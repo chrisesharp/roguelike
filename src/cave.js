@@ -3,12 +3,17 @@
 import Builder from "./builder.js";
 import FileGenerator from "./file-generator.js";
 import _ from "underscore";
+import Rock from "./items/rock.js";
+import Dagger from "./items/dagger.js";
+import ItemRepository from "./item-repository.js";
 
 export const DEFAULT_SIZE = {
     "width":50,
     "height":100,
     "depth":2,
     "generator":"FileGenerator", 
+    "itemsPerFloor":0,
+    "itemTypes": {},
     "randFunc":(arr)=>{return arr[0];}
 };
 
@@ -16,7 +21,10 @@ export default class Cave {
     constructor(template=DEFAULT_SIZE) {
         this.map = Cave.builder(template).generate();
         this.entrance = template.entrance;
+        this.itemsPerFloor = template.itemsPerFloor;
         this.items = {};
+        this.itemRepo = new ItemRepository(template.itemTypes);
+        this.distributeItems(this.map);
     }
 
     static builder(template) {
@@ -26,6 +34,18 @@ export default class Cave {
         let generator = template.generator || DEFAULT_SIZE.generator;
         let randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
         return new Builder(generator, width, height, depth, randomiser);
+    }
+
+    distributeItems(map) {
+        if (this.itemsPerFloor) {
+            for (let z=0; z < map.depth; z++) {
+                for (let i = 0; i < this.itemsPerFloor; i++) {
+                    let pos = map.getRandomFloorPosition(z)
+                    let item = this.itemRepo.createRandom()
+                    this.addItem(pos, item);
+                }
+            }
+        }
     }
 
     getEntrance() {
