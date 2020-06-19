@@ -143,11 +143,12 @@ export default class Server {
             let entity = this.connections[socket.id];
             let items = this.cave.getItemsAt(entity.pos);
             let item = items.find(o => (o.name === itemName));
-            let canTake = entity.tryTake(item)
-            if (canTake) {
+            if (item && entity.tryTake(item)) {
                 let room = this.cave.getRegion(entity);
                 this.cave.removeItem(item);
                 this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+            } else {
+                this.sendMessage(entity, MSGTYPE.INF, "You cannot take that item.");
             }
         });
 

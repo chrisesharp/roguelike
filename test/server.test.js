@@ -369,4 +369,14 @@ describe('basic socket.io API', () => {
       done();
     });
   });
+
+  test('should not disappear when not picked up', (done) => {
+    let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
+    app.cave.addItem(pos, rock);
+    socket.emit('take', 'dagger');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You cannot take that item."]);
+      done();
+    });
+  });
 });
