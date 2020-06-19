@@ -13,7 +13,6 @@ export default class Server {
         this.cave = new Cave(template);
         this.repo = new EntityRepository();
         this.connections = {};
-        this.defaultRoom = 'Entrance Room';
     } 
 
     tryMove(entity, delta) {
@@ -106,9 +105,9 @@ export default class Server {
         }
     }
 
-    sendMessageToRoom(room, ...message) {
-        this.backend.sockets.in(room).emit('message', message); 
-    }
+    // sendMessageToRoom(room, ...message) {
+    //     this.backend.sockets.in(room).emit('message', message); 
+    // }
 
     setMessengerForEntities() {
         let svr = this;
@@ -124,9 +123,11 @@ export default class Server {
         this.setMessengerForEntities();
         let prototype = socket.handshake.query;
         let entity = this.addEntity(socket.id, prototype, this.cave.getEntrance());
-        socket.join(this.defaultRoom, () => {
+        let room = this.cave.getRegion(entity);
+        socket.join(room, () => {
             // let rooms = Object.keys(socket.rooms);
-            this.sendMessageToRoom(this.defaultRoom, entity.name + " just entered the cave");
+            // this.sendMessageToRoom(room, entity.name + " just entered this cave");
+            this.backend.emit("message",  entity.name + " just entered this dungeon complex");
             this.backend.emit("entities", this.connections);
         });
 
@@ -136,6 +137,18 @@ export default class Server {
 
         socket.on("get_items", () => {
             socket.emit("items", this.cave.getItems(this.connections[socket.id].pos.z));
+        });
+
+        socket.on("take", (itemName) => {
+            let entity = this.connections[socket.id];
+            let items = this.cave.getItemsAt(entity.pos);
+            let item = items.find(o => (o.name === itemName));
+            let canTake = entity.tryTake(item)
+            if (canTake) {
+                let room = this.cave.getRegion(entity);
+                this.cave.removeItem(item);
+                this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+            }
         });
 
         socket.on("move", direction => {

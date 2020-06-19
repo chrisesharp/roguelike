@@ -359,4 +359,14 @@ describe('basic socket.io API', () => {
       done();
     });
   });
+
+  test('should disappear when picked up', (done) => {
+    let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
+    app.cave.addItem(pos, rock);
+    socket.emit('take', 'rock');
+    socket.on('items', (msg) => {
+      expect(msg).toEqual({});
+      done();
+    });
+  });
 });

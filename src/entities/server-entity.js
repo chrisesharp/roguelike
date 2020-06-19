@@ -26,7 +26,10 @@ export default class ServerEntity extends Entity {
             this.messenger(this, MSGTYPE.UPD, "Ouch!");
         } else {
             this.messenger(this, MSGTYPE.UPD, "You died!");
-        }
-        
+        }   
+    }
+
+    tryTake(item) {
+        return true;
     }
 }
