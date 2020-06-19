@@ -8,8 +8,8 @@ Screens.startScreen = startScreen;
 import {helpScreen}  from "./help.js"; 
 Screens.helpScreen = helpScreen;
 
-// import {playScreen}  from "./play.js"; 
-// Screens.playScreen = playScreen;
+import {playScreen}  from "./play.js"; 
+Screens.playScreen = playScreen;
 
 // import {lookScreen}  from "./targets.js"; 
 // Screens.lookScreen = lookScreen;
@@ -32,7 +32,7 @@ Screens.helpScreen = helpScreen;
 // import {pickupScreen}  from "./items.js"; 
 // Screens.pickupScreen = pickupScreen;
 
-// import {inventoryScreen}  from "./items.js"; 
-// Screens.inventoryScreen = inventoryScreen;
+import {inventoryScreen}  from "./item-list.js"; 
+Screens.inventoryScreen = inventoryScreen;
 
 export { Screens }; 

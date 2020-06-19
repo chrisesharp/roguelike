@@ -1,6 +1,8 @@
 "use strict";
 
 import { game } from '../game.js';
+import { isReturnKey, isEscKey, isZeroKey, isLetterKey, letterIndex } from '../keys.js';
+
 
 export default class ItemListScreen {
     constructor(template) {
@@ -41,13 +43,13 @@ export default class ItemListScreen {
                     this.selectedIndices[i]) ? '+' : '-';
 
                 let suffix = '';
-                if (this.items[i] === this.player.getArmor()) {
-                    suffix = ' (wearing)';
-                } else if (this.items[i] === this.player.getWeapon()) {
-                    suffix = ' (wielding)';
-                }
+                // if (this.items[i] === this.player.getArmor()) {
+                //     suffix = ' (wearing)';
+                // } else if (this.items[i] === this.player.getWeapon()) {
+                //     suffix = ' (wielding)';
+                // }
                 display.drawText(0, row++,  option + ' ' + selectionState + ' ' +
-                    this.items[i].describe() + suffix);
+                    this.items[i].getDescription() + suffix);
             }
         }
     }

@@ -114,6 +114,11 @@ class Game {
         return (message[0].search('level')>0);
     }
 
+    addMessage(message) {
+        this.messages.push(message);
+        this.refresh();
+    }
+
     connectToServer() {
         let properties = this.updateName();
         properties.type = "player";
@@ -129,8 +134,7 @@ class Game {
             if (this.hasChangedLevel(message)) {
                 socket.emit('get_items');
             }
-            this.messages.push(message);
-            this.refresh();
+            this.addMessage(message);
         });
 
         socket.on('delete', (pos) => {
@@ -295,6 +299,14 @@ class Game {
 
     getScreen() {
         return this.currentScreen;
+    }
+
+    getOption(index) {
+        const letters = 'abcdefghijklmnopqrstuv';
+        if (index < 0 || index > letters.length - 1 ) {
+            return "";
+        }
+        return letters[index];
     }
 }
 

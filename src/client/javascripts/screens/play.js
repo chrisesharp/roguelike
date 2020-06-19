@@ -4,6 +4,7 @@ import { Color } from '../display.js';
 import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
+import Entity from '../entity.js';
 
 
 class PlayScreen  {
@@ -149,6 +150,14 @@ class PlayScreen  {
     setSubScreen(subScreen) {
         this.subScreen = subScreen;
         game.refresh();
+    }
+
+    showItemsSubScreen(subScreen, items, emptyMessage) {
+        if (items && subScreen.setup(this.player, items) > 0) {
+            this.setSubScreen(subScreen);
+        } else {
+            game.addMessage(emptyMessage);
+        }
     }
 };
 
