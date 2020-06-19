@@ -162,6 +162,7 @@ class Game {
                     this.addItem(thing); 
                 });
             }
+            console.log(items);
         });
 
         socket.on('entities', (entities) => {
@@ -204,6 +205,7 @@ class Game {
                 if (npc) {
                     this.moveEntity(npc, pos);
                 } else {
+                    socket.emit('get_items');
                     socket.emit('get_entities');
                 }
             }

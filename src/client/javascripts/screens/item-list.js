@@ -54,6 +54,17 @@ export default class ItemListScreen {
         }
     }
 
+    executeOkFunction() {
+        let selectedItems = {};
+        for (let key in this.selectedIndices) {
+            selectedItems[key] = this.items[key];
+        }
+
+        game.getScreen().setSubScreen(undefined);
+
+        this.okFunction(selectedItems);
+    }
+
     handleInput(inputType, inputData) {
         if (this.isCancelCondition(inputData)) {
             game.getScreen().setSubScreen(undefined);
@@ -114,9 +125,19 @@ export const pickupScreen = new ItemListScreen({
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
-        if (!game.takeItem(Object.keys(selectedItems))) {
-            game.addMessage("Your inventory is full! Not all items were picked up.");
-        }
+        game.takeItem(Object.keys(selectedItems));
         return false;
+    }
+});
+
+export const dropScreen = new ItemListScreen({
+    caption: 'Choose the items you wish to drop',
+    canSelect: true,
+    canSelectMultipleItems: true,
+    ok: function(selectedItems) {
+        Object.keys(selectedItems).forEach(item => {
+            this.player.dropItem(item);
+        });
+        return true;
     }
 });

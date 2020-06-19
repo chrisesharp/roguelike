@@ -32,6 +32,9 @@ export default class Server {
                 return false;
             } else {
                 this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[z]}!`);
+                // socket.join(z, () => {
+                //     this.sendMessageToRoom(z, entity.name + " just entered this cave");
+                // });
                 return true;
             }
         }
@@ -42,6 +45,9 @@ export default class Server {
                 return false;
             } else {
                 this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[z]}!`);
+                // socket.join(z, () => {
+                //     this.sendMessageToRoom(z, entity.name + " just entered this cave");
+                // });
                 return true;
             }
         }
@@ -104,9 +110,9 @@ export default class Server {
         }
     }
 
-    // sendMessageToRoom(room, ...message) {
-    //     this.backend.sockets.in(room).emit('message', message); 
-    // }
+    sendMessageToRoom(room, ...message) {
+        this.backend.sockets.in(room).emit('message', message); 
+    }
 
     setMessengerForEntities() {
         let svr = this;
@@ -122,10 +128,11 @@ export default class Server {
         this.setMessengerForEntities();
         let prototype = socket.handshake.query;
         let entity = this.addEntity(socket.id, prototype, this.cave.getEntrance());
-        let room = this.cave.getRegion(entity);
+        // let room = this.cave.getRegion(entity);
+        let room = entity.pos.z;
         socket.join(room, () => {
             // let rooms = Object.keys(socket.rooms);
-            // this.sendMessageToRoom(room, entity.name + " just entered this cave");
+            this.sendMessageToRoom(room, entity.name + " just entered this cave");
             this.backend.emit("message",  entity.name + " just entered this dungeon complex");
             this.backend.emit("entities", this.connections);
         });
@@ -135,7 +142,10 @@ export default class Server {
         });
 
         socket.on("get_items", () => {
-            socket.emit("items", this.cave.getItems(this.connections[socket.id].pos.z));
+            let entity = this.connections[socket.id];
+            // let room = this.cave.getRegion(entity);
+            // socket.emit("items", this.cave.getItems(room));
+            socket.emit("items", this.cave.getItems(entity.pos.z));
         });
 
         socket.on("take", (itemName) => {
@@ -143,7 +153,7 @@ export default class Server {
             let items = this.cave.getItemsAt(entity.pos);
             let item = items.find(o => (o.name === itemName));
             if (item && entity.tryTake(item)) {
-                let room = this.cave.getRegion(entity);
+                let room = entity.pos.z;
                 this.cave.removeItem(item);
                 this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
             } else {
@@ -153,6 +163,7 @@ export default class Server {
 
         socket.on("move", direction => {
             let entity = this.connections[socket.id];
+            // let startRoom = this.cave.getRegion(entity);
             let delta = getMovement(direction);
             let canMove = this.tryMove(entity, delta);
             if (canMove) {
@@ -162,6 +173,15 @@ export default class Server {
                     "z":entity.pos.z + delta.z,
                 }
                 entity.pos = position;
+                // let newRoom = this.cave.getRegion(entity);
+                // if (!(newRoom in socket.rooms)) {
+                    // socket.leave(startRoom, () => {
+                    //     this.sendMessageToRoom(room, entity.name + " just entered this cave");
+                    // });
+                //     socket.join(newRoom, () => {
+                //         this.sendMessageToRoom(newRoom, entity.name + " just entered this cave");
+                //     });
+                // }
                 this.backend.emit("position", socket.id, entity.pos);
             }
         });
