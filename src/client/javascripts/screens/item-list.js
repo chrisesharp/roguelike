@@ -135,8 +135,9 @@ export const dropScreen = new ItemListScreen({
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
+        console.log("selected:",selectedItems);
         Object.keys(selectedItems).forEach(item => {
-            this.player.dropItem(item);
+            game.dropItem(selectedItems[item]);
         });
         return true;
     }

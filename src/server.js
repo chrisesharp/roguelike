@@ -161,6 +161,16 @@ export default class Server {
             }
         });
 
+        socket.on("drop", (itemName) => {
+            let entity = this.connections[socket.id];
+            let item = entity.dropItem(itemName);
+            if (item) {
+                let room = entity.pos.z;
+                this.cave.addItem(entity.pos, item);
+                this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+            }
+        });
+
         socket.on("move", direction => {
             let entity = this.connections[socket.id];
             // let startRoom = this.cave.getRegion(entity);

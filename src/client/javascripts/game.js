@@ -78,7 +78,10 @@ class Game {
 
     takeItem(item) {
         this.socket.emit("take", item.name);
-        return true;
+    }
+
+    dropItem(item) {
+        this.socket.emit("drop", item.name);
     }
 
     addItem(item) {

@@ -36,6 +36,20 @@ export default class ServerEntity extends Entity {
         return true;
     }
 
+    dropItem(itemName) {
+        let item;
+        for (let i=0; i< this.inventory.length; i++) {
+            if (this.inventory[i].name === itemName) {
+                item = this.inventory.splice(i,1)[0];
+                break;
+            }
+        }
+        if (item) {
+            this.messenger(this, MSGTYPE.UPD, `You drop ${item.describeThe()}.`);
+        }
+        return item;
+    }
+
     getInventory() {
         return this.inventory;
     }
