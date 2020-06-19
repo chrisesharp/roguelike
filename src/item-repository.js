@@ -1,9 +1,7 @@
 "use strict";
 
-import ServerEntity from './entities/server-entity.js';
 import Rock from './items/rock.js';
 import Dagger from './items/dagger.js';
-import Item from './items/item.js';
 
 const constructors = [];
 constructors.push({type : "dagger", ctor : Dagger});

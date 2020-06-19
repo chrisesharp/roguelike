@@ -32,7 +32,7 @@ export default class ServerEntity extends Entity {
 
     tryTake(item) {
         this.inventory.push(item);
-        this.messenger(this, MSGTYPE.INF, `You take ${item.describeThe()}.`);
+        this.messenger(this, MSGTYPE.UPD, `You take ${item.describeThe()}.`);
         return true;
     }
 

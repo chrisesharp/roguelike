@@ -22,6 +22,7 @@ export default class Entity extends Glyph {
         this.hitPoints = this.maxHitPoints;
         this.hunger = 0;
         this.sight = 10;
+        this.inventory = [];
     }
 
     getHitPoints() {
@@ -67,5 +68,9 @@ export default class Entity extends Glyph {
 
     getDescription() {
         return this.name;
+    }
+
+    getInventory() {
+        return this.inventory;
     }
 }
