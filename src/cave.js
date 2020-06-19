@@ -12,7 +12,6 @@ export const DEFAULT_SIZE = {
     "height":100,
     "depth":2,
     "generator":"FileGenerator", 
-    "itemsPerFloor":0,
     "itemTypes": {},
     "randFunc":(arr)=>{return arr[0];}
 };
@@ -21,9 +20,8 @@ export default class Cave {
     constructor(template=DEFAULT_SIZE) {
         this.map = Cave.builder(template).generate();
         this.entrance = template.entrance;
-        this.itemsPerFloor = template.itemsPerFloor;
         this.items = {};
-        this.itemRepo = new ItemRepository(template.itemTypes);
+        this.itemRepos = this.createRepos(template);
         this.distributeItems(this.map);
     }
 
@@ -36,14 +34,23 @@ export default class Cave {
         return new Builder(generator, width, height, depth, randomiser);
     }
 
+    createRepos(template) {
+        let depth = this.map.getDepth();
+        let repos = Array(depth);
+        for (let z = 0; z < depth; z++) {
+            let levelIdx = `itemTypes${z}`;
+            let types =  template[levelIdx] || template.itemTypes || {};
+            repos[z] = new ItemRepository(types);
+        }
+        return repos;
+    }
+
     distributeItems(map) {
-        if (this.itemsPerFloor) {
-            for (let z=0; z < map.depth; z++) {
-                for (let i = 0; i < this.itemsPerFloor; i++) {
-                    let pos = map.getRandomFloorPosition(z)
-                    let item = this.itemRepo.createRandom()
-                    this.addItem(pos, item);
-                }
+        for (let z=0; z < map.depth; z++) {
+            while (this.itemRepos[z].moreItems()) {
+                let pos = map.getRandomFloorPosition(z)
+                let item = this.itemRepos[z].createRandom()
+                this.addItem(pos, item);
             }
         }
     }

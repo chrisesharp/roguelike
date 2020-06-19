@@ -125,7 +125,6 @@ describe('cave creation', () => {
   });
 
   test('should have 0 number of items', (done) => {
-    defaultTemplate.itemsPerFloor = 0;
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
     expect(Object.keys(items).length).toBe(0);
@@ -133,8 +132,7 @@ describe('cave creation', () => {
   });
 
   test('should have 2 number of items', (done) => {
-    defaultTemplate.itemsPerFloor = 2;
-    defaultTemplate.itemTypes = {"rock":1};
+    defaultTemplate.itemTypes = {"rock":2};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
     expect(Object.keys(items).length).toBe(2);
@@ -143,8 +141,8 @@ describe('cave creation', () => {
   });
 
   test('should have a dagger and a rock', (done) => {
-    defaultTemplate.itemsPerFloor = 5;
-    defaultTemplate.itemTypes = {'rock':1,'dagger':1};
+    defaultTemplate.itemTypes0 = {'rock':1,'dagger':1};
+    defaultTemplate.itemTypes1 = {'rock':1,'dagger':1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
     let hasDagger = false;
@@ -165,8 +163,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have a two daggers where non-existent types requested', (done) => {
-    defaultTemplate.itemsPerFloor = 2;
+  test('should have a one dagger where non-existent types requested', (done) => {
     defaultTemplate.itemTypes = {'dagger':1,'non-thing':1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
@@ -178,14 +175,13 @@ describe('cave creation', () => {
         }
       });
     });
-    expect(hasDagger).toBe(2);
+    expect(hasDagger).toBe(1);
     delete defaultTemplate['itemTypes'];
     done();
   });
 
   test('should have two daggers and no rocks', (done) => {
-    defaultTemplate.itemsPerFloor = 2;
-    defaultTemplate.itemTypes = {'rock':0,'dagger':1};
+    defaultTemplate.itemTypes0 = {'rock':0,'dagger':2,'non-thing':1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
     let hasDagger = 0;

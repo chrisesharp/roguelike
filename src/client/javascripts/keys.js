@@ -41,7 +41,7 @@ KEYDOWN.push({key:KEYS.VK_LEFT, func: function() { this.move(DIRS.WEST); return 
 KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(DIRS.EAST); return false;} });
 KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(DIRS.NORTH); return false;} });
 KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(DIRS.SOUTH); return false;} });
-KEYDOWN.push({key:KEYS.VK_I,     func: function() { this.showItemsSubScreen(Screens.inventoryScreen, this.player.getItems(),'You are not carrying anything.'); return true;} });
+KEYDOWN.push({key:KEYS.VK_I,     func: function() { this.showItemsSubScreen(Screens.inventoryScreen, this.player.getInventory(),'You are not carrying anything.'); return true;} });
 KEYDOWN.push({key:KEYS.VK_D,     func: function() { this.showItemsSubScreen(Screens.dropScreen, this.player.getItems(),'You have nothing to drop.'); return true;} });
 KEYDOWN.push({key:KEYS.VK_E,     func: function() { this.showItemsSubScreen(Screens.eatScreen, this.player.getItems(),'You have nothing to eat.'); return true;} });
 KEYDOWN.push({key:KEYS.VK_W,     func: wHandler });

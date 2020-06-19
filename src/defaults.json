@@ -2,7 +2,6 @@
     "width":40,
     "height":40,
     "depth":2,
-    "itemsPerFloor": 10,
     "itemTypes": {"rock":2,"dagger":1},
     "generator" : "CellGenerator"
 }
