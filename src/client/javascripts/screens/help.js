@@ -18,6 +18,7 @@ export default class HelpScreen {
         y += 3;
         display.drawText(0, y++, '[,] to pick up items');
         display.drawText(0, y++, '[d] to drop items');
+        display.drawText(0, y++, '[i] to see what items you have');
         display.drawText(0, y++, '[e] to eat items');
         display.drawText(0, y++, '[w] to wield items');
         display.drawText(0, y++, '[W] to wear items');
