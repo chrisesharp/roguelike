@@ -76,6 +76,11 @@ class Game {
         return this.items[key];
     }
 
+    takeItem(item) {
+        this.socket.emit("take", item.name);
+        return true;
+    }
+
     addItem(item) {
         let x = item.pos.x;
         let y = item.pos.y;
@@ -149,6 +154,7 @@ class Game {
         });
         socket.emit('get_items');
         socket.on('items',(items) => {
+            this.items = [];
             for (let pos in items) {
                 let here = items[pos];
                 here.forEach(item => {

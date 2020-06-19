@@ -71,6 +71,6 @@ export default class Entity extends Glyph {
     }
 
     getInventory() {
-        return this.inventory;
+        return this.inventory.map(item => { return new Entity(item);});
     }
 }

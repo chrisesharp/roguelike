@@ -4,7 +4,7 @@ import { Color } from '../display.js';
 import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
-import Entity from '../entity.js';
+import { pickupScreen } from './item-list.js';
 
 
 class PlayScreen  {
@@ -158,6 +158,16 @@ class PlayScreen  {
         } else {
             game.addMessage(emptyMessage);
         }
+    }
+
+    showPickupSubScreen() {
+        let items = game.getItemsAt(this.player.pos.x, this.player.pos.y, this.player.pos.z);
+        if (items && items.length === 1) {
+            let item = items[0];
+            game.takeItem(item);
+        } else {
+            this.showItemsSubScreen(pickupScreen, items, 'There is nothing here to pick up.');
+        } 
     }
 };
 

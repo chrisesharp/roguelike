@@ -108,3 +108,15 @@ export const inventoryScreen = new ItemListScreen({
     caption: 'Inventory',
     canSelect: false
 });
+
+export const pickupScreen = new ItemListScreen({
+    caption: 'Choose the items you wish to pickup',
+    canSelect: true,
+    canSelectMultipleItems: true,
+    ok: function(selectedItems) {
+        if (!game.takeItem(Object.keys(selectedItems))) {
+            game.addMessage("Your inventory is full! Not all items were picked up.");
+        }
+        return false;
+    }
+});

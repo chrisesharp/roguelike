@@ -84,6 +84,7 @@ export default class Cave {
         } else {
             this.items[key] = [item];
         }
+        // console.log(`added ${item.name} at `,pos);
     }
 
     removeItem(item) {
