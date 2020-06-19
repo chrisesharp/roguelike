@@ -9,6 +9,7 @@ export default class ServerEntity extends Entity {
         super(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
+        this.inventory = [];
     }
 
     handleCollision(other) {
@@ -30,6 +31,12 @@ export default class ServerEntity extends Entity {
     }
 
     tryTake(item) {
+        this.inventory.push(item);
+        this.messenger(this, MSGTYPE.INF, `You take ${item.describeThe()}.`);
         return true;
+    }
+
+    getInventory() {
+        return this.inventory;
     }
 }

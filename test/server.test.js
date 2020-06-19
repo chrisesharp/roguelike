@@ -379,4 +379,18 @@ describe('basic socket.io API', () => {
       done();
     });
   });
+
+  test('should be in entities inventory when picked up', (done) => {
+    let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
+    app.cave.addItem(pos, rock);
+    let taker = app.connections[socket.id];
+    expect(taker.getInventory().length).toBe(0);
+    socket.emit('take', 'rock');
+    socket.on('message', (msg) => {
+      let taker = app.getEntityAt(pos);
+      expect(taker.getInventory().length).toBe(1);
+      expect(msg).toEqual(["You take the rock."]);
+      done();
+    });
+  });
 });

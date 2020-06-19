@@ -17,7 +17,6 @@ export default class Server {
 
     tryMove(entity, delta) {
         if (!entity.isAlive()) {
-            console.log("Entity dead:",entity);
             return false;
         }
         let x = entity.pos.x + delta.x;
