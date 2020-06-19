@@ -370,6 +370,20 @@ describe('basic socket.io API', () => {
     });
   });
 
+  test('should appear when dropped', (done) => {
+    let rock = new Rock();
+    let dropper = app.connections[socket.id];
+    dropper.inventory.push(rock);
+    let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
+    socket.emit('drop', 'rock');
+    socket.on('items', (msg) => {
+      let items = msg[pos];
+      expect(items.length).toBe(1);
+      expect(new Rock(items[0])).toEqual(rock);
+      done();
+    });
+  });
+
   test('should not disappear when not picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.addItem(pos, rock);
