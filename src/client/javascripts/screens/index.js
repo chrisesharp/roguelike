@@ -23,8 +23,8 @@ Screens.playScreen = playScreen;
 // import {eatScreen}  from "./items.js"; 
 // Screens.eatScreen = eatScreen;
 
-// import {examineScreen}  from "./items.js"; 
-// Screens.examineScreen = examineScreen;
+import {examineScreen}  from "./item-list.js"; 
+Screens.examineScreen = examineScreen;
 
 import {dropScreen}  from "./item-list.js"; 
 Screens.dropScreen = dropScreen;

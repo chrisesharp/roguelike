@@ -2,7 +2,7 @@
 
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, isZeroKey, isLetterKey, letterIndex } from '../keys.js';
-
+import Item from '../item.js';
 
 export default class ItemListScreen {
     constructor(template) {
@@ -140,5 +140,20 @@ export const dropScreen = new ItemListScreen({
             game.dropItem(selectedItems[item]);
         });
         return true;
+    }
+});
+
+export const examineScreen = new ItemListScreen({
+    caption: 'Choose the item you wish to examine',
+    canSelect: true,
+    canSelectMultipleItems: false,
+    isAcceptable: function(item) {
+        return true;
+    },
+    ok: function(selectedItems) {
+        let key = Object.keys(selectedItems)[0];
+        let item = new Item(selectedItems[key]);
+        game.addMessage(`It's ${item.describeA(false)} (${item.getDetails()}).`);
+        return false;
     }
 });

@@ -1,11 +1,12 @@
 "use strict";
 
-import Item from './item.js';
+import Item from '../client/javascripts/item.js';
 
 export default class Apple extends Item {
     constructor(properties) {
         super(properties);
         this.name = "apple";
+        this.details = "it looks edible"
         this.setGlyph({
             char: 'o',
             foreground: 'green'
