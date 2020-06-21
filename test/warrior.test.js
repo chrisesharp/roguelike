@@ -18,4 +18,10 @@ describe('warriors creation', () => {
       expect(warrior.getHitPoints()).toBe(10);
       done();
     });
+
+    test('should have no inventory', (done) => {
+      let warrior = new Warrior({server:mockServer});
+      expect(warrior.getInventory()).toEqual([]);
+      done();
+    });
 });

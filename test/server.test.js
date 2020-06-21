@@ -421,4 +421,28 @@ describe('basic socket.io API', () => {
       done();
     });
   });
+
+  test('should disappear from inventory when eaten', (done) => {
+    let apple = new Apple();
+    let eater = app.connections[socket.id];
+    eater.inventory.push(apple);
+    socket.emit('eat', 'apple');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You eat the apple."]);
+      expect(eater.getInventory()).toEqual([]);
+      done();
+    });
+  });
+
+  test('should disappear from inventory when eaten', (done) => {
+    let apple = new Apple();
+    let eater = app.connections[socket.id];
+    eater.inventory.push(apple);
+    socket.emit('eat', 'rock');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You don't have the rock to eat."]);
+      expect(eater.getInventory().length).toBe(1);
+      done();
+    });
+  });
 });

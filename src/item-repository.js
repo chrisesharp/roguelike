@@ -1,11 +1,13 @@
 "use strict";
 
+import Apple from './items/apple.js';
 import Rock from './items/rock.js';
 import Dagger from './items/dagger.js';
 
 const constructors = [];
 constructors.push({type : "dagger", ctor : Dagger});
 constructors.push({type : "rock", ctor : Rock});
+constructors.push({type : "apple", ctor : Apple});
 
 export default class ItemRepository {
     constructor(types) {

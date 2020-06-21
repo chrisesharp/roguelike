@@ -50,6 +50,21 @@ export default class ServerEntity extends Entity {
         return item;
     }
 
+    eatItem(itemName) {
+        let item;
+        for (let i=0; i< this.inventory.length; i++) {
+            if (this.inventory[i].name === itemName) {
+                item = this.inventory.splice(i,1)[0];
+                break;
+            }
+        }
+        if (item) {
+            this.messenger(this, MSGTYPE.UPD, `You eat ${item.describeThe()}.`);
+        } else {
+            this.messenger(this, MSGTYPE.INF, `You don't have the ${itemName} to eat.`);
+        }
+    }
+
     getInventory() {
         return this.inventory;
     }

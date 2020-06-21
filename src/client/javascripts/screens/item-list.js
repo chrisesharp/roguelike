@@ -18,6 +18,7 @@ export default class ItemListScreen {
         this.player = player;
         let count = 0;
         this.items = items.map( (item) => {
+            item = new Item(item);
             if (this.isAcceptableFunction(item)) {
                 count++;
                 return item;
@@ -157,3 +158,66 @@ export const examineScreen = new ItemListScreen({
         return false;
     }
 });
+
+export const eatScreen = new ItemListScreen({
+    caption: 'Choose the item you wish to eat',
+    canSelect: true,
+    canSelectMultipleItems: false,
+    isAcceptable: function(item) {
+        return item && new Item(item).isEdible();
+    },
+    ok: function(selectedItems) {
+        let key = Object.keys(selectedItems)[0];
+        let item = new Item(selectedItems[key]);
+        game.eatItem(item);
+        return false;
+    }
+});
+
+// export const wieldScreen = new ItemListScreen({
+//     caption: 'Choose the item you wish to wield',
+//     canSelect: true,
+//     canSelectMultipleItems: false,
+//     hasNoItemOption: true,
+//     isAcceptable: function(item) {
+//         return item && item.hasMixin('Equippable') && item.isWieldable();
+//     },
+//     ok: function(selectedItems) {
+//         let keys = Object.keys(selectedItems);
+//         if (keys.length === 0) {
+//             this._player.unwield();
+//             game.sendMessage(this._player, "You are empty handed.")
+//         } else {
+//             // Make sure to unequip the item first in case it is the armor.
+//             let item = selectedItems[keys[0]];
+//             this._player.unequip(item);
+//             this._player.wield(item);
+//             game.sendMessage(this._player, "You are wielding %s.", [item.describeA()]);
+//         }
+//         return false;
+//     }
+// });
+
+// export const wearScreen = new ItemListScreen({
+//     caption: 'Choose the item you wish to wear',
+//     canSelect: true,
+//     canSelectMultipleItems: false,
+//     hasNoItemOption: true,
+//     isAcceptable: function(item) {
+//         return item && item.hasMixin('Equippable') && item.isWearable();
+//     },
+//     ok: function(selectedItems) {
+//         let keys = Object.keys(selectedItems);
+//         if (keys.length === 0) {
+//             this._player.takeOff();
+//             game.sendMessage(this._player, "You are not wearing anthing.")
+//         } else {
+//             // Make sure to unequip the item first in case it is the weapon.
+//             let item = selectedItems[keys[0]];
+//             this._player.unequip(item);
+//             this._player.wear(item);
+//             game.sendMessage(this._player, "You are wearing %s.", [item.describeA()]);
+//         }
+//         return false;
+//     }
+// });

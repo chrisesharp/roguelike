@@ -171,6 +171,11 @@ export default class Server {
             }
         });
 
+        socket.on("eat", (itemName) => {
+            let entity = this.connections[socket.id];
+            entity.eatItem(itemName);
+        });
+
         socket.on("move", direction => {
             let entity = this.connections[socket.id];
             // let startRoom = this.cave.getRegion(entity);

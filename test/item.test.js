@@ -24,4 +24,13 @@ describe('item creation', () => {
         expect(apple.describeThe(false)).toBe("the apple");
         done();
     });
+
+    test('should be edible if edible', (done) => {
+        let apple = new Apple();
+        let rock = new Rock();
+        expect(apple.isEdible()).toBe(true);
+        expect(apple.getDetails()).toBe("it looks edible");
+        expect(rock.isEdible()).toBe(false);
+        done();
+    });
 });

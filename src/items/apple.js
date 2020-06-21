@@ -7,6 +7,7 @@ export default class Apple extends Item {
         super(properties);
         this.name = "apple";
         this.details = "it looks edible"
+        this.edible = true;
         this.setGlyph({
             char: 'o',
             foreground: 'green'

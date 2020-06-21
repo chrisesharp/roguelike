@@ -24,7 +24,6 @@ class PlayScreen  {
         this.map = game.map;
         this.player = game.player;
         this.player.pos = game.entrance;
-        console.log("player pos",this.player.pos);
     }
 
     exit() { 

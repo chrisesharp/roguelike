@@ -3,10 +3,11 @@
 import Entity from './entity.js';
 
 export default class Item extends Entity {
-    constructor(properties) {
+    constructor(properties={}) {
         super(properties);
         this.alive = false;
         this.walkable = true;
+        this.edible = (properties['edible'] !== undefined) ? properties['edible'] : false;
     }
 
     describeA(capitalize) {
@@ -20,5 +21,9 @@ export default class Item extends Entity {
     describeThe(capitalize) {
         let prefix = capitalize ? 'The' : 'the';
         return prefix + ' ' + this.getDescription();
+    }
+
+    isEdible() {
+        return this.edible;
     }
 }

@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import Map from './map';
 import Entity from './entity';
+import Item from './item';
 
 import { Display, dispOpts } from './display';
 import { startScreen } from './screens/start';
@@ -84,6 +85,10 @@ class Game {
         this.socket.emit("drop", item.name);
     }
 
+    eatItem(item) {
+        this.socket.emit("eat", item.name);
+    }
+
     addItem(item) {
         let x = item.pos.x;
         let y = item.pos.y;
@@ -161,7 +166,7 @@ class Game {
             for (let pos in items) {
                 let here = items[pos];
                 here.forEach(item => {
-                    let thing = new Entity(item);
+                    let thing = new Item(item);
                     this.addItem(thing); 
                 });
             }
