@@ -108,10 +108,10 @@ export default class Cave {
         return this.items[key] || [];
     }
 
-    getRegion(entity) {
-        let x = entity.pos.x;
-        let y = entity.pos.y;
-        let z = entity.pos.z;
-        return this.map.regions[z][y][x];
-    }
+    // getRegion(entity) {
+    //     let x = entity.pos.x;
+    //     let y = entity.pos.y;
+    //     let z = entity.pos.z;
+    //     return this.map.regions[z][y][x];
+    // }
 }

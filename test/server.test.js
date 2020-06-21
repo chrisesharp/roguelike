@@ -384,6 +384,20 @@ describe('basic socket.io API', () => {
     });
   });
 
+  test('should not drop non-existent things', (done) => {
+    let dagger = new Dagger();
+    let dropper = app.connections[socket.id];
+    dropper.inventory.push(dagger);
+    let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
+    socket.emit('drop', 'rock');
+    socket.emit('get_items');
+    socket.on('items', (msg) => {
+      let items = msg[pos];
+      expect(items).toBe(undefined);
+      done();
+    });
+  });
+
   test('should not disappear when not picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.addItem(pos, rock);
