@@ -165,7 +165,6 @@ class Game {
                     this.addItem(thing); 
                 });
             }
-            console.log(items);
         });
 
         socket.on('entities', (entities) => {

@@ -61,7 +61,6 @@ export default class ItemListScreen {
         }
 
         game.getScreen().setSubScreen(undefined);
-
         this.okFunction(selectedItems);
     }
 
@@ -125,7 +124,9 @@ export const pickupScreen = new ItemListScreen({
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
-        game.takeItem(Object.keys(selectedItems));
+        Object.keys(selectedItems).forEach(item => {
+            game.takeItem(selectedItems[item]);
+        });
         return false;
     }
 });
@@ -135,7 +136,6 @@ export const dropScreen = new ItemListScreen({
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
-        console.log("selected:",selectedItems);
         Object.keys(selectedItems).forEach(item => {
             game.dropItem(selectedItems[item]);
         });
