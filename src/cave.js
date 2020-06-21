@@ -3,8 +3,6 @@
 import Builder from "./builder.js";
 import FileGenerator from "./file-generator.js";
 import _ from "underscore";
-import Rock from "./items/rock.js";
-import Dagger from "./items/dagger.js";
 import ItemRepository from "./item-repository.js";
 
 export const DEFAULT_SIZE = {
