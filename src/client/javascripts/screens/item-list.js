@@ -44,11 +44,11 @@ export default class ItemListScreen {
                     this.selectedIndices[i]) ? '+' : '-';
 
                 let suffix = '';
-                // if (this.items[i] === this.player.getArmor()) {
-                //     suffix = ' (wearing)';
-                // } else if (this.items[i] === this.player.getWeapon()) {
-                //     suffix = ' (wielding)';
-                // }
+                if (this.items[i].name === this.player.getArmour()) {
+                    suffix = ' (wearing)';
+                } else if (this.items[i].name === this.player.getWeapon()) {
+                    suffix = ' (wielding)';
+                }
                 display.drawText(0, row++,  option + ' ' + selectionState + ' ' +
                     this.items[i].getDescription() + suffix);
             }
@@ -190,26 +190,18 @@ export const wieldScreen = new ItemListScreen({
     }
 });
 
-// export const wearScreen = new ItemListScreen({
-//     caption: 'Choose the item you wish to wear',
-//     canSelect: true,
-//     canSelectMultipleItems: false,
-//     hasNoItemOption: true,
-//     isAcceptable: function(item) {
-//         return item && item.hasMixin('Equippable') && item.isWearable();
-//     },
-//     ok: function(selectedItems) {
-//         let keys = Object.keys(selectedItems);
-//         if (keys.length === 0) {
-//             this._player.takeOff();
-//             game.sendMessage(this._player, "You are not wearing anthing.")
-//         } else {
-//             // Make sure to unequip the item first in case it is the weapon.
-//             let item = selectedItems[keys[0]];
-//             this._player.unequip(item);
-//             this._player.wear(item);
-//             game.sendMessage(this._player, "You are wearing %s.", [item.describeA()]);
-//         }
-//         return false;
-//     }
-// });
+export const wearScreen = new ItemListScreen({
+    caption: 'Choose the item you wish to wear',
+    canSelect: true,
+    canSelectMultipleItems: false,
+    hasNoItemOption: true,
+    isAcceptable: function(item) {
+        return item && item.isWearable();
+    },
+    ok: function(selectedItems) {
+        let key = Object.keys(selectedItems)[0];
+        let armour = selectedItems[key];
+        game.wearItem(armour);
+        return false;
+    }
+});

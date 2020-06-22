@@ -2,7 +2,7 @@
     "width":40,
     "height":40,
     "depth":2,
-    "itemTypes": {"rock":3,"apple":3},
+    "itemTypes": {"rock":3,"apple":3,"chainmail":3},
     "itemTypes1": {"rock":2,"dagger":2},
     "generator" : "CellGenerator"
 }

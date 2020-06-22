@@ -173,6 +173,11 @@ export default class Server {
             entity.wield(weapon);
         });
 
+        socket.on("wear", (armour) => {
+            let entity = this.connections[socket.id];
+            entity.wear(armour);
+        });
+
         socket.on("move", direction => {
             let entity = this.connections[socket.id];
             let startRoom = entity.pos.z;

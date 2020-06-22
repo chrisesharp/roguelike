@@ -76,6 +76,14 @@ export default class ServerEntity extends Entity {
             }
         }
         if (item) {
+            if (this.currentArmour === item) {
+                this.wear();
+            }
+
+            if (this.currentWeapon === item) {
+                this.wield();
+            }
+
             this.messenger(this, MSGTYPE.UPD, `You drop ${item.describeThe()}.`);
         }
         return item;
@@ -111,6 +119,21 @@ export default class ServerEntity extends Entity {
         }
         
     }
+
+    wear(armourName) {
+        if (armourName) {
+            let armour = this.inventory.find(o => (o.name === armourName));
+            if (armour) {
+                this.currentArmour = armour;
+                this.messenger(this, MSGTYPE.UPD, `You are wearing ${armour.describeThe()}.`);
+            } else {
+                this.messenger(this, MSGTYPE.INF, `You don't have any ${armourName} to wear.`);
+            }
+        } else {
+            this.currentArmour = null;
+            this.messenger(this, MSGTYPE.UPD, `You are not wearing anything now.`);
+        }
+    } 
 
     isWielding() {
         return this.currentWeapon;

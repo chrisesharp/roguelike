@@ -23,6 +23,8 @@ export default class Entity extends Glyph {
         this.hunger = 0;
         this.sight = 10;
         this.details = properties['details'] || "none";
+        this.currentArmour = properties['currentArmour'] || null;
+        this.currentWeapon = properties['currentWeapon'] || null;
         this.inventory = [];
     }
 
@@ -77,5 +79,13 @@ export default class Entity extends Glyph {
 
     getInventory() {
         return this.inventory;
+    }
+
+    getArmour() {
+        return (this.currentArmour) ? this.currentArmour.name : "";
+    }
+
+    getWeapon() {
+        return (this.currentWeapon) ? this.currentWeapon.name : "";
     }
 }

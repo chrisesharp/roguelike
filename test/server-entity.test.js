@@ -63,4 +63,28 @@ describe('entity creation', () => {
         expect(defender.getHitPoints()).toBe(defender.getMaxHitPoints());
         done();
     });
+
+    test('should be unarmoured if drop armour', (done) => {
+        const pos1 = {"x":1,"y":2,"z":0};
+        let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
+        let armour = new Chainmail();
+        defender.inventory.push(armour);
+        defender.currentArmour = armour;
+        expect(defender.getAC()).toBe(7);
+        defender.dropItem(armour.name);
+        expect(defender.getAC()).toBe(10);
+        done();
+    });
+
+    test('should be unarmed if drop weapon', (done) => {
+        const pos1 = {"x":1,"y":2,"z":0};
+        let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
+        let rock = new Rock();
+        defender.inventory.push(rock);
+        defender.currentWeapon = rock;
+        expect(defender.isWielding()).toEqual(rock);
+        defender.dropItem(rock.name);
+        expect(defender.isWielding()).toEqual(null);
+        done();
+    });
 });

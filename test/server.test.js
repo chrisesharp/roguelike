@@ -10,6 +10,7 @@ import Entity from "../src/client/javascripts/entity";
 import Rock from "../src/items/rock";
 import Dagger from "../src/items/dagger";
 import Apple from "../src/items/apple";
+import Chainmail from "../src/items/chainmail";
  
 let socket;
 let httpServer;
@@ -479,6 +480,28 @@ describe('basic socket.io API', () => {
     socket.on('message', (msg) => {
       expect(msg).toEqual(["You are not wielding anything now."]);
       expect(wielder.isWielding()).toBe(null);
+      done();
+    });
+  });
+
+  test('should wear chainmail', (done) => {
+    let armour = new Chainmail();
+    let wearer = app.connections[socket.id];
+    wearer.inventory.push(armour);
+    socket.emit('wear', 'chainmail');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You are wearing the chainmail."]);
+      expect(wearer.getAC()).toBe(7);
+      done();
+    });
+  });
+
+  test('should not wear chainmail if not in inventory', (done) => {
+    let wearer = app.connections[socket.id];
+    socket.emit('wear', 'chainmail');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You don't have any chainmail to wear."]);
+      expect(wearer.getAC()).toBe(10);
       done();
     });
   });

@@ -95,7 +95,14 @@ class Game {
         } else {
             this.socket.emit("wield", null);
         }
-        
+    }
+
+    wearItem(item) {
+        if (item) {
+            this.socket.emit("wear", item.name);
+        } else {
+            this.socket.emit("wear", null);
+        }
     }
 
     addItem(item) {
