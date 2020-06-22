@@ -8,6 +8,7 @@ export default class Item extends Entity {
         this.alive = false;
         this.walkable = true;
         this.edible = (properties['edible'] !== undefined) ? properties['edible'] : false;
+        this.wiedable = (properties['wiedable'] !== undefined) ? properties['wiedable'] : false;
     }
 
     describeA(capitalize) {
@@ -25,5 +26,9 @@ export default class Item extends Entity {
 
     isEdible() {
         return this.edible;
+    }
+
+    isWieldable() {
+        return this.wiedable;
     }
 }

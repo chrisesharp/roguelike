@@ -9,13 +9,19 @@ export default class ServerEntity extends Entity {
         super(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
+        this.currentWeapon = null;
         this.inventory = [];
     }
 
     handleCollision(other) {
         if (other.isAlive()) {
-            this.messenger(this, MSGTYPE.INF, `${other.name} is there.`);
-            other.hitFor(this.damage);
+            if (this.isWielding()) {
+                let dmg = this.dealDamage();
+                other.hitFor(dmg);
+                this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
+            } else {
+                this.messenger(this, MSGTYPE.INF, `${other.name} is there.`);
+            }
         } else {
             this.messenger(this, MSGTYPE.INF, `You see a dead ${other.name}.`);
         }
@@ -34,6 +40,14 @@ export default class ServerEntity extends Entity {
         this.inventory.push(item);
         this.messenger(this, MSGTYPE.UPD, `You take ${item.describeThe()}.`);
         return true;
+    }
+
+    dealDamage() {
+        let damage = this.damage;
+        if (this.currentWeapon) {
+            damage += this.currentWeapon.damage;
+        }
+        return damage;
     }
 
     dropItem(itemName) {
@@ -63,6 +77,26 @@ export default class ServerEntity extends Entity {
         } else {
             this.messenger(this, MSGTYPE.INF, `You don't have the ${itemName} to eat.`);
         }
+    }
+
+    wield(weaponName) {
+        if (weaponName) {
+            let weapon = this.inventory.find(o => (o.name === weaponName));
+            if (weapon) {
+                this.currentWeapon = weapon;
+                this.messenger(this, MSGTYPE.UPD, `You are wielding ${weapon.describeA()}.`);
+            } else {
+                this.messenger(this, MSGTYPE.INF, `You don't have a ${weaponName} to wield.`);
+            }
+        } else {
+            this.currentWeapon = null;
+            this.messenger(this, MSGTYPE.UPD, `You are not wielding anything now.`);
+        }
+        
+    }
+
+    isWielding() {
+        return this.currentWeapon;
     }
 
     getInventory() {

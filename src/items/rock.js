@@ -7,6 +7,8 @@ export default class Rock extends Item {
         super(properties);
         this.name = "rock";
         this.details = "igneous"
+        this.wiedable = true;
+        this.damage = 2;
         this.setGlyph({
             char: '*',
             foreground: 'grey'

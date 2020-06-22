@@ -176,6 +176,11 @@ export default class Server {
             entity.eatItem(itemName);
         });
 
+        socket.on("wield", (weapon) => {
+            let entity = this.connections[socket.id];
+            entity.wield(weapon);
+        });
+
         socket.on("move", direction => {
             let entity = this.connections[socket.id];
             // let startRoom = this.cave.getRegion(entity);

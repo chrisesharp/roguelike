@@ -7,6 +7,8 @@ export default class Dagger extends Item {
         super(properties);
         this.name = "dagger";
         this.details = "it has a sharp edge"
+        this.wiedable = true;
+        this.damage = 3;
         this.setGlyph({
             char: '!',
             foreground: 'lightblue'

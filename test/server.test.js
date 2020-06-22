@@ -445,4 +445,41 @@ describe('basic socket.io API', () => {
       done();
     });
   });
+
+  test('should wield a dagger', (done) => {
+    let dagger = new Dagger();
+    let wielder = app.connections[socket.id];
+    wielder.inventory.push(dagger);
+    socket.emit('wield', 'dagger');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You are wielding a dagger."]);
+      expect(wielder.dealDamage()).toBe(4);
+      done();
+    });
+  });
+
+  test("should not wield a dagger if you don't have one", (done) => {
+    let rock = new Rock();
+    let wielder = app.connections[socket.id];
+    wielder.inventory.push(rock);
+    socket.emit('wield', 'dagger');
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You don't have a dagger to wield."]);
+      done();
+    });
+  });
+
+  test('should not wield a dagger if wield nothing', (done) => {
+    let rock = new Rock();
+    let wielder = app.connections[socket.id];
+    wielder.inventory.push(rock);
+    wielder.currentWeapon = rock;
+    expect(wielder.isWielding()).toEqual(rock);
+    socket.emit('wield', null);
+    socket.on('message', (msg) => {
+      expect(msg).toEqual(["You are not wielding anything now."]);
+      expect(wielder.isWielding()).toBe(null);
+      done();
+    });
+  });
 });

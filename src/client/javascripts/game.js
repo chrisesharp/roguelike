@@ -89,6 +89,15 @@ class Game {
         this.socket.emit("eat", item.name);
     }
 
+    wieldItem(item) {
+        if (item) {
+            this.socket.emit("wield", item.name);
+        } else {
+            this.socket.emit("wield", null);
+        }
+        
+    }
+
     addItem(item) {
         let x = item.pos.x;
         let y = item.pos.y;

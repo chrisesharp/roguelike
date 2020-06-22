@@ -29,9 +29,9 @@ export const letterIndex = function(keyCode) {
 
 export const wHandler = function(input) { 
     if (input.shiftKey) {
-        this.showItemsSubScreen(Screens.wieldScreen, this.player.getItems(),'You have nothing to wield.');
+        this.showItemsSubScreen(Screens.wieldScreen, this.player.getInventory(),'You have nothing to wield.');
     } else {
-        this.showItemsSubScreen(Screens.wearScreen, this.player.getItems(),'You have nothing to wear.');
+        this.showItemsSubScreen(Screens.wearScreen, this.player.getInventory(),'You have nothing to wear.');
     }
     return true;
 }

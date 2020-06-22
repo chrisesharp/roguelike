@@ -153,7 +153,7 @@ export const examineScreen = new ItemListScreen({
     },
     ok: function(selectedItems) {
         let key = Object.keys(selectedItems)[0];
-        let item = new Item(selectedItems[key]);
+        let item = selectedItems[key];
         game.addMessage(`It's ${item.describeA(false)} (${item.getDetails()}).`);
         return false;
     }
@@ -164,39 +164,31 @@ export const eatScreen = new ItemListScreen({
     canSelect: true,
     canSelectMultipleItems: false,
     isAcceptable: function(item) {
-        return item && new Item(item).isEdible();
+        return item && item.isEdible();
     },
     ok: function(selectedItems) {
         let key = Object.keys(selectedItems)[0];
-        let item = new Item(selectedItems[key]);
+        let item = selectedItems[key];
         game.eatItem(item);
         return false;
     }
 });
 
-// export const wieldScreen = new ItemListScreen({
-//     caption: 'Choose the item you wish to wield',
-//     canSelect: true,
-//     canSelectMultipleItems: false,
-//     hasNoItemOption: true,
-//     isAcceptable: function(item) {
-//         return item && item.hasMixin('Equippable') && item.isWieldable();
-//     },
-//     ok: function(selectedItems) {
-//         let keys = Object.keys(selectedItems);
-//         if (keys.length === 0) {
-//             this._player.unwield();
-//             game.sendMessage(this._player, "You are empty handed.")
-//         } else {
-//             // Make sure to unequip the item first in case it is the armor.
-//             let item = selectedItems[keys[0]];
-//             this._player.unequip(item);
-//             this._player.wield(item);
-//             game.sendMessage(this._player, "You are wielding %s.", [item.describeA()]);
-//         }
-//         return false;
-//     }
-// });
+export const wieldScreen = new ItemListScreen({
+    caption: 'Choose the item you wish to wield',
+    canSelect: true,
+    canSelectMultipleItems: false,
+    hasNoItemOption: true,
+    isAcceptable: function(item) {
+        return item && item.isWieldable();
+    },
+    ok: function(selectedItems) {
+        let key = Object.keys(selectedItems)[0];
+        let weapon = selectedItems[key];
+        game.wieldItem(weapon);
+        return false;
+    }
+});
 
 // export const wearScreen = new ItemListScreen({
 //     caption: 'Choose the item you wish to wear',

@@ -14,8 +14,8 @@ Screens.playScreen = playScreen;
 // import {lookScreen}  from "./targets.js"; 
 // Screens.lookScreen = lookScreen;
 
-// import {wieldScreen}  from "./items.js"; 
-// Screens.wieldScreen = wieldScreen;
+import {wieldScreen}  from "./item-list.js"; 
+Screens.wieldScreen = wieldScreen;
 
 // import {wearScreen}  from "./items.js"; 
 // Screens.wearScreen = wearScreen;
