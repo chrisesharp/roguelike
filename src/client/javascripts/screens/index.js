@@ -11,8 +11,8 @@ Screens.helpScreen = helpScreen;
 import {playScreen}  from "./play.js"; 
 Screens.playScreen = playScreen;
 
-// import {lookScreen}  from "./targets.js"; 
-// Screens.lookScreen = lookScreen;
+import {lookScreen}  from "./target.js"; 
+Screens.lookScreen = lookScreen;
 
 import {wieldScreen}  from "./item-list.js"; 
 Screens.wieldScreen = wieldScreen;

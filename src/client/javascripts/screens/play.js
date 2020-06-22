@@ -5,6 +5,7 @@ import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
 import { pickupScreen } from './item-list.js';
+import { lookScreen } from './target.js';
 
 
 class PlayScreen  {
@@ -167,6 +168,12 @@ class PlayScreen  {
         } else {
             this.showItemsSubScreen(pickupScreen, items, 'There is nothing here to pick up.');
         } 
+    }
+
+    showLookScreen() {
+        let offsets = this.getScreenOffsets();
+        lookScreen.setup(this.player, offsets.x, offsets.y);
+        this.setSubScreen(lookScreen);
     }
 };
 

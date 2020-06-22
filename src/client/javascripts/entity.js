@@ -28,6 +28,10 @@ export default class Entity extends Glyph {
         this.inventory = [];
     }
 
+    getSightRadius() {
+        return this.sight;
+    }
+
     getHitPoints() {
         return this.hitPoints;
     }
