@@ -12,7 +12,7 @@ KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(1, 0, 0); return f
 KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(0, -1, 0); return false;} });
 KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(0, 1, 0); return false;} });
 
-export const getHandler = function(inputType, inputData) {
+const getHandler = function(inputType, inputData) {
     let handler = null;
     if (inputType === 'keydown') {
         handler = KEYDOWN.find(o => o.key === inputData.keyCode);
