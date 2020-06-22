@@ -2,11 +2,12 @@
 
 import Entity from '../client/javascripts/entity.js';
 import { MSGTYPE } from '../messages.js';
-
+import Rules from '../rules.js';
 
 export default class ServerEntity extends Entity {
     constructor(properties) {
         super(properties);
+        this.rules = new Rules(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
         this.ac = 10;
@@ -18,15 +19,29 @@ export default class ServerEntity extends Entity {
     handleCollision(other) {
         if (other.isAlive()) {
             if (this.isWielding()) {
-                let dmg = this.dealDamage();
-                other.hitFor(dmg);
-                this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
+                if (this.tryToHit(other)) {
+                    let dmg = this.dealDamage();
+                    other.hitFor(dmg);
+                    this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
+                    this.messenger(other, MSGTYPE.INF, `${this.name} hit you for ${dmg} damage.`);
+                } else {
+                    this.messenger(this, MSGTYPE.INF, `You missed ${other.name}!`);
+                    this.messenger(other, MSGTYPE.INF, `${this.name} missed you.`);
+                }
             } else {
                 this.messenger(this, MSGTYPE.INF, `${other.name} is there.`);
             }
         } else {
             this.messenger(this, MSGTYPE.INF, `You see a dead ${other.name}.`);
         }
+    }
+
+    toHitBonus() {
+        return 0;
+    }
+
+    tryToHit(other) {
+        return this.rules.toHitRoll(this, other);
     }
 
     hitFor(damage) {
@@ -103,5 +118,13 @@ export default class ServerEntity extends Entity {
 
     getInventory() {
         return this.inventory;
+    }
+
+    getAC() {
+        let ac = this.ac;
+        if (this.currentArmour) {
+            ac += this.currentArmour.ac;
+        }
+        return ac;
     }
 }

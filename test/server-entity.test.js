@@ -2,7 +2,9 @@
 
 import ServerEntity from '../src/entities/server-entity.js';
 import Rock from '../src/items/rock.js';
-const mockServer =  () => {};
+import Chainmail from '../src/items/chainmail.js';
+
+const mockServer = (obj, type, msg) => { };
 
 describe('entity creation', () => {
     test('should not attack if unarmed', (done) => {
@@ -23,7 +25,7 @@ describe('entity creation', () => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3});
-        let attacker = new ServerEntity({pos:pos2, messenger:mockServer});
+        let attacker = new ServerEntity({pos:pos2, messenger:mockServer, random:(()=>{return 1;})});
         let rock = new Rock();
         attacker.currentWeapon = rock;
         expect(attacker.isWielding()).toEqual(rock);
@@ -36,6 +38,29 @@ describe('entity creation', () => {
         attacker.handleCollision(defender);
         expect(attacker.getHitPoints()).toBe(attacker.getMaxHitPoints());
         expect(defender.isAlive()).toBe(false);
+        done();
+    });
+
+    test('should have better armour class if wearning armour', (done) => {
+        const pos1 = {"x":1,"y":2,"z":0};
+        let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
+        expect(defender.getAC()).toBe(10);
+        let armour = new Chainmail();
+        defender.currentArmour = armour;
+        expect(defender.getAC()).toBe(7);
+        done();
+    });
+
+    test('should miss if roll low', (done) => {
+        const pos1 = {"x":1,"y":2,"z":0};
+        const pos2 = {"x":2,"y":2,"z":0};
+        let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3});
+        let attacker = new ServerEntity({pos:pos2, messenger:mockServer, random:(()=>{return 0;})});
+        let rock = new Rock();
+        attacker.currentWeapon = rock;
+        attacker.handleCollision(defender);
+        expect(attacker.getHitPoints()).toBe(attacker.getMaxHitPoints());
+        expect(defender.getHitPoints()).toBe(defender.getMaxHitPoints());
         done();
     });
 });
