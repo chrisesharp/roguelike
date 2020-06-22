@@ -9,7 +9,9 @@ export default class ServerEntity extends Entity {
         super(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
+        this.ac = 10;
         this.currentWeapon = null;
+        this.currentArmour = null;
         this.inventory = [];
     }
 
