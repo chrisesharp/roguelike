@@ -1,6 +1,7 @@
 "use strict";
 import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
+import ServerHealth from './server-health';
 import Map from './map';
 import Entity from './entity';
 import Item from './item';
@@ -292,37 +293,6 @@ class Game {
         }
     }
 
-    initHealth(field) {
-        this.health = field;
-        this.getHealth();
-    }
-
-    getHealth() {
-        axios.get(`${BASE_URL}/health`,{
-                timeout: 2500
-            }).then( (result) => {
-                game.updateHealth(result.data.status);
-            }).catch( (error) => {
-                game.updateHealth("DOWN");
-            }).then( () => {
-                setTimeout(game.getHealth, 15000);
-            });
-    }
-
-    updateHealth(state) {
-        game.health.innerHTML = "Status:"+ state;
-        switch (state) {
-            case "UP":
-                game.health.style.color = "green";
-                break;
-            case "DOWN":
-                game.health.style.color = "red";
-                break;
-            default:
-                game.health.style.color = "orange";
-        }
-    }
-
     updateStats(stats) {
         game.statsField.innerHTML = stats;
     }
@@ -367,7 +337,7 @@ class Game {
 }
 
 export const game = new Game();
-
+const monitor = new ServerHealth(`${BASE_URL}/health`);
 const app = document.getElementById('playfield');
 const name = document.getElementById('name');
 const roleField = document.getElementById('role_input');
@@ -378,7 +348,7 @@ const status = document.getElementById('status');
 
 window.onload =  async () => {
     app.appendChild(game.getDisplay().getContainer());
-    game.initHealth(status);
+    monitor.initServerHealth(status);
     game.initRoles(roleField, rolePrototype);
     game.start(name, messages, stats);
 };
