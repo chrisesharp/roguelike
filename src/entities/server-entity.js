@@ -94,7 +94,7 @@ export default class ServerEntity extends Entity {
         return damage;
     }
 
-    dropItem(itemName) {
+    removeItemFromInventory(itemName) {
         let item;
         for (let i=0; i< this.inventory.length; i++) {
             if (this.inventory[i].name === itemName) {
@@ -102,28 +102,24 @@ export default class ServerEntity extends Entity {
                 break;
             }
         }
+        return item;
+    }
+
+    dropItem(itemName) {
+        let item = this.removeItemFromInventory(itemName);
         if (item) {
             if (this.currentArmour === item) {
                 this.wear();
-            }
-
-            if (this.currentWeapon === item) {
+            } else if (this.currentWeapon === item) {
                 this.wield();
             }
-
             this.messenger(this, MSGTYPE.UPD, `You drop ${item.describeThe()}.`);
         }
         return item;
     }
 
     eat(itemName) {
-        let item;
-        for (let i=0; i< this.inventory.length; i++) {
-            if (this.inventory[i].name === itemName) {
-                item = this.inventory.splice(i,1)[0];
-                break;
-            }
-        }
+        let item = this.removeItemFromInventory(itemName);
         if (item) {
             this.messenger(this, MSGTYPE.UPD, `You eat ${item.describeThe()}.`);
         } else {
@@ -144,7 +140,6 @@ export default class ServerEntity extends Entity {
             this.currentWeapon = null;
             this.messenger(this, MSGTYPE.UPD, `You are not wielding anything now.`);
         }
-        
     }
 
     wear(armourName) {
@@ -160,7 +155,7 @@ export default class ServerEntity extends Entity {
             this.setAC(null);
             this.messenger(this, MSGTYPE.UPD, `You are not wearing anything now.`);
         }
-    } 
+    }
 
     isWielding() {
         return this.currentWeapon;
