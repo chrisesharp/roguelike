@@ -38,15 +38,13 @@ export default class TargetBasedScreen {
 
     render(display) {
         game.getScreen().renderTiles.call(game.getScreen(), display);
-        let points = Geometry.getLine(this.startX, this.startY, this.cursorX,
-            this.cursorY);
-
-        for (let i = 0; i < points.length; i++) {
+        let points = Geometry.getLine(this.startX, this.startY, this.cursorX, this.cursorY);
+        for (let i = 0; i < points.length - 1; i++) {
             display.drawText(points[i].x, points[i].y, '%c{magenta}*');
         }
-
-        display.drawText(0, game.getScreenHeight() - 1,
-            this.captionFunction(this.cursorX + this.offsetX, this.cursorY + this.offsetY));
+        display.drawText(points[points.length-1].x, points[points.length-1].y, '%c{magenta}*')
+        let caption = this.captionFunction(this.cursorX + this.offsetX, this.cursorY + this.offsetY);
+        display.drawText(0, game.getScreenHeight() - 1, caption);
     }
 
     handleInput(inputType, inputData) {
@@ -122,7 +120,6 @@ export const lookScreen = new TargetBasedScreen({
                 }
             }
         }
-        let message = (details) ? `${element} - ${description} (${details})` : `${element} - ${description}`;
-        return message;
+        return (details) ? `${element} - ${description} (${details})` : `${element} - ${description}`;
     }
 });
