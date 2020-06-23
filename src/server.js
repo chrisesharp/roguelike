@@ -25,27 +25,27 @@ export default class Server {
         if (z < entity.pos.z) {
             if (tile != Tiles.stairsUpTile) {
                 this.sendMessage(entity, MSGTYPE.INF, "You can't go up here!");
-                return false;
+                return null;
             } else {
                 this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[z]}!`);
-                return true;
+                return newPos;
             }
         }
 
         if (z > entity.pos.z) {
             if (tile != Tiles.stairsDownTile) {
                 this.sendMessage(entity, MSGTYPE.INF, "You can't go down here!");
-                return false;
+                return null;
             } else {
                 this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[z]}!`);
-                return true;
+                return newPos;
             }
         }
 
         let target = this.getEntityAt(newPos);
         if (target) {
             entity.handleCollision(target);
-            return false;
+            return null;
         }
         
         if (tile.isWalkable()) {
@@ -54,10 +54,10 @@ export default class Server {
                 let msg = (items.length === 1) ? `You see ${[items[0].describeA()]}.` : "There are several objects here.";
                 this.sendMessage(entity, MSGTYPE.INF, msg);
             }
-            return true;
+            return newPos;
         }
         this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
-        return false;
+        return null;
     }
 
     addEntity(id, prototype, pos) {
@@ -174,13 +174,8 @@ export default class Server {
 
         socket.on("move", direction => {
             let delta = getMovement(direction);
-            let canMove = (entity.isAlive()) ? server.tryMove(entity, delta) : false;
-            if (canMove) {
-                let position = {
-                    "x":entity.pos.x + delta.x,
-                    "y":entity.pos.y + delta.y,
-                    "z":entity.pos.z + delta.z,
-                }
+            let position = (entity.isAlive()) ? server.tryMove(entity, delta) : null;
+            if (position) {
                 let startRoom = entity.pos.z;
                 let newRoom = position.z;
                 entity.pos = position;
