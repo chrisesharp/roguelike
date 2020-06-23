@@ -110,11 +110,12 @@ class PlayScreen  {
 
     renderStats() {
         let hp = this.player.getHitPoints();
+        let ac = this.player.getAC();
         let max = this.player.getMaxHitPoints();
         let lvl = 1;
         let gp = 0;
-        let hunger = this.player.getHunger().string;
-        let statsHTML = `<hr>HP: ${hp}/${max}<hr>Lvl: ${lvl}<hr>GP: ${gp}<hr>${hunger}`; 
+        let hunger = this.player.getHunger();
+        let statsHTML = `<hr>HP: ${hp}/${max}<hr>AC: ${ac}<hr>Lvl: ${lvl}<hr>GP: ${gp}<hr>${hunger}`; 
         game.updateStats(statsHTML);
     }
 

@@ -4,13 +4,22 @@ import Entity from '../client/javascripts/entity.js';
 import { MSGTYPE } from '../messages.js';
 import Rules from '../rules.js';
 
+const hungerLevels = {
+    0: "not hungry",
+    1: "hungry",
+    2: "starving"
+};
+
 export default class ServerEntity extends Entity {
     constructor(properties) {
         super(properties);
         this.rules = new Rules(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
-        this.ac = 10;
+        this.base_ac = 10;
+        this.ac = 10;;
+        this.hungerLevel = 0
+        this.hunger = this.getHunger();
         this.currentWeapon = null;
         this.currentArmour = null;
         this.inventory = [];
@@ -36,11 +45,22 @@ export default class ServerEntity extends Entity {
         }
     }
 
+    getHunger() {
+        let level = Math.floor(this.hungerLevel);
+        return {value:level,description:hungerLevels[level]};
+    }
+
+    exertion(effort) {
+        this.hungerLevel += effort/20;
+        this.hunger = this.getHunger();
+    }
+
     toHitBonus() {
         return 0;
     }
 
     tryToHit(other) {
+        this.exertion(1);
         return this.rules.toHitRoll(this, other);
     }
 
@@ -89,7 +109,7 @@ export default class ServerEntity extends Entity {
         return item;
     }
 
-    eatItem(itemName) {
+    eat(itemName) {
         let item;
         for (let i=0; i< this.inventory.length; i++) {
             if (this.inventory[i].name === itemName) {
@@ -124,13 +144,13 @@ export default class ServerEntity extends Entity {
         if (armourName) {
             let armour = this.inventory.find(o => (o.name === armourName));
             if (armour) {
-                this.currentArmour = armour;
+                this.setAC(armour);
                 this.messenger(this, MSGTYPE.UPD, `You are wearing ${armour.describeThe()}.`);
             } else {
                 this.messenger(this, MSGTYPE.INF, `You don't have any ${armourName} to wear.`);
             }
         } else {
-            this.currentArmour = null;
+            this.setAC(null);
             this.messenger(this, MSGTYPE.UPD, `You are not wearing anything now.`);
         }
     } 
@@ -143,11 +163,16 @@ export default class ServerEntity extends Entity {
         return this.inventory;
     }
 
-    getAC() {
-        let ac = this.ac;
+    setAC(armour) {
+        this.currentArmour = armour;
+        let ac = this.base_ac;
         if (this.currentArmour) {
             ac += this.currentArmour.ac;
         }
-        return ac;
+        this.ac = ac;
+    }
+
+    getAC() {
+        return this.ac;
     }
 }

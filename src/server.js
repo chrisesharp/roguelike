@@ -16,14 +16,10 @@ export default class Server {
     } 
 
     tryMove(entity, delta) {
-        if (!entity.isAlive()) {
-            return false;
-        }
         let x = entity.pos.x + delta.x;
         let y = entity.pos.y + delta.y;
         let z = entity.pos.z + delta.z;
         let newPos = {x:x, y:y, z:z};
-
         let tile = this.cave.getMap().getTile(x, y, entity.pos.z);
 
         if (z < entity.pos.z) {
@@ -55,11 +51,8 @@ export default class Server {
         if (tile.isWalkable()) {
             let items = this.cave.getItemsAt(newPos);
             if (items.length > 0) {
-                if (items.length === 1) {
-                    this.sendMessage(entity, MSGTYPE.INF, `You see ${[items[0].describeA()]}.`);
-                } else {
-                    this.sendMessage(entity, MSGTYPE.INF, "There are several objects here.");
-                }
+                let msg = (items.length === 1) ? `You see ${[items[0].describeA()]}.` : "There are several objects here.";
+                this.sendMessage(entity, MSGTYPE.INF, msg);
             }
             return true;
         }
@@ -68,8 +61,8 @@ export default class Server {
     }
 
     addEntity(id, prototype, pos) {
+        prototype.pos = pos;
         let entity = this.repo.create(prototype);
-        entity.pos = pos;
         entity.entrance = pos;
         this.connections[id] = entity;
         return entity;
@@ -94,11 +87,8 @@ export default class Server {
             if (this.connections[socket_id] === entity) {
                 this.backend.to(socket_id).emit("message", message);
                 if (type === MSGTYPE.UPD) {
-                    if (entity.isAlive()) {
-                        this.backend.to(socket_id).emit("update", entity);
-                    } else {
-                        this.backend.to(socket_id).emit("dead", entity);
-                    }
+                    let cmd = (entity.isAlive()) ? "update" : "dead";
+                    this.backend.to(socket_id).emit(cmd, entity);
                 }
             }
         }
@@ -130,18 +120,19 @@ export default class Server {
             this.backend.emit("message",  entity.name + " just entered this dungeon complex");
             this.backend.emit("entities", this.connections);
         });
+        this.registerEventHandlers(socket, entity);
+    }
 
+    registerEventHandlers(socket, entity) {
         socket.on("get_entities", () => {
             socket.emit("entities", this.connections);
         });
 
         socket.on("get_items", () => {
-            let entity = this.connections[socket.id];
             socket.emit("items", this.cave.getItems(entity.pos.z));
         });
 
         socket.on("take", (itemName) => {
-            let entity = this.connections[socket.id];
             let items = this.cave.getItemsAt(entity.pos);
             let item = items.find(o => (o.name === itemName));
             if (item && entity.tryTake(item)) {
@@ -154,7 +145,6 @@ export default class Server {
         });
 
         socket.on("drop", (itemName) => {
-            let entity = this.connections[socket.id];
             let item = entity.dropItem(itemName);
             if (item) {
                 let room = entity.pos.z;
@@ -163,48 +153,40 @@ export default class Server {
             }
         });
 
-        socket.on("eat", (itemName) => {
-            let entity = this.connections[socket.id];
-            entity.eatItem(itemName);
+        socket.on("eat", (food) => {
+            entity.eat(food);
         });
 
         socket.on("wield", (weapon) => {
-            let entity = this.connections[socket.id];
             entity.wield(weapon);
         });
 
         socket.on("wear", (armour) => {
-            let entity = this.connections[socket.id];
             entity.wear(armour);
         });
 
         socket.on("move", direction => {
-            let entity = this.connections[socket.id];
-            let startRoom = entity.pos.z;
             let delta = getMovement(direction);
-            let canMove = this.tryMove(entity, delta);
+            let canMove = (entity.isAlive()) ? this.tryMove(entity, delta) : false;
             if (canMove) {
                 let position = {
                     "x":entity.pos.x + delta.x,
                     "y":entity.pos.y + delta.y,
                     "z":entity.pos.z + delta.z,
                 }
+                let startRoom = entity.pos.z;
                 let newRoom = position.z;
                 entity.pos = position;
                 if (!(newRoom in socket.rooms)) {
                     socket.leave(startRoom, () => {
-                        socket.to(room).emit(entity.name + " just left this cave");
+                        socket.to(startRoom).emit(entity.name + " just left this cave");
                     });
                     socket.join(newRoom, () => {
-                        socket.to(room).emit(entity.name + " just entered this cave");
+                        socket.to(startRoom).emit(entity.name + " just entered this cave");
                     });
                 }
                 this.backend.emit("position", socket.id, entity.pos);
             }
-        });
-
-        socket.on("echo", data => {
-            socket.emit("echo", "Hi there, " + data);
         });
 
         socket.on("map", () => {
@@ -218,7 +200,7 @@ export default class Server {
         });
 
         socket.on("disconnect", (reason) => {
-            this.backend.emit("delete",this.connections[socket.id].pos);
+            this.backend.emit("delete",entity.pos);
             delete this.connections[socket.id];
         });
     }

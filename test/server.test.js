@@ -78,27 +78,6 @@ afterEach((done) => {
 
 describe('basic socket.io API', () => {
 
-  test('should connect and join default room', (done) => {
-    ioServer.on('connection', (mySocket) => {
-      let name = mySocket.handshake.query.name;
-      expect(name).toBe('test');
-      let role = mySocket.handshake.query.role;
-      expect(role).toBe('testcode');
-      expect(mySocket).toBeDefined();
-    });
-    let startRoom = app.defaultRoom;
-    socket.on('message', (message) => {
-      expect(message[1]).toBe(startRoom);
-      expect(message[2]).toBe(socket.id);
-      done();
-    });
-    socket.emit('echo', 'Test');
-    socket.on('echo', (message) => {
-      expect(message).toBe('Hi there, Test');
-      done();
-    });
-  });
-
   test('should return default map', (done) => {
     socket.emit('map');
     socket.on('map', (message) => {

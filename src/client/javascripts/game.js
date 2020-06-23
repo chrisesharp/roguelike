@@ -111,7 +111,7 @@ class Game {
         this.socket.emit("drop", item.name);
     }
 
-    eatItem(item) {
+    eat(item) {
         this.socket.emit("eat", item.name);
     }
 

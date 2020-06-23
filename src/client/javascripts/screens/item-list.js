@@ -177,7 +177,7 @@ export const eatScreen = new ItemListScreen({
     ok: function(selectedItems) {
         let key = Object.keys(selectedItems)[0];
         let item = selectedItems[key];
-        game.eatItem(item);
+        game.eat(item);
         return false;
     }
 });

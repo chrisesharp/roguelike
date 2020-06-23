@@ -2,11 +2,6 @@
 
 import Glyph from './glyph.js';
 
-const hungerLevels = {
-    0: "not hungry",
-    1: "hungry",
-    2: "starving"
-};
 
 export default class Entity extends Glyph {
     constructor(properties = {}) {
@@ -20,11 +15,12 @@ export default class Entity extends Glyph {
         this.speed = properties['speed'] || 1000;
         this.maxHitPoints = (properties['hp'] !== undefined) ? properties['hp'] : 1;
         this.hitPoints = this.maxHitPoints;
-        this.hunger = 0;
+        this.hunger = (properties['hunger'] !== undefined) ? properties['hunger'] : {value:0, description:"not hungry"};
         this.sight = 10;
         this.details = properties['details'] || "none";
         this.currentArmour = properties['currentArmour'] || null;
         this.currentWeapon = properties['currentWeapon'] || null;
+        this.ac = properties['ac'] || 10;
         this.inventory = [];
     }
 
@@ -40,8 +36,12 @@ export default class Entity extends Glyph {
         return this.maxHitPoints;
     }
 
+    getAC() {
+        return this.ac;
+    }
+
     getHunger() {
-        return {value:this.hunger,string:hungerLevels[this.hunger]};
+        return this.hunger.description;
     }
 
     getSightRadius() {

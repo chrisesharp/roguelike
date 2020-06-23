@@ -46,7 +46,7 @@ describe('entity creation', () => {
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
         expect(defender.getAC()).toBe(10);
         let armour = new Chainmail();
-        defender.currentArmour = armour;
+        defender.setAC(armour);
         expect(defender.getAC()).toBe(7);
         done();
     });
@@ -69,9 +69,10 @@ describe('entity creation', () => {
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
         let armour = new Chainmail();
         defender.inventory.push(armour);
-        defender.currentArmour = armour;
+        defender.setAC(armour);
         expect(defender.getAC()).toBe(7);
         defender.dropItem(armour.name);
+        defender.setAC(null);
         expect(defender.getAC()).toBe(10);
         done();
     });
@@ -87,4 +88,15 @@ describe('entity creation', () => {
         expect(defender.isWielding()).toEqual(null);
         done();
     });
+
+    test('should be hungry with exertion', (done) => {
+        const pos1 = {"x":1,"y":2,"z":0};
+        let entity = new ServerEntity({pos:pos1, messenger:mockServer, random:(()=>{return 0;})});
+        expect(entity.getHunger().description).toBe("not hungry");
+        entity.exertion(20);
+        expect(entity.getHunger().description).toBe("hungry");
+        entity.exertion(20);
+        expect(entity.getHunger().description).toBe("starving");
+        done();
+      });
 });

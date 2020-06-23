@@ -44,7 +44,7 @@ describe('entity creation', () => {
 
     test('should not be hungry by default', (done) => {
       let entity = new Entity();
-      expect(entity.getHunger().value).toBe(0);
+      expect(entity.getHunger()).toBe("not hungry");
       done();
     });
 
