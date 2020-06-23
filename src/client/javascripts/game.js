@@ -13,6 +13,9 @@ import io from 'socket.io-client';
 const stats = document.getElementById('stats_pane');
 const hostname = location.host;
 const BASE_URL = 'http://'+hostname;
+const DEFAULT_ROLES = [
+    {type:"warrior",name:"Warrior"}
+];
 
 class Game {
     constructor() {
@@ -46,6 +49,28 @@ class Game {
         game.nameField.querySelector("#name_input").focus();
         this.statsField = statsField;
         this.switchScreen(startScreen);
+    }
+
+    initRoles(roleField, rolePrototype) {
+        this.roleField = roleField;
+        this.rolePrototype = rolePrototype;
+        axios.get(`${BASE_URL}/roles`,{
+                timeout: 2500
+            }).then( (result) => {
+                game.updateRoles(result.data);
+            }).catch( (error) => {
+                game.updateRoles(DEFAULT_ROLES);
+            });
+    }
+
+    updateRoles(roles) {
+        this.roleField.removeChild(this.rolePrototype);
+        roles.forEach((role) => {
+            let newRole = this.rolePrototype.cloneNode(false);
+            newRole.value = role.type;
+            newRole.innerHTML = role.name;
+            this.roleField.appendChild(newRole);
+        });
     }
 
     onMapAvailable() {
@@ -345,6 +370,8 @@ export const game = new Game();
 
 const app = document.getElementById('playfield');
 const name = document.getElementById('name');
+const roleField = document.getElementById('role_input');
+const rolePrototype = document.getElementsByClassName('role')[0];
 const messages = document.getElementById('messages');
 const messagePrototype = document.getElementsByClassName('message')[0];
 const status = document.getElementById('status');
@@ -352,5 +379,6 @@ const status = document.getElementById('status');
 window.onload =  async () => {
     app.appendChild(game.getDisplay().getContainer());
     game.initHealth(status);
+    game.initRoles(roleField, rolePrototype);
     game.start(name, messages, stats);
 };
