@@ -22,30 +22,14 @@ export default class Server {
         let newPos = {x:x, y:y, z:z};
         let tile = this.cave.getMap().getTile(x, y, entity.pos.z);
 
-        if (z < entity.pos.z) {
-            if (tile != Tiles.stairsUpTile) {
-                this.sendMessage(entity, MSGTYPE.INF, "You can't go up here!");
-                return null;
-            } else {
-                this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[z]}!`);
-                return newPos;
-            }
-        }
-
-        if (z > entity.pos.z) {
-            if (tile != Tiles.stairsDownTile) {
-                this.sendMessage(entity, MSGTYPE.INF, "You can't go down here!");
-                return null;
-            } else {
-                this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[z]}!`);
-                return newPos;
-            }
-        }
-
         let target = this.getEntityAt(newPos);
         if (target) {
             entity.handleCollision(target);
             return null;
+        }
+
+        if (z !== entity.pos.z) {
+            return this.levelChange(entity, newPos, tile);
         }
         
         if (tile.isWalkable()) {
@@ -57,6 +41,21 @@ export default class Server {
             return newPos;
         }
         this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
+        return null;
+    }
+
+    levelChange(entity, newPos, tile) {
+        if (newPos.z < entity.pos.z && tile === Tiles.stairsUpTile) {
+            this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[newPos.z]}!`);
+            return newPos;
+        }
+
+        if (newPos.z > entity.pos.z && tile === Tiles.stairsDownTile) {
+            this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[newPos.z]}!`);
+            return newPos;
+        } 
+        
+        this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
         return null;
     }
 

@@ -193,7 +193,7 @@ describe('basic socket.io API', () => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     socket.emit('move', DIRS.DOWN);
     socket.on('message', (msg) => {
-      expect(msg).toEqual(["You can't go down here!"]);
+      expect(msg).toEqual(["You can't go that way!"]);
       done();
     });
   });
@@ -202,7 +202,7 @@ describe('basic socket.io API', () => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     socket.emit('move', DIRS.UP);
     socket.on('message', (msg) => {
-      expect(msg).toEqual(["You can't go up here!"]);
+      expect(msg).toEqual(["You can't go that way!"]);
       done();
     });
   });
