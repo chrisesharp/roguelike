@@ -1,27 +1,10 @@
 "use strict";
 
 import { game } from '../game.js';
-import { isReturnKey, isEscKey } from '../keys.js';
-import { KEYS } from '../display.js';
+import { isReturnKey, isEscKey, getHandler } from '../keys.js';
 import  Tile  from '../tile.js';
 import Geometry from '../geometry.js';
-
-const KEYDOWN = [];
-KEYDOWN.push({key:KEYS.VK_LEFT, func: function() { this.move(-1, 0, 0); return false;} });
-KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(1, 0, 0); return false;} });
-KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(0, -1, 0); return false;} });
-KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(0, 1, 0); return false;} });
-
-const getHandler = function(inputType, inputData) {
-    let handler = null;
-    if (inputType === 'keydown') {
-        handler = KEYDOWN.find(o => o.key === inputData.keyCode);
-    } else if (inputType === 'keypress') {
-        let keyChar = String.fromCharCode(inputData.charCode);
-        handler = KEYPRESS.find(o => o.char === keyChar);
-    }
-    return handler;
-}
+import { getMovement } from '../movement.js';
 
 export default class TargetBasedScreen {
     constructor(template) {
@@ -43,7 +26,6 @@ export default class TargetBasedScreen {
         this.cursorX = this.startX;
         this.cursorY = this.startY;
 
-        // Cache the FOV
         let visibleCells = {};
         game.getMap().getFov(this.player.pos.z).compute(
             this.player.pos.x, this.player.pos.y, 
@@ -90,7 +72,10 @@ export default class TargetBasedScreen {
                 );
     }
 
-    move(dx, dy) {
+    move(direction) {
+        let movement = getMovement(direction);
+        let dx = movement.x;
+        let dy = movement.y;
         this.cursorX = Math.max(0, Math.min(this.cursorX + dx, game.getScreenWidth()));
         this.cursorY = Math.max(0, Math.min(this.cursorY + dy, game.getScreenHeight() - 1));
     }
