@@ -38,7 +38,7 @@ export default class ItemListScreen {
 
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i]) {
-                let option = game.getOption(i);
+                let option = this.getOption(i);
 
                 let selectionState = (this.canSelectItem && this.canSelectMultipleItems &&
                     this.selectedIndices[i]) ? '+' : '-';
@@ -112,6 +112,14 @@ export default class ItemListScreen {
 
     keyToIndex(keyCode) {
         return letterIndex(keyCode);
+    }
+
+    getOption(index) {
+        const letters = 'abcdefghijklmnopqrstuv';
+        if (index < 0 || index > letters.length - 1 ) {
+            return "";
+        }
+        return letters[index];
     }
 };
 

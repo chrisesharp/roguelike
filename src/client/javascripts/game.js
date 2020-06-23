@@ -326,14 +326,6 @@ class Game {
     getScreen() {
         return this.currentScreen;
     }
-
-    getOption(index) {
-        const letters = 'abcdefghijklmnopqrstuv';
-        if (index < 0 || index > letters.length - 1 ) {
-            return "";
-        }
-        return letters[index];
-    }
 }
 
 export const game = new Game();
