@@ -26,22 +26,29 @@ export default class ServerEntity extends Entity {
     }
 
     handleCollision(other) {
-        if (other.isAlive()) {
+        if (other instanceof Array) {
+            let msg = (other.length === 1) ? `You see ${[other[0].describeA()]}.` : "There are several objects here.";
+            this.messenger(this, MSGTYPE.INF, msg);
+        } else if (other.isAlive()) {
             if (this.isWielding()) {
-                if (this.tryToHit(other)) {
-                    let dmg = this.dealDamage();
-                    other.hitFor(dmg);
-                    this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
-                    this.messenger(other, MSGTYPE.INF, `${this.name} hit you for ${dmg} damage.`);
-                } else {
-                    this.messenger(this, MSGTYPE.INF, `You missed ${other.name}!`);
-                    this.messenger(other, MSGTYPE.INF, `${this.name} missed you.`);
-                }
+                this.attack(other);
             } else {
                 this.messenger(this, MSGTYPE.INF, `${other.name} is there.`);
             }
         } else {
             this.messenger(this, MSGTYPE.INF, `You see a dead ${other.name}.`);
+        }
+    }
+
+    attack(other) {
+        if (this.tryToHit(other)) {
+            let dmg = this.dealDamage();
+            other.hitFor(dmg);
+            this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
+            this.messenger(other, MSGTYPE.INF, `${this.name} hit you for ${dmg} damage.`);
+        } else {
+            this.messenger(this, MSGTYPE.INF, `You missed ${other.name}!`);
+            this.messenger(other, MSGTYPE.INF, `${this.name} missed you.`);
         }
     }
 

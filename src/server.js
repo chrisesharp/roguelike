@@ -35,9 +35,12 @@ export default class Server {
         if (tile.isWalkable()) {
             let items = this.cave.getItemsAt(newPos);
             if (items.length > 0) {
-                let msg = (items.length === 1) ? `You see ${[items[0].describeA()]}.` : "There are several objects here.";
-                this.sendMessage(entity, MSGTYPE.INF, msg);
+                entity.handleCollision(items);
             }
+            // if (items.length > 0) {
+            //     let msg = (items.length === 1) ? `You see ${[items[0].describeA()]}.` : "There are several objects here.";
+            //     this.sendMessage(entity, MSGTYPE.INF, msg);
+            // }
             return newPos;
         }
         this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
