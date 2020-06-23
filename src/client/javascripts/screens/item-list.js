@@ -60,7 +60,6 @@ export default class ItemListScreen {
         for (let key in this.selectedIndices) {
             selectedItems[key] = this.items[key];
         }
-
         game.getScreen().setSubScreen(undefined);
         this.okFunction(selectedItems);
     }
@@ -92,8 +91,7 @@ export default class ItemListScreen {
     isCancelCondition(inputData) {
         return (isEscKey(inputData) || 
                     (isReturnKey(inputData) && 
-                        (!this.canSelectItem || 
-                        Object.keys(this.selectedIndices).length === 0)
+                        (!this.canSelectItem || Object.keys(this.selectedIndices).length === 0)
                     )
                 );
     }

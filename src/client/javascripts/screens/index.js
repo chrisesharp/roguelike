@@ -29,8 +29,8 @@ Screens.examineScreen = examineScreen;
 import {dropScreen}  from "./item-list.js"; 
 Screens.dropScreen = dropScreen;
 
-// import {pickupScreen}  from "./items.js"; 
-// Screens.pickupScreen = pickupScreen;
+import {pickupScreen}  from "./item-list.js"; 
+Screens.pickupScreen = pickupScreen;
 
 import {inventoryScreen}  from "./item-list.js"; 
 Screens.inventoryScreen = inventoryScreen;
