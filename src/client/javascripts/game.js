@@ -330,7 +330,7 @@ class Game {
 
 export const game = new Game();
 const monitor = new ServerHealth(`${BASE_URL}/health`);
-const app = document.getElementById('playfield');
+const playfield = document.getElementById('playfield');
 const name = document.getElementById('name');
 const roleField = document.getElementById('role_input');
 const rolePrototype = document.getElementsByClassName('role')[0];
@@ -339,7 +339,7 @@ const messagePrototype = document.getElementsByClassName('message')[0];
 const status = document.getElementById('status');
 
 window.onload =  async () => {
-    app.appendChild(game.getDisplay().getContainer());
+    playfield.appendChild(game.getDisplay().getContainer());
     monitor.initServerHealth(status);
     game.initRoles(roleField, rolePrototype);
     game.start(name, messages, stats);
