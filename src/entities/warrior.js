@@ -9,4 +9,8 @@ export default class Warrior extends ServerEntity {
         this.setGlyph({'char':"@",'foreground':'yellow','background':"black"});
     }
 
+    toHitBonus() {
+        return 1;
+    }
+
 }

@@ -37,10 +37,6 @@ export default class Server {
             if (items.length > 0) {
                 entity.handleCollision(items);
             }
-            // if (items.length > 0) {
-            //     let msg = (items.length === 1) ? `You see ${[items[0].describeA()]}.` : "There are several objects here.";
-            //     this.sendMessage(entity, MSGTYPE.INF, msg);
-            // }
             return newPos;
         }
         this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");

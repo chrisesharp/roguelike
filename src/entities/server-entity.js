@@ -129,13 +129,7 @@ export default class ServerEntity extends Entity {
 
     wield(weaponName) {
         if (weaponName) {
-            let weapon = this.inventory.find(o => (o.name === weaponName));
-            if (weapon) {
-                this.currentWeapon = weapon;
-                this.messenger(this, MSGTYPE.UPD, `You are wielding ${weapon.describeA()}.`);
-            } else {
-                this.messenger(this, MSGTYPE.INF, `You don't have a ${weaponName} to wield.`);
-            }
+            this.use(weaponName, "wield");
         } else {
             this.currentWeapon = null;
             this.messenger(this, MSGTYPE.UPD, `You are not wielding anything now.`);
@@ -144,16 +138,24 @@ export default class ServerEntity extends Entity {
 
     wear(armourName) {
         if (armourName) {
-            let armour = this.inventory.find(o => (o.name === armourName));
-            if (armour) {
-                this.setAC(armour);
-                this.messenger(this, MSGTYPE.UPD, `You are wearing ${armour.describeThe()}.`);
-            } else {
-                this.messenger(this, MSGTYPE.INF, `You don't have any ${armourName} to wear.`);
-            }
+            this.use(armourName, "wear");
         } else {
             this.setAC(null);
             this.messenger(this, MSGTYPE.UPD, `You are not wearing anything now.`);
+        }
+    }
+
+    use(itemName, verb) {
+        let item = this.inventory.find(o => (o.name === itemName));
+        if (item) {
+            if (item.wearable) {
+                this.setAC(item);
+            } else {
+                this.currentWeapon = item;
+            }
+            this.messenger(this, MSGTYPE.UPD, `You are ${verb}ing ${item.describeThe()}.`);
+        } else {
+            this.messenger(this, MSGTYPE.INF, `You don't have any ${itemName} to ${verb}.`);
         }
     }
 

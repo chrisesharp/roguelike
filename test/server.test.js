@@ -432,7 +432,7 @@ describe('basic socket.io API', () => {
     wielder.inventory.push(dagger);
     socket.emit('wield', 'dagger');
     socket.on('message', (msg) => {
-      expect(msg).toEqual(["You are wielding a dagger."]);
+      expect(msg).toEqual(["You are wielding the dagger."]);
       expect(wielder.dealDamage()).toBe(4);
       done();
     });
@@ -444,7 +444,7 @@ describe('basic socket.io API', () => {
     wielder.inventory.push(rock);
     socket.emit('wield', 'dagger');
     socket.on('message', (msg) => {
-      expect(msg).toEqual(["You don't have a dagger to wield."]);
+      expect(msg).toEqual(["You don't have any dagger to wield."]);
       done();
     });
   });
