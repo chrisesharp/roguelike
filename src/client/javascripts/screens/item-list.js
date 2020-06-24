@@ -65,25 +65,27 @@ export default class ItemListScreen {
     }
 
     handleInput(inputType, inputData) {
-        if (this.isCancelCondition(inputData)) {
-            game.getScreen().setSubScreen(undefined);
-        } else if (isReturnKey(inputData)) {
-            this.executeOkFunction();
-        } else if (this.zeroSelected(inputData)) {
-            this.selectedIndices = {};
-            this.executeOkFunction();
-        } else if (this.letterSelected(inputData) && this.hasItem(inputData.keyCode)) {
-            let index = this.keyToIndex(inputData.keyCode);
-            if (this.canSelectMultipleItems) {
-                if (this.selectedIndices[index]) {
-                    delete this.selectedIndices[index];
+        if (inputType === "keydown") {
+            if (this.isCancelCondition(inputData)) {
+                game.getScreen().setSubScreen(undefined);
+            } else if (isReturnKey(inputData)) {
+                this.executeOkFunction();
+            } else if (this.zeroSelected(inputData)) {
+                this.selectedIndices = {};
+                this.executeOkFunction();
+            } else if (this.letterSelected(inputData) && this.hasItem(inputData.keyCode)) {
+                let index = this.keyToIndex(inputData.keyCode);
+                if (this.canSelectMultipleItems) {
+                    if (this.selectedIndices[index]) {
+                        delete this.selectedIndices[index];
+                    } else {
+                        this.selectedIndices[index] = true;
+                    }
+                    game.refresh();
                 } else {
                     this.selectedIndices[index] = true;
+                    this.executeOkFunction();
                 }
-                game.refresh();
-            } else {
-                this.selectedIndices[index] = true;
-                this.executeOkFunction();
             }
         }
     }

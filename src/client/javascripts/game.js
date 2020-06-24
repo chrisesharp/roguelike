@@ -47,7 +47,6 @@ class Game {
     start(nameField, messageField, statsField) {
         this.nameField = nameField;
         this.messageField = messageField;
-        game.nameField.querySelector("#name_input").focus();
         this.statsField = statsField;
         this.switchScreen(startScreen);
     }
@@ -75,7 +74,6 @@ class Game {
     }
 
     onMapAvailable() {
-        console.log(this.socket.id + " connected to server");
         this.map.setupFov();
         this.entrance = this.map.entrance;
         this.switchScreen(playScreen);
@@ -86,21 +84,20 @@ class Game {
     }
 
     key(x, y, z) {
-        let key = '(' + x + ',' + y + ',' + z + ')';
-        return key.toString();
+        return '(' + x + ',' + y + ',' + z + ')';
+    }
+
+    posToKey(pos) {
+        return this.key(pos.x, pos.y, pos.z);
     }
 
     addEntity(entity) {
-        let x = entity.pos.x;
-        let y = entity.pos.y;
-        let z = entity.pos.z
-        let key = this.key(x, y, z);
+        let key = this.posToKey(entity.pos);
         this.entities[key] = entity;
     }
 
     getItemsAt(x, y, z) {
-        let key = this.key(x, y, z);
-        return this.items[key];
+        return this.items[this.key(x, y, z)];
     }
 
     takeItem(item) {
@@ -116,26 +113,17 @@ class Game {
     }
 
     wieldItem(item) {
-        if (item) {
-            this.socket.emit("wield", item.name);
-        } else {
-            this.socket.emit("wield", null);
-        }
+        let weapon = (item) ? item.name : null;
+        this.socket.emit("wield", weapon);
     }
 
     wearItem(item) {
-        if (item) {
-            this.socket.emit("wear", item.name);
-        } else {
-            this.socket.emit("wear", null);
-        }
+        let armour = (item) ? item.name : null;
+        this.socket.emit("wear", armour);
     }
 
     addItem(item) {
-        let x = item.pos.x;
-        let y = item.pos.y;
-        let z = item.pos.z
-        let key = this.key(x, y, z);
+        let key = this.posToKey(item.pos);
         if (this.items[key]) {
             this.items[key].push(item);
         } else {
@@ -144,8 +132,7 @@ class Game {
     }
 
     getEntityAt(x, y, z) {
-        let key = this.key(x, y, z);
-        return this.entities[key];
+        return this.entities[this.key(x, y, z)];
     }
 
     removeEntity(entity) {
@@ -153,7 +140,7 @@ class Game {
     }
 
     removeEntityAt(pos) {
-        let key = this.key(pos.x, pos.y, pos.z);
+        let key = this.posToKey(pos);
         if (this.entities.hasOwnProperty(key)) {
             delete this.entities[key];
         };
@@ -184,7 +171,13 @@ class Game {
             transports: ['websocket'],
             query: properties,
         });
+        this.registerEventHandlers(socket);
+        socket.emit('map');
+        socket.emit('get_items');
+        this.socket = socket;
+    }
 
+    registerEventHandlers(socket) {
         socket.on('message', (message) => {
             if (this.hasChangedLevel(message)) {
                 socket.emit('get_items');
@@ -197,12 +190,11 @@ class Game {
             this.refresh();
         });
 
-        socket.emit('map');
         socket.on('map', (data) => {
           this.map = new Map(data);
           this.onMapAvailable();
         });
-        socket.emit('get_items');
+
         socket.on('items',(items) => {
             this.items = [];
             for (let pos in items) {
@@ -259,8 +251,7 @@ class Game {
                 }
             }
             this.refresh();
-          });
-        this.socket = socket;
+        });
     }
 
     getDisplay() {
@@ -297,6 +288,13 @@ class Game {
         game.statsField.innerHTML = stats;
     }
 
+    setNameField(nameInput, roleInput) {
+        let name = nameInput.value;
+        let role = roleInput.value;
+        this.nameField.innerHTML = `${name} (${role})`;
+        return {name:name, role:role};
+    }
+
     getNameField() {
         return this.nameField.querySelector("#name_input");
     }
@@ -305,15 +303,17 @@ class Game {
         return this.nameField.querySelector("#role_input");
     }
 
+    hideInputFields(...fields) {
+        fields.forEach(field => {
+            field.style.display = "none";
+        });
+    }
+
     updateName() {
-        let nameInput = this.nameField.querySelector("#name_input");
-        let roleInput = this.nameField.querySelector("#role_input");
-        let name = nameInput.value;
-        let role = roleInput.value;
-        nameInput.style.display = "none";
-        roleInput.style.display = "none";
-        this.nameField.innerHTML += `${name} (${role})`;
-        return {name:name, role:role};
+        let nameInput = this.getNameField();
+        let roleInput = this.getRoleField();
+        this.hideInputFields(nameInput, roleInput);
+        return this.setNameField(nameInput, roleInput);
     }
 
     updateMessages(text) {
@@ -331,9 +331,9 @@ class Game {
 export const game = new Game();
 const monitor = new ServerHealth(`${BASE_URL}/health`);
 const playfield = document.getElementById('playfield');
-const name = document.getElementById('name');
 const roleField = document.getElementById('role_input');
 const rolePrototype = document.getElementsByClassName('role')[0];
+const name = document.getElementById('name');
 const messages = document.getElementById('messages');
 const messagePrototype = document.getElementsByClassName('message')[0];
 const status = document.getElementById('status');
@@ -342,5 +342,6 @@ window.onload =  async () => {
     playfield.appendChild(game.getDisplay().getContainer());
     monitor.initServerHealth(status);
     game.initRoles(roleField, rolePrototype);
+    name.querySelector("#name_input").focus();
     game.start(name, messages, stats);
 };

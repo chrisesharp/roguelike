@@ -21,6 +21,7 @@ export const isLetterKey = function(inputData) {
 }
 
 export const letterIndex = function(keyCode) {
+    console.log("keyCode ",keyCode, KEYS.VK_A);
     return keyCode - KEYS.VK_A;
 }
 
