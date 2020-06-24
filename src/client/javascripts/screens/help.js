@@ -1,16 +1,11 @@
 "use strict";
 
-import { game } from '../game.js';
+import Screen from './screen.js';
 
-export default class HelpScreen {
-
+export default class HelpScreen extends Screen {
     render(display) {
-        let text = game.title + ' Help';
-        let border = '----------------------';
-        let y = 0;
-        let width = game.getScreenWidth();
-        display.drawText(width / 2 - text.length / 2, y++, text);
-        display.drawText(width / 2 - text.length / 2, y++, border);
+        super.render(display);
+        let y = 2;
         display.drawText(0, y++, 'The villagers have been complaining of ');
         display.drawText(0, y++, 'a terrible stench coming from the cave.');
         display.drawText(0, y++, 'Find the source of this smell and get');
@@ -26,13 +21,9 @@ export default class HelpScreen {
         display.drawText(0, y++, '[;] to look around you');
         display.drawText(0, y++, '[?] to show this help screen');
         y += 3;
-        text = '--- press any key to continue ---';
-        display.drawText(width / 2 - text.length / 2, y++, text);
-    }
-
-    handleInput(inputType, inputData) {
-        game.getScreen().setSubScreen(null);
+        let text = '--- press any key to continue ---';
+        display.drawText(this.width / 2 - text.length / 2, y++, text);
     }
 };
 
-export const helpScreen = new HelpScreen();
+export const helpScreen = new HelpScreen({caption: function(){ return 'NodeJS Rogue Help';}});

@@ -1,13 +1,13 @@
 "use strict";
 
+import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, isZeroKey, isLetterKey, letterIndex } from '../keys.js';
 import Item from '../item.js';
 
-export default class ItemListScreen {
+export default class ItemListScreen extends Screen {
     constructor(template) {
-        this.caption = template['caption'];
-        this.okFunction = template['ok'];
+        super(template);
         this.isAcceptableFunction = template['isAcceptable'] || function(x) {return x;};
         this.canSelectItem = template['canSelect'];
         this.canSelectMultipleItems = template['canSelectMultipleItems'];
@@ -30,8 +30,8 @@ export default class ItemListScreen {
     }
 
     render(display) {
-        let row = 0;
-        display.drawText(0, row++, this.caption);
+        super.render(display);
+        let row = 2;
         if (this.hasNoItemOption) {
             display.drawText(0, row++, '0 - no item');
         }
@@ -56,11 +56,11 @@ export default class ItemListScreen {
     }
 
     executeOkFunction() {
+        game.getScreen().setSubScreen(undefined);
         let selectedItems = {};
         for (let key in this.selectedIndices) {
             selectedItems[key] = this.items[key];
         }
-        game.getScreen().setSubScreen(undefined);
         this.okFunction(selectedItems);
     }
 
@@ -124,12 +124,12 @@ export default class ItemListScreen {
 };
 
 export const inventoryScreen = new ItemListScreen({
-    caption: 'Inventory',
+    caption: function() { return 'Inventory';},
     canSelect: false
 });
 
 export const pickupScreen = new ItemListScreen({
-    caption: 'Choose the items you wish to pickup',
+    caption: function() { return 'Choose the items you wish to pickup';},
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
@@ -141,7 +141,7 @@ export const pickupScreen = new ItemListScreen({
 });
 
 export const dropScreen = new ItemListScreen({
-    caption: 'Choose the items you wish to drop',
+    caption: function() { return 'Choose the items you wish to drop';},
     canSelect: true,
     canSelectMultipleItems: true,
     ok: function(selectedItems) {
@@ -153,7 +153,7 @@ export const dropScreen = new ItemListScreen({
 });
 
 export const examineScreen = new ItemListScreen({
-    caption: 'Choose the item you wish to examine',
+    caption: function() { return 'Choose the item you wish to examine';},
     canSelect: true,
     canSelectMultipleItems: false,
     isAcceptable: function(item) {
@@ -168,7 +168,7 @@ export const examineScreen = new ItemListScreen({
 });
 
 export const eatScreen = new ItemListScreen({
-    caption: 'Choose the item you wish to eat',
+    caption: function() { return 'Choose the item you wish to eat';},
     canSelect: true,
     canSelectMultipleItems: false,
     isAcceptable: function(item) {
@@ -183,7 +183,7 @@ export const eatScreen = new ItemListScreen({
 });
 
 export const wieldScreen = new ItemListScreen({
-    caption: 'Choose the item you wish to wield',
+    caption: function() { return 'Choose the item you wish to wield';},
     canSelect: true,
     canSelectMultipleItems: false,
     hasNoItemOption: true,
@@ -199,7 +199,7 @@ export const wieldScreen = new ItemListScreen({
 });
 
 export const wearScreen = new ItemListScreen({
-    caption: 'Choose the item you wish to wear',
+    caption: function() { return 'Choose the item you wish to wear';},
     canSelect: true,
     canSelectMultipleItems: false,
     hasNoItemOption: true,

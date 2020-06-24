@@ -1,16 +1,9 @@
 "use strict";
 
+import Screen from './screen.js';
 import { Color } from '../display.js';
 
-export default class LoseScreen  {
-    enter() {
-        console.log("Entered lose screen."); 
-    }
-
-    exit() {
-        console.log("Exited lose screen."); 
-    }
-
+export default class LoseScreen extends Screen {
     render(display) {
         let opts = display.getOptions();
         let centreX = Math.floor(opts.width/2)
@@ -25,9 +18,5 @@ export default class LoseScreen  {
             let background = Color.toRGB([r, g, b]);
             display.drawText(x, y, "%b{" + background + "}" + message);
         }
-    }
-
-    handleInput(inputType, inputData) {
-        // Nothing to do here      
     }
 };

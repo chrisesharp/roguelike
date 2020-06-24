@@ -1,21 +1,18 @@
 "use strict";
 
+import Screen from './screen.js';
 import { isReturnKey } from '../keys.js';
 import { game } from '../game.js';
 
-export default class StartScreen {
-    constructor() {
+export default class StartScreen extends Screen {
+    constructor(template) {
+        super(template);
         this.ended = false;
         this.message = "Enter your name below";
     }
 
-    enter() {
-        console.log("Entered start screen."); 
-    }
-
     exit() {
         if (!this.ended) {
-            console.log("Exited start screen.");
             game.connectToServer();
             this.ended = true;
         }

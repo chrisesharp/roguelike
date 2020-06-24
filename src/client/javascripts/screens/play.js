@@ -19,7 +19,6 @@ class PlayScreen  {
     }
 
     enter() {
-        console.log("Entered play screen");
         this.screenWidth = game.getScreenWidth();
         this.screenHeight = game.getScreenHeight();
         this.map = game.map;
@@ -141,7 +140,6 @@ class PlayScreen  {
     move(direction) {
         game.socket.emit("move", direction);
     }
-    
     
     setGameEnded() {
         this.gameEnded = true;
