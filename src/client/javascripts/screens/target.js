@@ -108,12 +108,8 @@ export const lookScreen = new TargetBasedScreen({
     ok: function(x, y) { return {x:x, y:y};},
     caption: function(x, y) {
         let objects = this.getTargets();
-        let i = 0;
-        let object = objects[i];
-        while (!object) {
-            i++;
-            object = objects[i];
-        }
+        let object;
+        while (!(object = objects.shift())) { }
         let element = object.getRepresentation();
         let description = object.getDescription();
         let details = (object.getDetails) ? object.getDetails() : false;
