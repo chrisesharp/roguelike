@@ -97,7 +97,7 @@ export default class TargetBasedScreen extends Screen {
         let movement = getMovement(direction);
         let x = Math.max(0, Math.min(this.cursorX + movement.x, this.width));
         let y = Math.max(0, Math.min(this.cursorY + movement.y, this.height - 1));
-        if (this.map.isExplored(x, y, this.player.pos.z)) {
+        if (this.visibleCells[x+','+y]) {
             this.cursorX = x;
             this.cursorY = y;
         }
