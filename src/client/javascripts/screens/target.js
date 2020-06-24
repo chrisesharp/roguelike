@@ -17,6 +17,8 @@ export default class TargetBasedScreen extends Screen {
         this.cursorX = this.startX;
         this.cursorY = this.startY;
         this.map = game.getMap();
+        this.width = game.getScreenWidth();
+        this.height = game.getScreenHeight();
 
         let visibleCells = {};
         this.map.getFov(this.player.pos.z).compute(
@@ -31,8 +33,7 @@ export default class TargetBasedScreen extends Screen {
     render(display) {
         game.getScreen().renderTiles.call(game.getScreen(), display);
         this.renderCursor(display);
-        let caption = this.captionFunction(this.cursorX + this.offsetX, this.cursorY + this.offsetY);
-        display.drawText(0, game.getScreenHeight() - 1, caption);
+        this.renderCaption(display);
     }
 
     renderCursor(display) {
@@ -40,6 +41,11 @@ export default class TargetBasedScreen extends Screen {
         for (let i = 0; i < points.length; i++) {
             display.drawText(points[i].x, points[i].y, '%c{magenta}*');
         }
+    }
+
+    renderCaption(display) {
+        let caption = this.captionFunction(this.cursorX + this.offsetX, this.cursorY + this.offsetY);
+        display.drawText(0, this.height - 1, caption);
     }
 
     getTargets() {
@@ -89,10 +95,12 @@ export default class TargetBasedScreen extends Screen {
 
     move(direction) {
         let movement = getMovement(direction);
-        let dx = movement.x;
-        let dy = movement.y;
-        this.cursorX = Math.max(0, Math.min(this.cursorX + dx, game.getScreenWidth()));
-        this.cursorY = Math.max(0, Math.min(this.cursorY + dy, game.getScreenHeight() - 1));
+        let x = Math.max(0, Math.min(this.cursorX + movement.x, this.width));
+        let y = Math.max(0, Math.min(this.cursorY + movement.y, this.height - 1));
+        if (this.map.isExplored(x, y, this.player.pos.z)) {
+            this.cursorX = x;
+            this.cursorY = y;
+        }
     }
 
     showItemsSubScreen() {
