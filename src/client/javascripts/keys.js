@@ -1,9 +1,7 @@
 "use strict";
 
 import { KEYS } from './display';
-
-import {DIRS } from './movement';
-
+import { DIRS } from './movement';
 import { Screens } from './screens/index.js';
 
 export const isReturnKey = function(inputData) {
@@ -33,26 +31,25 @@ export const wHandler = function(input) {
     } else {
         this.showItemsSubScreen(Screens.wearScreen, this.player.getInventory(),'You have nothing to wear.');
     }
-    return true;
 }
 
 const KEYDOWN = [];
-KEYDOWN.push({key:KEYS.VK_LEFT, func: function() { this.move(DIRS.WEST); return false;} });
-KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(DIRS.EAST); return false;} });
-KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(DIRS.NORTH); return false;} });
-KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(DIRS.SOUTH); return false;} });
-KEYDOWN.push({key:KEYS.VK_I,     func: function() { this.showItemsSubScreen(Screens.inventoryScreen, this.player.getInventory(),'You are not carrying anything.'); return true;} });
-KEYDOWN.push({key:KEYS.VK_D,     func: function() { this.showItemsSubScreen(Screens.dropScreen, this.player.getInventory(),'You have nothing to drop.'); return true;} });
-KEYDOWN.push({key:KEYS.VK_E,     func: function() { this.showItemsSubScreen(Screens.eatScreen, this.player.getInventory(),'You have nothing to eat.'); return true;} });
+KEYDOWN.push({key:KEYS.VK_LEFT, func: function() { this.move(DIRS.WEST);} });
+KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(DIRS.EAST);} });
+KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(DIRS.NORTH);} });
+KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(DIRS.SOUTH);} });
+KEYDOWN.push({key:KEYS.VK_I,     func: function() { this.showItemsSubScreen(Screens.inventoryScreen, this.player.getInventory(),'You are not carrying anything.');} });
+KEYDOWN.push({key:KEYS.VK_D,     func: function() { this.showItemsSubScreen(Screens.dropScreen, this.player.getInventory(),'You have nothing to drop.');} });
+KEYDOWN.push({key:KEYS.VK_E,     func: function() { this.showItemsSubScreen(Screens.eatScreen, this.player.getInventory(),'You have nothing to eat.');} });
 KEYDOWN.push({key:KEYS.VK_W,     func: wHandler });
-KEYDOWN.push({key:KEYS.VK_X,     func: function() { this.showItemsSubScreen(Screens.examineScreen, this.player.getInventory(),'You have nothing to examine.'); return true;} });
-KEYDOWN.push({key:KEYS.VK_COMMA, func: function() { this.showPickupSubScreen(); return true;} });
+KEYDOWN.push({key:KEYS.VK_X,     func: function() { this.showItemsSubScreen(Screens.examineScreen, this.player.getInventory(),'You have nothing to examine.');} });
+KEYDOWN.push({key:KEYS.VK_COMMA, func: function() { this.showPickupSubScreen();} });
 
 const KEYPRESS = [];
-KEYPRESS.push({char: ">", func: function() { this.move(DIRS.DOWN); return false; } });
-KEYPRESS.push({char: "<", func: function() { this.move(DIRS.UP); return false;} });
-KEYPRESS.push({char: "?", func: function() { this.setSubScreen(Screens.helpScreen); return true;} });
-KEYPRESS.push({char: ";", func: function() { this.showLookScreen(); return true;} });
+KEYPRESS.push({char: ">", func: function() { this.move(DIRS.DOWN);} });
+KEYPRESS.push({char: "<", func: function() { this.move(DIRS.UP);} });
+KEYPRESS.push({char: "?", func: function() { this.setSubScreen(Screens.helpScreen);} });
+KEYPRESS.push({char: ";", func: function() { this.showLookScreen();} });
 
 export const getHandler = function(inputType, inputData) {
     let handler = null;

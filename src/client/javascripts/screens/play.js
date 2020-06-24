@@ -134,8 +134,7 @@ class PlayScreen  {
         
         let handler = getHandler(inputType, inputData);
         if (handler) {
-            let shouldReturn = handler.func.call(this,inputData);
-            if (shouldReturn) { return; }
+            handler.func.call(this,inputData);
         }
     }
 
