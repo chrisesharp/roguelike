@@ -16,6 +16,7 @@ export default class ServerEntity extends Entity {
         this.rules = new Rules(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
+        this.hitBonus = 0;
         this.base_ac = 10;
         this.ac = 10;;
         this.hungerLevel = 0
@@ -63,7 +64,7 @@ export default class ServerEntity extends Entity {
     }
 
     toHitBonus() {
-        return 0;
+        return this.hitBonus;
     }
 
     tryToHit(other) {

@@ -19,6 +19,12 @@ describe('warriors creation', () => {
       done();
     });
 
+    test('should have a positive to-hit bonus', (done) => {
+      let warrior = new Warrior({server:mockServer});
+      expect(warrior.toHitBonus()>0).toBe(true);
+      done();
+    });
+
     test('should have no inventory', (done) => {
       let warrior = new Warrior({server:mockServer});
       expect(warrior.getInventory()).toEqual([]);

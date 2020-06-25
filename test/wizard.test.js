@@ -18,4 +18,10 @@ describe('wizards creation', () => {
       expect(warrior.getHitPoints()).toBe(4);
       done();
     });
+
+    test('should not have a positive to-hit bonus', (done) => {
+      let warrior = new Wizard({server:mockServer});
+      expect(warrior.toHitBonus()<=0).toBe(true);
+      done();
+    });
 });
