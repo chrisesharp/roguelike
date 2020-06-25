@@ -3,7 +3,7 @@
 /* istanbul ignore file */
 /* can't test ROT under Jest */
 
-import { floorTile, wallTile } from  './tile-server.js';
+import { floorTile, wallTile } from  '../tile-server.js';
 import ROT from "rot-js";
 
 export default class CellGenerator {

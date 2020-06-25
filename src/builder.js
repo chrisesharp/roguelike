@@ -1,16 +1,12 @@
 "use strict";
 
 import { Tiles } from "./tile-server.js";
-import FileGenerator from "./file-generator.js";
-import CellGenerator from "./cell-generator.js";
-import MockGenerator from "../test/mock-generator.js";
+import { Generators } from "./generators/index.js";
 
 const MIN_REGION_SIZE = 10;
 
-const classes = { FileGenerator, CellGenerator, MockGenerator}
-
 function dynamicGenerator(generator) {
-    return classes[generator]
+    return Generators[generator]
 }
 
 export default class Builder {

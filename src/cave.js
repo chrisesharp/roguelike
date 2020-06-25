@@ -1,7 +1,6 @@
 "use strict";
 
 import Builder from "./builder.js";
-import FileGenerator from "./file-generator.js";
 import _ from "underscore";
 import ItemRepository from "./item-repository.js";
 
@@ -82,7 +81,6 @@ export default class Cave {
         } else {
             this.items[key] = [item];
         }
-        // console.log(`added ${item.name} at `,pos);
     }
 
     removeItem(item) {

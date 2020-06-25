@@ -1,6 +1,6 @@
 "use strict";
 import fs from "fs";
-import { floorTile, wallTile } from  './tile-server.js';
+import { floorTile, wallTile } from  '../tile-server.js';
 
 const mapsDir = process.env.npm_package_config_maps;
 
