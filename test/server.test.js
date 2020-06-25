@@ -59,7 +59,7 @@ beforeEach((done) => {
   });
 
   socket.on('connect', () => {
-    app.connections[socket.id].pos = defaultPos;
+    app.entities.getEntity(socket.id).pos = defaultPos;
     done();
   });
 });
@@ -68,7 +68,7 @@ afterEach((done) => {
   if (socket.connected) {
     socket.disconnect();
   }
-  app.removeEntity("mock");
+  app.entities.removeEntity("mock");
   app.cave.removeItem(apple);
   app.cave.removeItem(dagger);
   app.cave.removeItem(rock);
@@ -99,7 +99,7 @@ describe('basic socket.io API', () => {
   });
 
   test('should not move if dead', (done) => {
-    let entity = app.connections[socket.id];
+    let entity = app.entities.getEntity(socket.id);
     entity.alive = false;
     socket.emit('move',DIRS.EAST);
     socket.emit('get_position');
@@ -210,7 +210,7 @@ describe('basic socket.io API', () => {
   test('should not move onto another live entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc"};
-    app.addEntity("mock", proto, pos);
+    app.entities.addEntity("mock", proto, pos);
     socket.emit('move', DIRS.EAST);
     socket.on('message', (msg) => {
       expect(msg).toEqual(["Tester is there."]);
@@ -221,7 +221,7 @@ describe('basic socket.io API', () => {
   test('should not move onto another dead entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", hp:0};
-    app.addEntity("mock", proto, pos);
+    app.entities.addEntity("mock", proto, pos);
     socket.emit('move', DIRS.EAST);
     socket.on('message', (msg) => {
       expect(msg).toEqual(['You see a dead Tester.']);
@@ -230,7 +230,7 @@ describe('basic socket.io API', () => {
   });
 
   test('should update entity if hit', (done) => {
-    let entity = app.connections[socket.id];
+    let entity = app.entities.getEntity(socket.id);
     entity.hitPoints = 2;
     entity.hitFor(1);
     socket.on('update', (msg) => {
@@ -240,7 +240,7 @@ describe('basic socket.io API', () => {
   });
 
   test('should update entity if killed', (done) => {
-    let entity = app.connections[socket.id];
+    let entity = app.entities.getEntity(socket.id);
     entity.hitPoints = 1;
     entity.hitFor(1);
     socket.on('dead', (msg) => {
@@ -352,7 +352,7 @@ describe('basic socket.io API', () => {
 
   test('should appear when dropped', (done) => {
     let rock = new Rock();
-    let dropper = app.connections[socket.id];
+    let dropper = app.entities.getEntity(socket.id);
     dropper.inventory.push(rock);
     let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
     socket.emit('drop', 'rock');
@@ -366,7 +366,7 @@ describe('basic socket.io API', () => {
 
   test('should not drop non-existent things', (done) => {
     let dagger = new Dagger();
-    let dropper = app.connections[socket.id];
+    let dropper = app.entities.getEntity(socket.id);
     dropper.inventory.push(dagger);
     let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
     socket.emit('drop', 'rock');
@@ -391,11 +391,11 @@ describe('basic socket.io API', () => {
   test('should be in entities inventory when picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.addItem(pos, rock);
-    let taker = app.connections[socket.id];
+    let taker = app.entities.getEntity(socket.id);
     expect(taker.getInventory().length).toBe(0);
     socket.emit('take', 'rock');
     socket.on('message', (msg) => {
-      let taker = app.getEntityAt(pos);
+      let taker = app.entities.getEntityAt(pos);
       expect(taker.getInventory().length).toBe(1);
       expect(msg).toEqual(["You take the rock."]);
       done();
@@ -404,7 +404,7 @@ describe('basic socket.io API', () => {
 
   test('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
-    let eater = app.connections[socket.id];
+    let eater = app.entities.getEntity(socket.id);
     eater.inventory.push(apple);
     socket.emit('eat', 'apple');
     socket.on('message', (msg) => {
@@ -416,7 +416,7 @@ describe('basic socket.io API', () => {
 
   test('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
-    let eater = app.connections[socket.id];
+    let eater = app.entities.getEntity(socket.id);
     eater.inventory.push(apple);
     socket.emit('eat', 'rock');
     socket.on('message', (msg) => {
@@ -428,7 +428,7 @@ describe('basic socket.io API', () => {
 
   test('should wield a dagger', (done) => {
     let dagger = new Dagger();
-    let wielder = app.connections[socket.id];
+    let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(dagger);
     socket.emit('wield', 'dagger');
     socket.on('message', (msg) => {
@@ -440,7 +440,7 @@ describe('basic socket.io API', () => {
 
   test("should not wield a dagger if you don't have one", (done) => {
     let rock = new Rock();
-    let wielder = app.connections[socket.id];
+    let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
     socket.emit('wield', 'dagger');
     socket.on('message', (msg) => {
@@ -451,7 +451,7 @@ describe('basic socket.io API', () => {
 
   test('should not wield a dagger if wield nothing', (done) => {
     let rock = new Rock();
-    let wielder = app.connections[socket.id];
+    let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
     wielder.currentWeapon = rock;
     expect(wielder.isWielding()).toEqual(rock);
@@ -465,7 +465,7 @@ describe('basic socket.io API', () => {
 
   test('should wear chainmail', (done) => {
     let armour = new Chainmail();
-    let wearer = app.connections[socket.id];
+    let wearer = app.entities.getEntity(socket.id);
     wearer.inventory.push(armour);
     socket.emit('wear', 'chainmail');
     socket.on('message', (msg) => {
@@ -476,7 +476,7 @@ describe('basic socket.io API', () => {
   });
 
   test('should not wear chainmail if not in inventory', (done) => {
-    let wearer = app.connections[socket.id];
+    let wearer = app.entities.getEntity(socket.id);
     socket.emit('wear', 'chainmail');
     socket.on('message', (msg) => {
       expect(msg).toEqual(["You don't have any chainmail to wear."]);

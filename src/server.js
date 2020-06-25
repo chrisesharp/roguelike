@@ -6,42 +6,41 @@ import { getMovement } from "./client/javascripts/movement.js";
 import EntityRepository from "./entity-repository.js";
 import { MSGTYPE } from "./messages.js";
 import _ from "underscore";
+import State from "./state.js";
 
 export default class Server {
     constructor(backend, template) {
         this.backend = backend;
         this.cave = new Cave(template);
         this.repo = new EntityRepository();
-        this.connections = {};
+        this.entities = new State(this.repo);
     }
 
     connection(socket) {
         this.setMessengerForEntities();
         let prototype = socket.handshake.query;
-        let entity = this.addEntity(socket.id, prototype, this.cave.getEntrance());
+        let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
         // let room = this.cave.getRegion(entity);
         let room = entity.pos.z;
         socket.join(room, () => {
             // let rooms = Object.keys(socket.rooms);
             socket.to(room).emit(entity.name + " just entered this cave");
             this.backend.emit("message",  entity.name + " just entered this dungeon complex");
-            this.backend.emit("entities", this.getEntities());
+            this.backend.emit("entities", this.entities.getEntities());
         });
         this.registerEventHandlers(socket, entity, this);
     }
 
     disconnect(socket) {
-        // let entity = this.connections[socket.id];
-        let entity = this.getEntity(socket.id);
+        let entity = this.entities.getEntity(socket.id);
         this.backend.emit("delete",entity.pos);
         this.backend.emit("message",  entity.name + " just left this dungeon complex");
-        this.removeEntity(socket.id);
+        this.entities.removeEntity(socket.id);
     }
 
     registerEventHandlers(socket, entity, server) {
         socket.on("get_entities", () => {
-            // socket.emit("entities", server.connections);
-            socket.emit("entities", server.getEntities());
+            socket.emit("entities", server.entities.getEntities());
         });
 
         socket.on("get_items", () => {
@@ -89,12 +88,7 @@ export default class Server {
                 let newRoom = position.z;
                 entity.pos = position;
                 if (!(newRoom in socket.rooms)) {
-                    socket.leave(startRoom, () => {
-                        socket.to(startRoom).emit(entity.name + " just left this cave");
-                    });
-                    socket.join(newRoom, () => {
-                        socket.to(startRoom).emit(entity.name + " just entered this cave");
-                    });
+                    this.moveRoom(socket, entity, startRoom);
                 }
                 server.backend.emit("position", socket.id, entity.pos);
             }
@@ -115,6 +109,16 @@ export default class Server {
         });
     }
 
+    moveRoom(socket, entity, startRoom) {
+        let newRoom = entity.pos.z;
+        socket.leave(startRoom, () => {
+            socket.to(startRoom).emit(entity.name + " just left this cave");
+        });
+        socket.join(newRoom, () => {
+            socket.to(startRoom).emit(entity.name + " just entered this cave");
+        });
+    }
+
     setMessengerForEntities() {
         let svr = this;
         ( function () {
@@ -127,8 +131,8 @@ export default class Server {
 
     sendMessage(entity, ...message) {
         let type = message.shift();
-        for (let id in this.getEntities()) {
-            if (this.getEntity(id) === entity) {
+        for (let id in this.entities.getEntities()) {
+            if (this.entities.getEntity(id) === entity) {
                 this.backend.to(id).emit("message", message);
                 if (type === MSGTYPE.UPD) {
                     let cmd = (entity.isAlive()) ? "update" : "dead";
@@ -149,7 +153,7 @@ export default class Server {
         let newPos = {x:x, y:y, z:z};
         let tile = this.cave.getMap().getTile(x, y, entity.pos.z);
 
-        let target = this.getEntityAt(newPos);
+        let target = this.entities.getEntityAt(newPos);
         if (target) {
             entity.handleCollision(target);
             return null;
@@ -184,34 +188,4 @@ export default class Server {
         this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
         return null;
     }
-
-    addEntity(id, prototype, pos) {
-        prototype.pos = pos;
-        let entity = this.repo.create(prototype);
-        entity.entrance = pos;
-        this.connections[id] = entity;
-        return entity;
-    }
-
-    getEntities() {
-        return this.connections;
-    }
-
-    getEntity(id) {
-        return this.connections[id];
-    }
-
-    getEntityAt(pos) {
-        for (let socket_id in this.connections) {
-            let entity = this.connections[socket_id];
-            if (_.isEqual(entity.pos,pos)) {
-                return entity;
-            }
-        }
-    }
-
-    removeEntity(id) {
-        delete this.connections[id];
-    }
-
 }
