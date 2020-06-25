@@ -131,11 +131,11 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have 2 number of items', (done) => {
-    defaultTemplate.itemTypes = {"rock":2};
+  test('should have 1 number of items', (done) => {
+    defaultTemplate.itemTypes = {"rock":1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
-    expect(Object.keys(items).length).toBe(2);
+    expect(Object.keys(items).length).toBe(1);
     delete defaultTemplate['itemTypes'];
     done();
   });

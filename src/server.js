@@ -13,97 +13,6 @@ export default class Server {
         this.cave = new Cave(template);
         this.repo = new EntityRepository();
         this.connections = {};
-    } 
-
-    tryMove(entity, delta) {
-        let x = entity.pos.x + delta.x;
-        let y = entity.pos.y + delta.y;
-        let z = entity.pos.z + delta.z;
-        let newPos = {x:x, y:y, z:z};
-        let tile = this.cave.getMap().getTile(x, y, entity.pos.z);
-
-        let target = this.getEntityAt(newPos);
-        if (target) {
-            entity.handleCollision(target);
-            return null;
-        }
-
-        if (z !== entity.pos.z) {
-            return this.levelChange(entity, newPos, tile);
-        }
-        
-        if (tile.isWalkable()) {
-            let items = this.cave.getItemsAt(newPos);
-            if (items.length > 0) {
-                entity.handleCollision(items);
-            }
-            return newPos;
-        }
-        this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
-        return null;
-    }
-
-    levelChange(entity, newPos, tile) {
-        if (newPos.z < entity.pos.z && tile === Tiles.stairsUpTile) {
-            this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[newPos.z]}!`);
-            return newPos;
-        }
-
-        if (newPos.z > entity.pos.z && tile === Tiles.stairsDownTile) {
-            this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[newPos.z]}!`);
-            return newPos;
-        } 
-        
-        this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
-        return null;
-    }
-
-    addEntity(id, prototype, pos) {
-        prototype.pos = pos;
-        let entity = this.repo.create(prototype);
-        entity.entrance = pos;
-        this.connections[id] = entity;
-        return entity;
-    }
-
-    getEntityAt(pos) {
-        for (let socket_id in this.connections) {
-            let entity = this.connections[socket_id];
-            if (_.isEqual(entity.pos,pos)) {
-                return entity;
-            }
-        }
-    }
-
-    removeEntity(id) {
-        delete this.connections[id];
-    }
-
-    sendMessage(entity, ...message) {
-        let type = message.shift();
-        for (let socket_id in this.connections) {
-            if (this.connections[socket_id] === entity) {
-                this.backend.to(socket_id).emit("message", message);
-                if (type === MSGTYPE.UPD) {
-                    let cmd = (entity.isAlive()) ? "update" : "dead";
-                    this.backend.to(socket_id).emit(cmd, entity);
-                }
-            }
-        }
-    }
-
-    // sendMessageToRoom(room, ...message) {
-    //     this.backend.sockets.in(room).emit('message', message); 
-    // }
-
-    setMessengerForEntities() {
-        let svr = this;
-        ( function () {
-            let msgFunc = (entity, type, message) => {
-                svr.sendMessage(entity, type, message);
-            };
-            svr.repo.setMessenger(msgFunc);
-        })();
     }
 
     connection(socket) {
@@ -116,13 +25,14 @@ export default class Server {
             // let rooms = Object.keys(socket.rooms);
             socket.to(room).emit(entity.name + " just entered this cave");
             this.backend.emit("message",  entity.name + " just entered this dungeon complex");
-            this.backend.emit("entities", this.connections);
+            this.backend.emit("entities", this.getEntities());
         });
         this.registerEventHandlers(socket, entity, this);
     }
 
     disconnect(socket) {
-        let entity = this.connections[socket.id];
+        // let entity = this.connections[socket.id];
+        let entity = this.getEntity(socket.id);
         this.backend.emit("delete",entity.pos);
         this.backend.emit("message",  entity.name + " just left this dungeon complex");
         this.removeEntity(socket.id);
@@ -130,7 +40,8 @@ export default class Server {
 
     registerEventHandlers(socket, entity, server) {
         socket.on("get_entities", () => {
-            socket.emit("entities", server.connections);
+            // socket.emit("entities", server.connections);
+            socket.emit("entities", server.getEntities());
         });
 
         socket.on("get_items", () => {
@@ -203,4 +114,104 @@ export default class Server {
             server.disconnect(socket);
         });
     }
+
+    setMessengerForEntities() {
+        let svr = this;
+        ( function () {
+            let msgFunc = (entity, type, message) => {
+                svr.sendMessage(entity, type, message);
+            };
+            svr.repo.setMessenger(msgFunc);
+        })();
+    }
+
+    sendMessage(entity, ...message) {
+        let type = message.shift();
+        for (let id in this.getEntities()) {
+            if (this.getEntity(id) === entity) {
+                this.backend.to(id).emit("message", message);
+                if (type === MSGTYPE.UPD) {
+                    let cmd = (entity.isAlive()) ? "update" : "dead";
+                    this.backend.to(id).emit(cmd, entity);
+                }
+            }
+        }
+    }
+
+    // sendMessageToRoom(room, ...message) {
+    //     this.backend.sockets.in(room).emit('message', message); 
+    // }
+
+    tryMove(entity, delta) {
+        let x = entity.pos.x + delta.x;
+        let y = entity.pos.y + delta.y;
+        let z = entity.pos.z + delta.z;
+        let newPos = {x:x, y:y, z:z};
+        let tile = this.cave.getMap().getTile(x, y, entity.pos.z);
+
+        let target = this.getEntityAt(newPos);
+        if (target) {
+            entity.handleCollision(target);
+            return null;
+        }
+        
+        if (tile.isWalkable()) {
+            if (z !== entity.pos.z) {
+                return this.levelChange(entity, newPos, tile);
+            }
+
+            let items = this.cave.getItemsAt(newPos);
+            if (items.length > 0) {
+                entity.handleCollision(items);
+            }
+            return newPos;
+        }
+        this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
+        return null;
+    }
+
+    levelChange(entity, newPos, tile) {
+        if (newPos.z < entity.pos.z && tile === Tiles.stairsUpTile) {
+            this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[newPos.z]}!`);
+            return newPos;
+        }
+
+        if (newPos.z > entity.pos.z && tile === Tiles.stairsDownTile) {
+            this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[newPos.z]}!`);
+            return newPos;
+        } 
+        
+        this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
+        return null;
+    }
+
+    addEntity(id, prototype, pos) {
+        prototype.pos = pos;
+        let entity = this.repo.create(prototype);
+        entity.entrance = pos;
+        this.connections[id] = entity;
+        return entity;
+    }
+
+    getEntities() {
+        return this.connections;
+    }
+
+    getEntity(id) {
+        return this.connections[id];
+    }
+
+    getEntityAt(pos) {
+        for (let socket_id in this.connections) {
+            let entity = this.connections[socket_id];
+            if (_.isEqual(entity.pos,pos)) {
+                return entity;
+            }
+        }
+    }
+
+    removeEntity(id) {
+        delete this.connections[id];
+    }
+
 }
