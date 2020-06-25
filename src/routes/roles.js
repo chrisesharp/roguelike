@@ -1,11 +1,16 @@
 "user strict";
 
 import express from 'express';
+import { Entities } from '../entities/index.js'
 
-const ROLES = [
-  {type:"warrior",name:"Warrior"},
-  {type:"wizard",name:"Wizard"}
-];
+const ROLES = [];
+
+Object.keys(Entities).forEach(key => {
+  let ctor = Entities[key];
+  let Role = ctor.toString().split(' ')[1];
+  let role = Role.charAt(0).toLowerCase() + Role.substring(1);
+  ROLES.push({type:role, name:Role})
+});
 
 export default function (app)  {
   let router = express.Router();
