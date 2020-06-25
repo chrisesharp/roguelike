@@ -23,7 +23,6 @@ export default class Server {
         let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
         let room = this.cave.getRegion(entity.pos);
         socket.join(room, () => {
-            // let rooms = Object.keys(socket.rooms);
             socket.to(room).emit(entity.name + " just entered this cave");
             this.backend.emit("message",  entity.name + " just entered this dungeon complex");
             this.backend.emit("entities", this.entities.getEntities());
@@ -58,24 +57,11 @@ export default class Server {
         });
 
         socket.on("take", (itemName) => {
-            let items = server.cave.getItemsAt(entity.pos);
-            let item = items.find(o => (o.name === itemName));
-            if (item && entity.tryTake(item)) {
-                let room = server.cave.getRegion(entity.pos);
-                server.cave.removeItem(item);
-                server.backend.sockets.in(room).emit('items', server.cave.getItems(room)); 
-            } else {
-                entity.messenger(entity, MSGTYPE.INF, "You cannot take that item.");
-            }
+            server.takeItem(entity, itemName);
         });
 
         socket.on("drop", (itemName) => {
-            let item = entity.dropItem(itemName);
-            if (item) {
-                let room = server.cave.getRegion(entity.pos);
-                server.cave.addItem(entity.pos, item);
-                server.backend.sockets.in(room).emit('items', server.cave.getItems(room)); 
-            }
+            server.dropItem(entity, itemName);
         });
 
         socket.on("eat", (food) => {
@@ -91,23 +77,11 @@ export default class Server {
         });
 
         socket.on("move", direction => {
-            let delta = getMovement(direction);
-            let position = (entity.isAlive()) ? server.tryMove(entity, delta) : null;
-            if (position) {
-                let startRoom = server.cave.getRegion(entity.pos);
-                let newRoom = server.cave.getRegion(position);
-                entity.pos = position;
-                if (!(newRoom in socket.rooms)) {
-                    this.moveRoom(socket, entity, startRoom);
-                }
-                server.backend.emit("position", socket.id, entity.pos);
-            }
+            server.moveEntity(socket, entity, direction);
         });
 
         socket.on("map", () => {
-            let map = server.cave.getMap();
-            map.entrance = entity.entrance;
-            socket.emit("map", map);
+            socket.emit("map", server.getMap(entity));
         });
 
         socket.on("get_position", () => {
@@ -145,6 +119,41 @@ export default class Server {
     // sendMessageToRoom(room, ...message) {
     //     this.backend.sockets.in(room).emit('message', message); 
     // }
+
+    takeItem(entity, itemName) {
+        let items = this.cave.getItemsAt(entity.pos);
+        let item = items.find(o => (o.name === itemName));
+        if (item && entity.tryTake(item)) {
+            let room = this.cave.getRegion(entity.pos);
+            this.cave.removeItem(item);
+            this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+        } else {
+            entity.messenger(entity, MSGTYPE.INF, "You cannot take that item.");
+        }
+    }
+
+    dropItem(entity, itemName) {
+        let item = entity.dropItem(itemName);
+        if (item) {
+            let room = this.cave.getRegion(entity.pos);
+            this.cave.addItem(entity.pos, item);
+            this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+        }
+    }
+
+    moveEntity(socket, entity, direction) {
+        let delta = getMovement(direction);
+        let position = (entity.isAlive()) ? this.tryMove(entity, delta) : null;
+        if (position) {
+            let startRoom = this.cave.getRegion(entity.pos);
+            let newRoom = this.cave.getRegion(position);
+            entity.pos = position;
+            if (!(newRoom in socket.rooms)) {
+                this.moveRoom(socket, entity, startRoom);
+            }
+            this.backend.emit("position", socket.id, entity.pos);
+        }
+    }
 
     tryMove(entity, delta) {
         let x = entity.pos.x + delta.x;
@@ -187,5 +196,11 @@ export default class Server {
         
         this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
         return null;
+    }
+
+    getMap(entity) {
+        let map = this.cave.getMap();
+        map.entrance = entity.entrance;
+        return map;
     }
 }
