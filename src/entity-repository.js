@@ -8,7 +8,6 @@ Object.keys(Entities).forEach(key => {
     let ctor = Entities[key];
     let role = ctor.toString().split(' ')[1];
     role = role.charAt(0).toLowerCase() + role.substring(1);
-    console.log(role,ctor);
     constructors.push({role:role, ctor:ctor})
 });
 constructors.push({role : "default", ctor : ServerEntity});
