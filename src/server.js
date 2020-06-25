@@ -7,6 +7,7 @@ import EntityRepository from "./entity-repository.js";
 import { MSGTYPE } from "./messages.js";
 import _ from "underscore";
 import State from "./state.js";
+import e from "express";
 
 export default class Server {
     constructor(backend, template) {
@@ -20,8 +21,7 @@ export default class Server {
         this.setMessengerForEntities();
         let prototype = socket.handshake.query;
         let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
-        // let room = this.cave.getRegion(entity);
-        let room = entity.pos.z;
+        let room = this.cave.getRegion(entity.pos);
         socket.join(room, () => {
             // let rooms = Object.keys(socket.rooms);
             socket.to(room).emit(entity.name + " just entered this cave");
@@ -29,6 +29,16 @@ export default class Server {
             this.backend.emit("entities", this.entities.getEntities());
         });
         this.registerEventHandlers(socket, entity, this);
+    }
+
+    setMessengerForEntities() {
+        let svr = this;
+        ( function () {
+            let msgFunc = (entity, type, message) => {
+                svr.sendMessage(entity, type, message);
+            };
+            svr.repo.setMessenger(msgFunc);
+        })();
     }
 
     disconnect(socket) {
@@ -51,7 +61,7 @@ export default class Server {
             let items = server.cave.getItemsAt(entity.pos);
             let item = items.find(o => (o.name === itemName));
             if (item && entity.tryTake(item)) {
-                let room = entity.pos.z;
+                let room = server.cave.getRegion(entity.pos);
                 server.cave.removeItem(item);
                 server.backend.sockets.in(room).emit('items', server.cave.getItems(room)); 
             } else {
@@ -62,7 +72,7 @@ export default class Server {
         socket.on("drop", (itemName) => {
             let item = entity.dropItem(itemName);
             if (item) {
-                let room = entity.pos.z;
+                let room = server.cave.getRegion(entity.pos);
                 server.cave.addItem(entity.pos, item);
                 server.backend.sockets.in(room).emit('items', server.cave.getItems(room)); 
             }
@@ -84,8 +94,8 @@ export default class Server {
             let delta = getMovement(direction);
             let position = (entity.isAlive()) ? server.tryMove(entity, delta) : null;
             if (position) {
-                let startRoom = entity.pos.z;
-                let newRoom = position.z;
+                let startRoom = server.cave.getRegion(entity.pos);
+                let newRoom = server.cave.getRegion(position);
                 entity.pos = position;
                 if (!(newRoom in socket.rooms)) {
                     this.moveRoom(socket, entity, startRoom);
@@ -110,23 +120,13 @@ export default class Server {
     }
 
     moveRoom(socket, entity, startRoom) {
-        let newRoom = entity.pos.z;
+        let newRoom = this.cave.getRegion(entity.pos);
         socket.leave(startRoom, () => {
             socket.to(startRoom).emit(entity.name + " just left this cave");
         });
         socket.join(newRoom, () => {
             socket.to(startRoom).emit(entity.name + " just entered this cave");
         });
-    }
-
-    setMessengerForEntities() {
-        let svr = this;
-        ( function () {
-            let msgFunc = (entity, type, message) => {
-                svr.sendMessage(entity, type, message);
-            };
-            svr.repo.setMessenger(msgFunc);
-        })();
     }
 
     sendMessage(entity, ...message) {
