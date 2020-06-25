@@ -4,9 +4,9 @@ const Items = {};
 
 import Rock from './rock.js';
 Items.Rock = Rock;
-import Dagger from './rock.js';
+import Dagger from './dagger.js';
 Items.Dagger = Dagger;
-import Apple from './rock.js';
+import Apple from './apple.js';
 Items.Apple = Apple;
 
 export { Items };

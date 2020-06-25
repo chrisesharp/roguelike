@@ -1,13 +1,18 @@
 "use strict";
 
 import ServerEntity from './entities/server-entity.js';
-import Warrior from './entities/warrior.js';
-import Wizard from './entities/wizard.js';
-
+import { Entities } from './entities/index.js';
 const constructors = [];
-constructors.push({role : "warrior", ctor : Warrior});
-constructors.push({role : "wizard", ctor : Wizard});
+
+Object.keys(Entities).forEach(key => {
+    let ctor = Entities[key];
+    let role = ctor.toString().split(' ')[1];
+    role = role.charAt(0).toLowerCase() + role.substring(1);
+    console.log(role,ctor);
+    constructors.push({role:role, ctor:ctor})
+});
 constructors.push({role : "default", ctor : ServerEntity});
+
 
 export default class EntityRepository {
     constructor() {
