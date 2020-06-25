@@ -23,9 +23,7 @@ export default class EntityRepository {
     }
 
     create(prototype) {
-        let name = prototype.name;
         let role = prototype.role;
-        let type = prototype.type;
         prototype.messenger = this.messenger;
         let entity = constructors.find(o => (o.role === role || o.role === "default"));
         return new entity.ctor(prototype);

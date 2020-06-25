@@ -1,16 +1,8 @@
 "use strict";
 
-// import Apple from './items/apple.js';
-// import Rock from './items/rock.js';
-// import Dagger from './items/dagger.js';
-// import Chainmail from './items/chainmail.js';
 import { Items } from './items/index.js';
 
 const constructors = [];
-// constructors.push({type : "dagger", ctor : Dagger});
-// constructors.push({type : "rock", ctor : Rock});
-// constructors.push({type : "apple", ctor : Apple});
-// constructors.push({type : "chainmail", ctor : Chainmail});
 Object.keys(Items).forEach(key => {
     let ctor = Items[key];
     let type = ctor.toString().split(' ')[1];
@@ -21,7 +13,6 @@ Object.keys(Items).forEach(key => {
 export default class ItemRepository {
     constructor(types) {
         this.items = this.assignFrequencies(types);
-        // this.messenger = null;
     }
 
     assignFrequencies(types) {
@@ -36,10 +27,6 @@ export default class ItemRepository {
         });
         return items;
     }
-
-    // setMessenger(messengerFunc) {
-    //     this.messenger = messengerFunc;
-    // }
 
     moreItems() {
         return (this.items.length > 0);
