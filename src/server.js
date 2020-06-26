@@ -4,7 +4,7 @@ import Cave from "./cave.js";
 import { Tiles } from "./tile-server.js";
 import { getMovement } from "./client/javascripts/movement.js";
 import EntityRepository from "./entity-repository.js";
-import { MSGTYPE } from "./messages.js";
+import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";
 import Messaging from "./messaging.js";
 
@@ -28,7 +28,7 @@ export default class Server {
     disconnect(socket) {
         let entity = this.entities.getEntity(socket.id);
         this.messaging.sendToAll("delete", entity.pos);
-        this.messaging.sendToAll("message", entity.name + " just left this dungeon complex");
+        this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.name));
         this.entities.removeEntity(socket.id);
     }
 
@@ -78,20 +78,20 @@ export default class Server {
         });
     }
 
-    moveRoom(socket, entity, startRoom) {
+    moveRooms(socket, entity, startRoom) {
         this.leaveRoom(socket, entity, startRoom);
         this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
     }
 
     enterRoom(socket, entity, room) {
         socket.join(room, () => {
-            socket.broadcast.to(room).emit("message", entity.name + " just entered this cave.");
+            socket.broadcast.to(room).emit("message", Messages.ENTER_ROOM(entity.name));
         });
     }
 
     leaveRoom(socket, entity, room) {
         socket.leave(room, () => {
-            this.messaging.sendMessageToRoom(room, entity.name + " just left this cave.");
+            socket.broadcast.to(room).emit("message", Messages.LEAVE_ROOM(entity.name));
         });
     }
 
@@ -116,7 +116,7 @@ export default class Server {
             this.cave.removeItem(item);
             this.messaging.sendToRoom(room, "items", this.cave.getItems(room));
         } else {
-            entity.messenger(entity, MSGTYPE.INF, "You cannot take that item.");
+            entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE(itemName));
         }
     }
 
@@ -137,7 +137,7 @@ export default class Server {
             let newRoom = this.cave.getRegion(position);
             entity.pos = position;
             if (!(newRoom in socket.rooms)) {
-                this.moveRoom(socket, entity, startRoom);
+                this.moveRooms(socket, entity, startRoom);
             }
             this.messaging.sendToAll("position", [socket.id, entity.pos])
         }
@@ -167,22 +167,22 @@ export default class Server {
             }
             return newPos;
         }
-        this.sendMessage(entity, MSGTYPE.INF, "You cannot walk there.");
+        this.sendMessage(entity, MSGTYPE.INF, Messages.NO_WALK(entity));
         return null;
     }
 
     levelChange(entity, newPos, tile) {
         if (newPos.z < entity.pos.z && tile === Tiles.stairsUpTile) {
-            this.sendMessage(entity, MSGTYPE.INF, `You ascend to level ${[newPos.z]}!`);
+            this.sendMessage(entity, MSGTYPE.INF, Messages.ASCEND([newPos.z]));
             return newPos;
         }
 
         if (newPos.z > entity.pos.z && tile === Tiles.stairsDownTile) {
-            this.sendMessage(entity, MSGTYPE.INF, `You descend to level ${[newPos.z]}!`);
+            this.sendMessage(entity, MSGTYPE.INF, Messages.DESCEND([newPos.z]));
             return newPos;
         } 
         
-        this.sendMessage(entity, MSGTYPE.INF, "You can't go that way!");
+        this.sendMessage(entity, MSGTYPE.INF, Messages.NO_CLIMB(entity));
         return null;
     }
 
