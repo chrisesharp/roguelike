@@ -15,10 +15,10 @@ export default class Server {
         this.cave = new Cave(template);
         this.repo = new EntityRepository();
         this.entities = new State(this.repo);
+        this.repo.setMessengerForEntities(this);
     }
 
     connection(socket) {
-        this.setMessengerForEntities();
         let prototype = socket.handshake.query;
         let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
         let room = this.cave.getRegion(entity.pos);
@@ -28,16 +28,6 @@ export default class Server {
             this.backend.emit("entities", this.entities.getEntities());
         });
         this.registerEventHandlers(socket, entity, this);
-    }
-
-    setMessengerForEntities() {
-        let svr = this;
-        ( function () {
-            let msgFunc = (entity, type, message) => {
-                svr.sendMessage(entity, type, message);
-            };
-            svr.repo.setMessenger(msgFunc);
-        })();
     }
 
     disconnect(socket) {

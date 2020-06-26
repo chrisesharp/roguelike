@@ -18,8 +18,10 @@ export default class EntityRepository {
         this.messenger = null;
     }
 
-    setMessenger(messengerFunc) {
-        this.messenger = messengerFunc;
+    setMessengerForEntities(server) {
+        this.messenger = (entity, type, message) => {
+            server.sendMessage(entity, type, message);
+        };
     }
 
     create(prototype) {
