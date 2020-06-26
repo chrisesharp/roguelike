@@ -6,28 +6,29 @@ import { getMovement } from "./client/javascripts/movement.js";
 import EntityRepository from "./entity-repository.js";
 import { MSGTYPE } from "./messages.js";
 import State from "./state.js";
+import Messaging from "./messaging.js";
 
 export default class Server {
     constructor(backend, template) {
-        this.backend = backend;
+        this.messaging = new Messaging(backend);
         this.cave = new Cave(template);
         this.repo = new EntityRepository();
-        this.entities = new State(this.repo);
         this.repo.setMessengerForEntities(this);
+        this.entities = new State(this.repo);
     }
 
     connection(socket) {
         let prototype = socket.handshake.query;
         let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
         this.registerEventHandlers(socket, entity, this);
-        this.sendToAll("entities",this.entities.getEntities());
+        this.messaging.sendToAll("entities",this.entities.getEntities());
         this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
     }
 
     disconnect(socket) {
         let entity = this.entities.getEntity(socket.id);
-        this.sendToAll("delete", entity.pos);
-        this.sendToAll("message", entity.name + " just left this dungeon complex");
+        this.messaging.sendToAll("delete", entity.pos);
+        this.messaging.sendToAll("message", entity.name + " just left this dungeon complex");
         this.entities.removeEntity(socket.id);
     }
 
@@ -77,14 +78,6 @@ export default class Server {
         });
     }
 
-    sendToRoom(room, cmd, data) {
-        this.backend.in(room).emit(cmd, data);
-    }
-
-    sendToAll(cmd, data) {
-        this.backend.emit(cmd, data);
-    }
-
     moveRoom(socket, entity, startRoom) {
         this.leaveRoom(socket, entity, startRoom);
         this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
@@ -98,7 +91,7 @@ export default class Server {
 
     leaveRoom(socket, entity, room) {
         socket.leave(room, () => {
-            this.sendMessageToRoom(room, entity.name + " just left this cave.");
+            this.messaging.sendMessageToRoom(room, entity.name + " just left this cave.");
         });
     }
 
@@ -106,17 +99,13 @@ export default class Server {
         let type = message.shift();
         for (let id in this.entities.getEntities()) {
             if (this.entities.getEntity(id) === entity) {
-                this.backend.to(id).emit("message", message);
+                this.messaging.sendMessageToId(id, "message", message);
                 if (type === MSGTYPE.UPD) {
                     let cmd = (entity.isAlive()) ? "update" : "dead";
-                    this.backend.to(id).emit(cmd, entity);
+                    this.messaging.sendMessageToId(id, cmd, entity);
                 }
             }
         }
-    }
-
-    sendMessageToRoom(room, ...message) {
-        this.backend.in(room).emit('message', message); 
     }
 
     takeItem(entity, itemName) {
@@ -125,7 +114,7 @@ export default class Server {
         if (item && entity.tryTake(item)) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.removeItem(item);
-            this.sendToRoom(room, "items", this.cave.getItems(room));
+            this.messaging.sendToRoom(room, "items", this.cave.getItems(room));
         } else {
             entity.messenger(entity, MSGTYPE.INF, "You cannot take that item.");
         }
@@ -136,7 +125,7 @@ export default class Server {
         if (item) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.addItem(entity.pos, item);
-            this.sendToRoom(room, "items", this.cave.getItems(room));
+            this.messaging.sendToRoom(room, "items", this.cave.getItems(room));
         }
     }
 
@@ -150,7 +139,7 @@ export default class Server {
             if (!(newRoom in socket.rooms)) {
                 this.moveRoom(socket, entity, startRoom);
             }
-            this.sendToAll("position", [socket.id, entity.pos])
+            this.messaging.sendToAll("position", [socket.id, entity.pos])
         }
     }
 
