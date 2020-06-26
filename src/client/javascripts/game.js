@@ -238,7 +238,9 @@ class Game {
             this.refresh();
         });
 
-        socket.on('position', (socket_id, pos) => {
+        socket.on('position', (payload) => {
+            let socket_id = payload[0];
+            let pos = payload[1];
             if (socket_id === socket.id) {
                 this.moveEntity(this.player, pos);
             } else {
