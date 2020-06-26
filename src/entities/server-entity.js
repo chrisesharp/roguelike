@@ -1,7 +1,7 @@
 "use strict";
 
 import Entity from '../client/javascripts/entity.js';
-import { MSGTYPE } from '../messages.js';
+import { MSGTYPE, Messages } from '../messages.js';
 import Rules from '../rules.js';
 
 const hungerLevels = {
@@ -28,16 +28,16 @@ export default class ServerEntity extends Entity {
 
     handleCollision(other) {
         if (other instanceof Array) {
-            let msg = (other.length === 1) ? `You see ${[other[0].describeA()]}.` : "There are several objects here.";
+            let msg = (other.length === 1) ? Messages.SINGLE_ITEM(other[0]) : Messages.MULTIPLE_ITEMS();
             this.messenger(this, MSGTYPE.INF, msg);
         } else if (other.isAlive()) {
             if (this.isWielding()) {
                 this.attack(other);
             } else {
-                this.messenger(this, MSGTYPE.INF, `${other.name} is there.`);
+                this.messenger(this, MSGTYPE.INF, Messages.ENTITY_THERE(other));
             }
         } else {
-            this.messenger(this, MSGTYPE.INF, `You see a dead ${other.name}.`);
+            this.messenger(this, MSGTYPE.INF, Messages.ENTITY_DEAD(other));
         }
     }
 
@@ -45,11 +45,11 @@ export default class ServerEntity extends Entity {
         if (this.tryToHit(other)) {
             let dmg = this.dealDamage();
             other.hitFor(dmg);
-            this.messenger(this, MSGTYPE.INF, `You hit ${other.name} for ${dmg} damage.`);
-            this.messenger(other, MSGTYPE.INF, `${this.name} hit you for ${dmg} damage.`);
+            this.messenger(this, MSGTYPE.INF, Messages.HIT_BY(other, dmg));
+            this.messenger(other, MSGTYPE.INF, Messages.HIT_OTHER(this, dmg));
         } else {
-            this.messenger(this, MSGTYPE.INF, `You missed ${other.name}!`);
-            this.messenger(other, MSGTYPE.INF, `${this.name} missed you.`);
+            this.messenger(this, MSGTYPE.INF, Messages.YOU_MISSED(other));
+            this.messenger(other, MSGTYPE.INF, Messages.MISSED_YOU(this));
         }
     }
 
@@ -75,15 +75,15 @@ export default class ServerEntity extends Entity {
     hitFor(damage) {
         this.hitPoints -= damage;
         if (this.isAlive()) {
-            this.messenger(this, MSGTYPE.UPD, "Ouch!");
+            this.messenger(this, MSGTYPE.UPD, Messages.TAKE_DMG(damage));
         } else {
-            this.messenger(this, MSGTYPE.UPD, "You died!");
+            this.messenger(this, MSGTYPE.UPD, Messages.DIED(this));
         }   
     }
 
     tryTake(item) {
         this.inventory.push(item);
-        this.messenger(this, MSGTYPE.UPD, `You take ${item.describeThe()}.`);
+        this.messenger(this, MSGTYPE.UPD, Messages.TAKE_ITEM(item));
         return true;
     }
 
@@ -114,17 +114,17 @@ export default class ServerEntity extends Entity {
             } else if (this.currentWeapon === item) {
                 this.wield();
             }
-            this.messenger(this, MSGTYPE.UPD, `You drop ${item.describeThe()}.`);
+            this.messenger(this, MSGTYPE.UPD, Messages.DROP_ITEM(item));
         }
         return item;
     }
 
-    eat(itemName) {
-        let item = this.removeItemFromInventory(itemName);
+    eat(foodName) {
+        let item = this.removeItemFromInventory(foodName);
         if (item) {
-            this.messenger(this, MSGTYPE.UPD, `You eat ${item.describeThe()}.`);
+            this.messenger(this, MSGTYPE.UPD, Messages.EAT_FOOD(item));
         } else {
-            this.messenger(this, MSGTYPE.INF, `You don't have the ${itemName} to eat.`);
+            this.messenger(this, MSGTYPE.INF, Messages.NO_EAT(foodName));
         }
     }
 
@@ -133,7 +133,7 @@ export default class ServerEntity extends Entity {
             this.use(weaponName, "wield");
         } else {
             this.currentWeapon = null;
-            this.messenger(this, MSGTYPE.UPD, `You are not wielding anything now.`);
+            this.messenger(this, MSGTYPE.UPD, Messages.NO_WIELD(weaponName));
         }
     }
 
@@ -142,7 +142,7 @@ export default class ServerEntity extends Entity {
             this.use(armourName, "wear");
         } else {
             this.setAC(null);
-            this.messenger(this, MSGTYPE.UPD, `You are not wearing anything now.`);
+            this.messenger(this, MSGTYPE.UPD, Messages.NO_WEAR(armourName));
         }
     }
 
@@ -154,9 +154,9 @@ export default class ServerEntity extends Entity {
             } else {
                 this.currentWeapon = item;
             }
-            this.messenger(this, MSGTYPE.UPD, `You are ${verb}ing ${item.describeThe()}.`);
+            this.messenger(this, MSGTYPE.UPD, Messages.USE_ITEM(verb, item));
         } else {
-            this.messenger(this, MSGTYPE.INF, `You don't have any ${itemName} to ${verb}.`);
+            this.messenger(this, MSGTYPE.INF, Messages.NO_USE(verb, itemName));
         }
     }
 
