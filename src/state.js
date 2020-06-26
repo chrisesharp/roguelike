@@ -27,7 +27,7 @@ export default class State {
     getEntityAt(pos) {
         for (let socket_id in this.connections) {
             let entity = this.connections[socket_id];
-            if (_.isEqual(entity.pos,pos)) {
+            if (_.isEqual(entity.pos, pos)) {
                 return entity;
             }
         }
