@@ -119,7 +119,7 @@ export default class Server {
         if (item && entity.tryTake(item)) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.removeItem(item);
-            this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+            this.backend.in(room).emit('items', this.cave.getItems(room)); 
         } else {
             entity.messenger(entity, MSGTYPE.INF, "You cannot take that item.");
         }
@@ -130,7 +130,7 @@ export default class Server {
         if (item) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.addItem(entity.pos, item);
-            this.backend.sockets.in(room).emit('items', this.cave.getItems(room)); 
+            this.backend.in(room).emit('items', this.cave.getItems(room)); 
         }
     }
 
