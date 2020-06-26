@@ -32,5 +32,4 @@ export const Messages = {
     NO_WEAR: () => { return "You are not wearing anything now."; },
     USE_ITEM: (verb, item) => { return `You are ${verb}ing ${item.describeThe()}.`;},
     NO_USE: (verb, item) => { return `You don't have any ${item} to ${verb}.`;},
-
 }

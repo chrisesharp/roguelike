@@ -1,6 +1,9 @@
 "use strict";
 
 import Screen from './screen.js';
+import { game } from '../game.js';
+import { isReturnKey } from '../keys.js';
+import { startScreen } from './start.js';
 import { Color } from '../display.js';
 
 export default class LoseScreen extends Screen {
@@ -17,6 +20,12 @@ export default class LoseScreen extends Screen {
             let b = 0;
             let background = Color.toRGB([r, g, b]);
             display.drawText(x, y, "%b{" + background + "}" + message);
+        }
+    }
+
+    handleInput(inputType, inputData) {
+        if (inputType === 'keydown' && isReturnKey(inputData)) {
+            game.switchScreen(startScreen);
         }
     }
 };
