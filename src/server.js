@@ -21,13 +21,9 @@ export default class Server {
     connection(socket) {
         let prototype = socket.handshake.query;
         let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
-        let room = this.cave.getRegion(entity.pos);
-        socket.join(room, () => {
-            socket.to(room).emit(entity.name + " just entered this cave");
-            this.backend.emit("message",  entity.name + " just entered this dungeon complex");
-            this.backend.emit("entities", this.entities.getEntities());
-        });
         this.registerEventHandlers(socket, entity, this);
+        this.backend.emit("entities", this.entities.getEntities());
+        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
     }
 
     disconnect(socket) {
@@ -84,12 +80,19 @@ export default class Server {
     }
 
     moveRoom(socket, entity, startRoom) {
-        let newRoom = this.cave.getRegion(entity.pos);
-        socket.leave(startRoom, () => {
-            socket.to(startRoom).emit(entity.name + " just left this cave");
+        this.leaveRoom(socket, entity, startRoom);
+        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
+    }
+
+    enterRoom(socket, entity, room) {
+        socket.join(room, () => {
+            socket.broadcast.to(room).emit("message", entity.name + " just entered this cave.");
         });
-        socket.join(newRoom, () => {
-            socket.to(startRoom).emit(entity.name + " just entered this cave");
+    }
+
+    leaveRoom(socket, entity, room) {
+        socket.leave(room, () => {
+            this.sendMessageToRoom(room, entity.name + " just left this cave.");
         });
     }
 
@@ -106,9 +109,9 @@ export default class Server {
         }
     }
 
-    // sendMessageToRoom(room, ...message) {
-    //     this.backend.sockets.in(room).emit('message', message); 
-    // }
+    sendMessageToRoom(room, ...message) {
+        this.backend.in(room).emit('message', message); 
+    }
 
     takeItem(entity, itemName) {
         let items = this.cave.getItemsAt(entity.pos);

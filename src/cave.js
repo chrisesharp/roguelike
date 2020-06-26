@@ -109,6 +109,6 @@ export default class Cave {
         let y = pos.y;
         let z = pos.z;
         // return this.map.regions[z][y][x];
-        return z;
+        return `${z}`;
     }
 }
