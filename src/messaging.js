@@ -20,4 +20,8 @@ export default class Messaging{
     sendMessageToId(id, cmd, data) {
         this.backend.to(id).emit(cmd, data);
     }
+
+    sendMessageToEntity(entity, cmd, data) {
+        this.sendMessageToId(entity.id, cmd, data);
+    }
 }

@@ -13,6 +13,7 @@ const hungerLevels = {
 export default class ServerEntity extends Entity {
     constructor(properties) {
         super(properties);
+        this.id = properties['id'];
         this.rules = new Rules(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;

@@ -91,20 +91,16 @@ export default class Server {
 
     leaveRoom(socket, entity, room) {
         socket.leave(room, () => {
-            socket.broadcast.to(room).emit("message", Messages.LEAVE_ROOM(entity.name));
+            this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.name));
         });
     }
 
     sendMessage(entity, ...message) {
         let type = message.shift();
-        for (let id in this.entities.getEntities()) {
-            if (this.entities.getEntity(id) === entity) {
-                this.messaging.sendMessageToId(id, "message", message);
-                if (type === MSGTYPE.UPD) {
-                    let cmd = (entity.isAlive()) ? "update" : "dead";
-                    this.messaging.sendMessageToId(id, cmd, entity);
-                }
-            }
+        this.messaging.sendMessageToEntity(entity, "message", message);
+        if (type === MSGTYPE.UPD) {
+            let cmd = (entity.isAlive()) ? "update" : "dead";
+            this.messaging.sendMessageToEntity(entity, cmd, entity);
         }
     }
 
