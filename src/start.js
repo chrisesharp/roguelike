@@ -3,7 +3,7 @@
 import express from "express";
 import http from "http";
 import io from "socket.io";
-import Server from "./server.js";
+import Server from "./server/server.js";
 import fs from "fs";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');
@@ -19,7 +19,7 @@ httpServer.listen(port, host);
 httpServer.on('listening', onListen);
 httpServer.on('error', onError);
 (async () => {
-    const routes = await import('../routes/index.js');
+    const routes = await import('./routes/index.js');
     routes.use(app);
 })();
 

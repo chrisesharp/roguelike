@@ -10,7 +10,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server/start.js",
+    "start": "node ./src/start.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
