@@ -1,6 +1,6 @@
 "use strict";
 
-import Tile from "../../client/tile";
+import Tile from "../../common/tile";
 import { FOV } from "./display";
 const nullTile = new Tile();
 

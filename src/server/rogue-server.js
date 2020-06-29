@@ -2,7 +2,7 @@
 
 import Cave from "./cave.js";
 import { Tiles } from "./tile-server.js";
-import { getMovement } from "../client/movement.js";
+import { getMovement } from "../common/movement.js";
 import EntityFactory from "./entity-factory.js";
 import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";

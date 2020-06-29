@@ -3,8 +3,8 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import ServerHealth from './server-health';
 import Map from './map';
-import Entity from '../../client/entity';
-import Item from '../../client/item';
+import Entity from '../../common/entity';
+import Item from '../../common/item';
 
 import { Display, dispOpts } from './display';
 import { startScreen } from './screens/start';

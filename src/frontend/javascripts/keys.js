@@ -1,7 +1,7 @@
 "use strict";
 
 import { KEYS } from './display';
-import { DIRS } from '../../client/movement';
+import { DIRS } from '../../common/movement';
 import { Screens } from './screens/index.js';
 
 export const isReturnKey = function(inputData) {

@@ -1,6 +1,6 @@
 "use strict";
 
-import Item from '../../client/item.js';
+import Item from '../../common/item.js';
 
 export default class Apple extends Item {
     constructor(properties) {

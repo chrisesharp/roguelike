@@ -1,6 +1,6 @@
 "use strict";
 
-import Entity from '../../client/entity.js';
+import Entity from '../../common/entity.js';
 import { MSGTYPE, Messages } from '../messages.js';
 import Rules from '../rules.js';
 
