@@ -23,7 +23,7 @@ httpServer.on('error', onError);
     routes.use(app);
 })();
 
-let filepath = process.env.npm_package_config_file || './src/defaults.json';
+let filepath = process.env.npm_package_config_file || './src/server/defaults.json';
 let file = fs.readFileSync(filepath, 'utf8');
 let template = JSON.parse(file);
 

@@ -1,7 +1,7 @@
 "user strict";
 
 import express from 'express';
-import { Entities } from '../entities/index.js'
+import { Entities } from '../server/entities/index.js'
 
 const ROLES = [];
 

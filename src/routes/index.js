@@ -8,7 +8,7 @@ const bundlerOpts = {
     hmrPort: 8080,
 };
 
-const bundler = new Bundler('./src/client/index.html', bundlerOpts);
+const bundler = new Bundler('./src/frontend/index.html', bundlerOpts);
 
 
 export function use(app){
