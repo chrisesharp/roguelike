@@ -10,7 +10,7 @@ Object.keys(Items).forEach(key => {
     constructors.push({type:type, ctor:ctor})
 });
 
-export default class ItemRepository {
+export default class ItemFactory {
     constructor(types) {
         this.items = this.assignFrequencies(types);
     }

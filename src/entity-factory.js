@@ -13,7 +13,7 @@ Object.keys(Entities).forEach(key => {
 constructors.push({role : "default", ctor : ServerEntity});
 
 
-export default class EntityRepository {
+export default class EntityFactory {
     constructor() {
         this.messenger = null;
     }

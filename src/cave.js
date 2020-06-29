@@ -2,7 +2,7 @@
 
 import Builder from "./builder.js";
 import _ from "underscore";
-import ItemRepository from "./item-repository.js";
+import ItemFactory from "./item-factory.js";
 
 export const DEFAULT_SIZE = {
     "width":50,
@@ -37,7 +37,7 @@ export default class Cave {
         for (let z = 0; z < depth; z++) {
             let levelIdx = `itemTypes${z}`;
             let types =  template[levelIdx] || template.itemTypes || {};
-            repos[z] = new ItemRepository(types);
+            repos[z] = new ItemFactory(types);
         }
         return repos;
     }

@@ -3,7 +3,7 @@
 import Cave from "./cave.js";
 import { Tiles } from "./tile-server.js";
 import { getMovement } from "./client/javascripts/movement.js";
-import EntityRepository from "./entity-repository.js";
+import EntityFactory from "./entity-factory.js";
 import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";
 import Messaging from "./messaging.js";
@@ -12,7 +12,7 @@ export default class Server {
     constructor(backend, template) {
         this.messaging = new Messaging(backend);
         this.cave = new Cave(template);
-        this.repo = new EntityRepository();
+        this.repo = new EntityFactory();
         this.repo.setMessengerForEntities(this);
         this.entities = new State(this.repo);
     }
