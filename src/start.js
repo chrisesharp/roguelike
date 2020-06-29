@@ -3,7 +3,7 @@
 import express from "express";
 import http from "http";
 import io from "socket.io";
-import Server from "./server/server.js";
+import Server from "./server/rogue-server.js";
 import fs from "fs";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');

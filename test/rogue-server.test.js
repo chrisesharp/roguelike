@@ -3,7 +3,7 @@
 import { ioc } from "../src/server/socket_client";
 import http from "http";
 import io from "socket.io";
-import Server from "../src/server/server";
+import Server from "../src/server/rogue-server";
 import { DIRS } from "../src/client/movement";
 import { Tiles } from "../src/server/tile-server";
 import Entity from "../src/client/entity";
