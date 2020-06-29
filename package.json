@@ -6,7 +6,7 @@
   "config": {
     "port": "3000",
     "host": "localhost",
-    "maps": "./test"
+    "maps": "./test/test-cave"
   },
   "main": "index.js",
   "scripts": {

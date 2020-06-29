@@ -11,7 +11,7 @@ export default class FileGenerator {
     }
     
     generateLevel(level) {
-        return this.fileMap(`${mapsDir}/cave${level}.txt`);
+        return this.fileMap(`${mapsDir}/level-${level}.txt`);
     }
 
     emptyMap() {
