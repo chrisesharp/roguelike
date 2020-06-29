@@ -3,14 +3,13 @@
 import { Tiles } from "./tile-server.js";
 import { Generators } from "./generators/index.js";
 
-const MIN_REGION_SIZE = 10;
-
 function dynamicGenerator(generator) {
     return Generators[generator]
 }
 
 export default class Builder {
-    constructor(generator, width, height, depth,  randomized) {
+    constructor(generator, width, height, depth, randomized, regionSize) {
+        this.regionSize = regionSize;
         this.randomized = randomized;
         this.width = width;
         this.height = height;
@@ -71,7 +70,7 @@ export default class Builder {
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
                 if (this.canFillRegion(x, y, z)) {
-                    if (this.fillRegion(region, x, y, z) <= MIN_REGION_SIZE) {
+                    if (this.fillRegion(region, x, y, z) <= this.regionSize) {
                         this.removeRegion(region, z);
                     } else {
                         region++;

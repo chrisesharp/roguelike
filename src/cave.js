@@ -10,7 +10,8 @@ export const DEFAULT_SIZE = {
     "depth":2,
     "generator":"FileGenerator", 
     "itemTypes": {},
-    "randFunc":(arr)=>{return arr[0];}
+    "randFunc":(arr)=>{return arr[0];},
+    "regionSize": 10,
 };
 
 export default class Cave {
@@ -28,7 +29,8 @@ export default class Cave {
         let depth = template.depth || DEFAULT_SIZE.depth;
         let generator = template.generator || DEFAULT_SIZE.generator;
         let randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
-        return new Builder(generator, width, height, depth, randomiser);
+        let regionSize = template.regionSize || DEFAULT_SIZE.regionSize;
+        return new Builder(generator, width, height, depth, randomiser, regionSize);
     }
 
     createRepos(template) {
