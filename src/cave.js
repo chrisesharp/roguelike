@@ -1,6 +1,6 @@
 "use strict";
 
-import Builder from "./builder.js";
+import MapBuilder from "./map-builder.js";
 import _ from "underscore";
 import ItemFactory from "./item-factory.js";
 
@@ -30,7 +30,7 @@ export default class Cave {
         let generator = template.generator || DEFAULT_SIZE.generator;
         let randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
         let regionSize = template.regionSize || DEFAULT_SIZE.regionSize;
-        return new Builder(generator, width, height, depth, randomiser, regionSize);
+        return new MapBuilder(generator, width, height, depth, randomiser, regionSize);
     }
 
     createRepos(template) {

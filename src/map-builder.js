@@ -7,7 +7,7 @@ function dynamicGenerator(generator) {
     return Generators[generator]
 }
 
-export default class Builder {
+export default class MapBuilder {
     constructor(generator, width, height, depth, randomized, regionSize) {
         this.regionSize = regionSize;
         this.randomized = randomized;
@@ -16,7 +16,7 @@ export default class Builder {
         this.depth = depth;
         this.tiles = new Array(this.depth);
         this.regions = new Array(depth);
-        this.generator = Builder.createGenerator(generator, width, height);
+        this.generator = MapBuilder.createGenerator(generator, width, height);
         this.fov = [];
     }
 
