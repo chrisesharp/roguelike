@@ -1,6 +1,6 @@
 "use strict";
 
-import Wizard from '../src/entities/wizard';
+import Wizard from '../src/server/entities/wizard';
 const mockServer = {
   sendMessage: () => {},
 };

@@ -1,6 +1,6 @@
 "use strict";
 
-import Entity from '../src/client/javascripts/entity.js';
+import Entity from '../src/client/entity.js';
 const defaultPos = {"x":2,"y":2,"z":0};
 
 describe('entity creation', () => {

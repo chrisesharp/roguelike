@@ -1,6 +1,6 @@
 "use strict";
 
-import Tile from './client/javascripts/tile.js';
+import Tile from '../client/tile.js';
 
 export const nullTile = new Tile();
 

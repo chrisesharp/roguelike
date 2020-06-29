@@ -1,8 +1,8 @@
 "use strict";
 
-import ServerEntity from '../src/entities/server-entity.js';
-import Rock from '../src/items/rock.js';
-import Chainmail from '../src/items/chainmail.js';
+import ServerEntity from '../src/server/entities/server-entity.js';
+import Rock from '../src/server/items/rock.js';
+import Chainmail from '../src/server/items/chainmail.js';
 
 const mockServer = (obj, type, msg) => { };
 

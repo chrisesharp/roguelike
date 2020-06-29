@@ -30,5 +30,4 @@ export default class EntityFactory {
         let entity = constructors.find(o => (o.role === role || o.role === "default"));
         return new entity.ctor(prototype);
     }
-
 }

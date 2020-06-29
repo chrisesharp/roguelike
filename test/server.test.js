@@ -1,16 +1,16 @@
 "use strict";
 
-import { ioc } from "../src/socket_client";
+import { ioc } from "../src/server/socket_client";
 import http from "http";
 import io from "socket.io";
-import Server from "../src/server";
-import { DIRS } from "../src/client/javascripts/movement";
-import { Tiles } from "../src/tile-server";
-import Entity from "../src/client/javascripts/entity";
-import Rock from "../src/items/rock";
-import Dagger from "../src/items/dagger";
-import Apple from "../src/items/apple";
-import Chainmail from "../src/items/chainmail";
+import Server from "../src/server/server";
+import { DIRS } from "../src/client/movement";
+import { Tiles } from "../src/server/tile-server";
+import Entity from "../src/client/entity";
+import Rock from "../src/server/items/rock";
+import Dagger from "../src/server/items/dagger";
+import Apple from "../src/server/items/apple";
+import Chainmail from "../src/server/items/chainmail";
  
 let socket;
 let httpServer;

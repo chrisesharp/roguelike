@@ -3,9 +3,9 @@
 import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, getHandler } from '../keys.js';
-import  Tile  from '../tile.js';
+import  Tile  from '../../../client/tile.js';
 import Geometry from '../geometry.js';
-import { getMovement } from '../movement.js';
+import { getMovement } from '../../../client/movement.js';
 
 export default class TargetBasedScreen extends Screen {    
     setup(player, offsetX, offsetY) {

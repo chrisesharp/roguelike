@@ -8,7 +8,7 @@ Generators.CellGenerator = CellGenerator;
 import FileGenerator from "./file-generator.js";
 Generators.FileGenerator = FileGenerator;
 
-import MockGenerator from "../../test/mock-generator.js";
+import MockGenerator from "../../../test/mock-generator.js";
 Generators.MockGenerator = MockGenerator;
 
 export { Generators };

@@ -1,6 +1,6 @@
 "use strict";
 
-import Item from '../client/javascripts/item.js';
+import Item from '../../client/item.js';
 
 export default class Dagger extends Item {
     constructor(properties) {

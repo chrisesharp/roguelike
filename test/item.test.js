@@ -1,7 +1,7 @@
 "use strict";
 
-import Rock from "../src/items/rock";
-import Apple from "../src/items/apple";
+import Rock from "../src/server/items/rock";
+import Apple from "../src/server/items/apple";
 const defaultPos = {"x":2,"y":2,"z":0};
 
 describe('item creation', () => {

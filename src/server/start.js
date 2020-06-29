@@ -19,7 +19,7 @@ httpServer.listen(port, host);
 httpServer.on('listening', onListen);
 httpServer.on('error', onError);
 (async () => {
-    const routes = await import('./routes/index.js');
+    const routes = await import('../routes/index.js');
     routes.use(app);
 })();
 

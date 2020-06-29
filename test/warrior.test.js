@@ -1,6 +1,6 @@
 "use strict";
 
-import Warrior from '../src/entities/warrior';
+import Warrior from '../src/server/entities/warrior';
 const mockServer = {
   sendMessage: () => {},
 };
