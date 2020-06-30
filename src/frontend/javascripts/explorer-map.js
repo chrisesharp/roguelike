@@ -1,44 +1,25 @@
 "use strict";
 
 import Tile from "../../common/tile";
+import Map from "../../common/map";
 import { FOV } from "./display";
 const nullTile = new Tile();
 
-export default class Map {
+export default class ExplorerMap extends Map {
     constructor(template={}) {
-        this.width = template.width;
-        this.height = template.height;
-        this.depth = template.depth;
-        this.tiles = template.tiles;
-        this.fov = template.fov;
-        this.entrance = template.entrance;
-        this.explored = new Array(this.depth);
-        this.setupExploredArray();
+        super(template);
+        this.explored = this.setupExploredArray();
     }
 
     setupExploredArray() {
+        let explored = new Array(this.depth);
         for (let z = 0; z < this.depth; z++) {
-            this.explored[z] = new Array(this.height);
+            explored[z] = new Array(this.height);
             for (let y = 0; y < this.height; y++) {
-                this.explored[z][y] = new Array(this.width).fill(false);
+                explored[z][y] = new Array(this.width).fill(false);
             }
         }
-    }
-
-    getWidth() {
-        return this.width;
-    }
-
-    getHeight() {
-        return this.height;
-    }
-
-    getTile(x, y, z) {
-        if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
-            return nullTile;
-        } else {
-            return new Tile(this.tiles[z][y][x]) || nullTile;
-        }
+        return explored;
     }
 
     getFov(depth) {
@@ -50,7 +31,7 @@ export default class Map {
     }
 
     setExplored(x, y, z, state) {
-        if (this.getTile(x, y, z) !== nullTile) {
+        if (this.onMap(x, y, z) && this.getTile(x, y, z) !== nullTile) {
             this.explored[z][y][x] = state;
         }
     }
@@ -67,5 +48,9 @@ export default class Map {
                 );
             })();
         }
+    }
+
+    onMap(x, y, z) {
+        return !(x<0 || x >= this.width || y < 0 || y >= this.height || z >= this.depth);
     }
 }

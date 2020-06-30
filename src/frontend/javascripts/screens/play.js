@@ -21,9 +21,9 @@ class PlayScreen  {
     enter() {
         this.screenWidth = game.getScreenWidth();
         this.screenHeight = game.getScreenHeight();
-        this.map = game.map;
-        this.player = game.player;
-        this.player.pos = game.entrance;
+        this.map = game.getMap();
+        this.player = game.getParticipant();
+        this.player.pos = game.getEntrance();
     }
 
     exit() { 
@@ -56,7 +56,7 @@ class PlayScreen  {
         let level = this.player.pos.z;
         let viewDist = this.player.getSightRadius();
         let map = this.map;
-        this.map.getFov(level).compute(
+        map.getFov(level).compute(
             this.player.pos.x, this.player.pos.y, viewDist, 
             function(x, y, radius, visibility) {
                 let dist = (viewDist - radius)/viewDist;
@@ -100,11 +100,11 @@ class PlayScreen  {
     }
 
     renderMessages() {
-        let messages = game.messages;
+        let messages = game.getMessages();
         for (let i = 0; i < messages.length; i++) {
             game.updateMessages(messages[i]);
         }
-        game.messages = [];
+        game.clearMessages();
     }
 
     renderStats() {
@@ -138,7 +138,7 @@ class PlayScreen  {
     }
 
     move(direction) {
-        game.socket.emit("move", direction);
+        game.move(direction);
     }
     
     setGameEnded() {

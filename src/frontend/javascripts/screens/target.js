@@ -25,7 +25,7 @@ export default class TargetBasedScreen extends Screen {
             this.player.pos.x, this.player.pos.y, 
             this.player.getSightRadius(), 
             function(x, y, radius, visibility) {
-                visibleCells[x + "," + y] = true;
+                visibleCells[x + "," + y] = visibility;
             });
         this.visibleCells = visibleCells;
     }
@@ -97,10 +97,8 @@ export default class TargetBasedScreen extends Screen {
         let movement = getMovement(direction);
         let x = Math.max(0, Math.min(this.cursorX + movement.x, this.width));
         let y = Math.max(0, Math.min(this.cursorY + movement.y, this.height - 1));
-        if (this.visibleCells[x+','+y]) {
-            this.cursorX = x;
-            this.cursorY = y;
-        }
+        this.cursorX = x;
+        this.cursorY = y;
     }
 
     showItemsSubScreen() {
