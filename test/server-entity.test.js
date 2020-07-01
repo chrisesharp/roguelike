@@ -6,7 +6,7 @@ import Chainmail from '../src/server/items/chainmail.js';
 
 const mockServer = (obj, type, msg) => { };
 
-describe('entity creation', () => {
+describe('server entity creation', () => {
     test('should not attack if unarmed', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};

@@ -23,7 +23,7 @@ class Game {
         this.screenHeight = dispOpts.height - 1,
         this.display = new Display(dispOpts);
         this.title = " NodeJS Roguelike ";
-        this.client = new Participant(this);
+        this.client = new Participant(BASE_URL, this);
         this.messages = [];
 
         let bindEventToScreen = (event) => {

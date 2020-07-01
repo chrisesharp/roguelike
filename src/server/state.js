@@ -8,11 +8,10 @@ export default class State {
         this.connections = {};
     }
 
-    addEntity(id, prototype, pos) {
-        prototype.pos = pos;
+    addEntity(id, prototype) {
         prototype.id = id;
         let entity = this.factory.create(prototype);
-        entity.entrance = pos;
+        entity.entrance = prototype.pos;
         this.connections[id] = entity;
         return entity;
     }

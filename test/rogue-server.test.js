@@ -225,8 +225,8 @@ describe('basic socket.io API', () => {
 
   test('should not move onto another live entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
-    let proto = {name:"Tester", role:"mock", type:"npc"};
-    app.entities.addEntity("mock", proto, pos);
+    let proto = {name:"Tester", role:"mock", type:"npc", pos:pos};
+    app.entities.addEntity("mock", proto);
     socket.emit('move', DIRS.EAST);
     socket.on('message', (msg) => {
       expect(msg).toEqual(["Tester is there."]);
@@ -236,8 +236,8 @@ describe('basic socket.io API', () => {
 
   test('should not move onto another dead entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
-    let proto = {name:"Tester", role:"mock", type:"npc", hp:0};
-    app.entities.addEntity("mock", proto, pos);
+    let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
+    app.entities.addEntity("mock", proto);
     socket.emit('move', DIRS.EAST);
     socket.on('message', (msg) => {
       expect(msg).toEqual(['You see a dead Tester.']);

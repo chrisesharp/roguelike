@@ -1,14 +1,18 @@
 "use strict";
 
 import ServerEntity from './entities/server-entity.js';
-import { Entities } from './entities/index.js';
+import { Players, Monsters } from './entities/index.js';
 const constructors = [];
 
-Object.keys(Entities).forEach(key => {
-    let ctor = Entities[key];
-    let role = ctor.toString().split(' ')[1];
-    role = role.charAt(0).toLowerCase() + role.substring(1);
-    constructors.push({role:role, ctor:ctor})
+let entityTypes = [ Players, Monsters ];
+
+entityTypes.forEach(Entities => {
+    Object.keys(Entities).forEach(key => {
+        let ctor = Entities[key];
+        let role = ctor.toString().split(' ')[1];
+        role = role.charAt(0).toLowerCase() + role.substring(1);
+        constructors.push({role:role, ctor:ctor})
+    });
 });
 constructors.push({role : "default", ctor : ServerEntity});
 

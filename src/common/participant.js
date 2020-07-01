@@ -1,25 +1,23 @@
 "use strict";
 
-import Map from '../common/map';
 import Entity from '../common/entity';
 import Item from '../common/item';
 import io from 'socket.io-client';
 
-const httpServerAddr = {address:"0.0.0.0", port:3000};
-
 export default class Participant {
-    constructor(caller) {
+    constructor(serverAddr, caller) {
+        this.serverAddr = serverAddr;
         this.caller = caller;
         this.entities = {};
         this.items = {};
-        this.messages = [];
         this.participant = new Entity();
         this.addEntity(this.participant);
         this.others = {};
+        this.socket = null;
     }
 
     connectToServer(properties) {
-        let socket = io(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
+        let socket = io(this.serverAddr, {
             'reconnection delay': 0,
             'reopen delay': 0,
             'force new connection': true,
@@ -32,26 +30,31 @@ export default class Participant {
         this.socket = socket;
     }
 
+    disconnectFromServer() {
+        this.socket.disconnect();
+    }
+
     registerEventHandlers(socket) {
         socket.on('message', (message) => {
             if (this.hasChangedRoom(message)) {
                 socket.emit('get_items');
             }
             this.caller.addMessage(message);
+            this.caller.refresh('message');
         });
 
         socket.on('delete', (pos) => {
             this.removeEntityAt(pos);
-            this.caller.refresh();
+            this.caller.refresh('delete');
         });
 
-        socket.on('map', (data) => {
-          let map = new Map(data);
-          this.caller.mapAvailable(map);
+        socket.on('map', (map) => {
+            this.caller.mapAvailable(map);
+            this.caller.refresh('map');
         });
 
         socket.on('items',(items) => {
-            this.items = [];
+            this.items = {};
             for (let pos in items) {
                 let here = items[pos];
                 here.forEach(item => {
@@ -59,6 +62,7 @@ export default class Participant {
                     this.addItem(thing); 
                 });
             }
+            this.caller.refresh('items');
         });
 
         socket.on('entities', (entities) => {
@@ -79,17 +83,17 @@ export default class Participant {
                     this.addEntity(this.participant);
                 }
             }
-            this.caller.refresh();
+            this.caller.refresh('entities');
         });
 
         socket.on('update', (entity) => {
             this.participant.assume(entity);
-            this.caller.refresh();
+            this.caller.refresh('update');
         });
 
         socket.on('dead', (entity) => {
             this.participant.assume(entity);
-            this.caller.refresh();
+            this.caller.refresh('dead');
         });
 
         socket.on('position', (payload) => {
@@ -106,7 +110,7 @@ export default class Participant {
                     socket.emit('get_entities');
                 }
             }
-            this.caller.refresh();
+            this.caller.refresh('position');
         });
     }
 

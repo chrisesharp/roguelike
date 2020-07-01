@@ -19,7 +19,8 @@ export default class Server {
 
     connection(socket) {
         let prototype = socket.handshake.query;
-        let entity = this.entities.addEntity(socket.id, prototype, this.cave.getEntrance());
+        prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
+        let entity = this.entities.addEntity(socket.id, prototype);
         this.registerEventHandlers(socket, entity, this);
         this.messaging.sendToAll("entities",this.entities.getEntities());
         this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));

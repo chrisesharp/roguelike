@@ -1,11 +1,15 @@
 "use strict";
 
-const Entities = {};
+const Players = {};
+const Monsters = {};
 
 import Warrior from './warrior.js';
-Entities.Warrior = Warrior;
+Players.Warrior = Warrior;
 
 import Wizard from './wizard.js';
-Entities.Wizard = Wizard;
+Players.Wizard = Wizard;
 
-export { Entities };
+import Goblin from './goblin.js';
+Monsters.Goblin = Goblin;
+
+export { Players, Monsters };

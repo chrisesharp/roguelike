@@ -12,6 +12,7 @@ export default class StartScreen extends Screen {
     }
 
     exit() {
+        let name = game.getNameField();
         if (!this.ended) {
             game.connectToServer();
             this.ended = true;
