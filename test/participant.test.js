@@ -10,7 +10,7 @@ import Rock from "../src/server/items/rock";
 import Dagger from "../src/server/items/dagger";
 import Apple from "../src/server/items/apple";
 import Chainmail from "../src/server/items/chainmail";
-import Goblin from "../src/server/entities/goblin";
+import Item from "../src/common/item";
 
 const rock = new Rock();
 const dagger = new Dagger();
@@ -114,25 +114,30 @@ describe('monster connects to server', () => {
     });
   });
 
-  // test('should take item', (done) => {
-  //   app.cave.addItem(defaultPos, dagger);
-  //   let theDagger = app.cave.getItemsAt(defaultPos)[0];
-  //   let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-  //   bot.start(defaultPos, (event) => {
-  //     if (event === 'map') {
-  //       bot.participant.takeItem(theDagger);
-  //       bot.participant.wieldItem(theDagger);
-  //     }
-  //     if (event === 'items') {
-  //       let goblin = bot.participant.getParticipant();
-  //       let pos = goblin.pos;
-  //       console.log("pos:",pos);
-  //       let items = bot.participant.getItemsAt(pos.x, pos.y, pos.z);
-  //       console.log("items:",items);
-  //       expect(items.length).toBe(2);
-  //       bot.stop();
-  //       done();
-  //     }
-  //   });
-  // });
+  test('should take item', (done) => {
+    app.cave.addItem(defaultPos, dagger);
+    let theDagger = app.cave.getItemsAt(defaultPos)[0];
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let count = 0;
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.participant.takeItem(theDagger);
+      }
+      if (event === 'items') {
+        count++;
+        let goblin = bot.participant.getParticipant();
+        let pos = goblin.pos;
+        let items = bot.participant.getItemsAt(pos.x, pos.y, pos.z);
+        if (count === 1) {
+          expect(items.length).toBe(1);
+        }
+        if (count === 2) {
+          expect(items).toBe(undefined);
+          let item = new Item(goblin.getInventory()[0]);
+          expect(item.getDescription()).toBe("dagger");
+        }
+      }
+      if (count > 1) { bot.stop();done(); }
+    });
+  });
 });
