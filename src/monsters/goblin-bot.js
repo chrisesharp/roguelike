@@ -39,9 +39,14 @@ export default class GoblinBot {
     }
 
     addMessage(messages) {
-        messages.forEach((message) => {
-            this.messages.push(message);
-        });
+        if (messages instanceof Array) {
+            messages.forEach((message) => {
+                this.messages.push(message);
+            });
+        } else {
+            this.messages.push(messages);
+        }
+        
     }
 
     move(direction) {

@@ -7,6 +7,7 @@ export default class Goblin extends ServerEntity {
         super(properties);
         this.hitPoints = this.maxHitPoints = 2;
         this.details = "a creeping goblin"
+        this.sight = 20;
         this.setGlyph({'char':"&",'foreground':'green','background':"black"});
     }
 

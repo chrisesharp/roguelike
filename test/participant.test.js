@@ -75,21 +75,66 @@ describe('monster connects to server', () => {
     });    
   });
 
+  test('should move', (done) => {
+    let newPos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z}
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.move(DIRS.SOUTH);
+      }
+      if (event == 'position') {
+        expect(bot.participant.getParticipant().pos).toEqual(newPos);
+        bot.stop();
+        done();
+      }
+    });    
+  });
+
   test('should see items ', (done) => {
-    app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     app.cave.addItem(pos, dagger);
     app.cave.addItem(pos, rock);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
+      let goblin = bot.participant.getParticipant();
       if (event === 'items') {
         bot.move(DIRS.SOUTH);
       } else if (event == 'message') {
         expect(bot.messages.pop()).toBe("There are several objects here.");
+        expect(goblin.getSightRadius()).toBe(20);
         bot.stop();
         done();
       }
-    });    
+    });
+  });
+
+  test('should see new items changing rooms ', (done) => {
+    app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
+    let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z+1};
+    app.cave.addItem(pos, dagger);
+    app.cave.addItem(pos, rock);
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let descended = false;
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.move(DIRS.DOWN);
+      }
+
+      if (event === 'message') {
+        expect(bot.messages.pop()).toBe("You descend to level 1!");
+      }
+
+      if (event === 'position') {
+        if (bot.participant.getParticipant().pos.z === pos.z) {
+          descended = true;
+        }
+      }
+      if (event === 'items' && descended) {
+        expect(bot.participant.getItemsAt(pos.x, pos.y, pos.z).length).toBe(2);
+        bot.stop();
+        done();
+      }
+    });
   });
 
   test('should see other entities', (done) => {
@@ -114,14 +159,91 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should take item', (done) => {
+  test('should die', (done) => {
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        expect(bot.participant.getParticipant().isAlive()).toBe(true);
+        let goblin = app.entities.getEntityAt(defaultPos);
+        goblin.hitFor(10);
+      }
+      if (event === 'dead') {
+        expect(bot.participant.getParticipant().isAlive()).toBe(false);
+        bot.stop();
+        done();
+      }
+    });
+  });
+
+  test('should see other entities move', (done) => {
+    let pos1 = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
+    let pos2 = {x:defaultPos.x, y:defaultPos.y+2, z:defaultPos.z};
+    let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let bot2moved = false;
+    bot1.start(defaultPos, (event) => {
+      bot2.start(pos1, (event) => {
+        if (event === 'map' && !bot2moved) {
+          bot2moved = true;
+          bot2.move(DIRS.SOUTH);
+        }
+        
+      }); 
+      if (event === "position") {
+        let other = bot1.participant.getEntityAt(pos2.x, pos2.y, pos2.z);
+        expect(other.getDescription()).toEqual(bot2.participant.getParticipant().getDescription());
+        done();
+      }
+    });
+  });
+
+  test('should take and wield item', (done) => {
     app.cave.addItem(defaultPos, dagger);
     let theDagger = app.cave.getItemsAt(defaultPos)[0];
+    expect(theDagger.isWieldable()).toBe(true);
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let count = 0;
+    bot.start(defaultPos, (event) => {
+      let goblin = bot.participant.getParticipant();
+      if (event === 'map') {
+        bot.participant.takeItem(theDagger);
+      }
+      if (event === 'items') {
+        count++;
+        let pos = goblin.pos;
+        let items = bot.participant.getItemsAt(pos.x, pos.y, pos.z);
+        if (count === 1) {
+          expect(items.length).toBe(1);
+        }
+        if (count === 2) {
+          expect(items).toBe(undefined);
+          let item = new Item(goblin.getInventory()[0]);
+          expect(item.getDescription()).toBe("dagger");
+          bot.participant.wieldItem(theDagger);
+        }
+      }
+      if (event === 'message' && count >= 2) {
+        expect(bot.messages.pop()).toEqual('You are wielding the dagger.');
+        count++;
+      }
+
+      if (event === 'update' && count > 2) {
+        expect(goblin.getWeapon()).toBe("dagger");
+        count++;
+      }
+      if (count > 3) { bot.stop();done(); }
+    });
+  });
+
+  test('should take and eat item', (done) => {
+    app.cave.addItem(defaultPos, apple);
+    let theApple = app.cave.getItemsAt(defaultPos)[0];
+    expect(theApple.isEdible()).toBe(true);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let count = 0;
     bot.start(defaultPos, (event) => {
       if (event === 'map') {
-        bot.participant.takeItem(theDagger);
+        bot.participant.takeItem(theApple);
       }
       if (event === 'items') {
         count++;
@@ -134,10 +256,87 @@ describe('monster connects to server', () => {
         if (count === 2) {
           expect(items).toBe(undefined);
           let item = new Item(goblin.getInventory()[0]);
-          expect(item.getDescription()).toBe("dagger");
+          expect(item.getDescription()).toBe("apple");
+          bot.participant.eat(theApple);
         }
       }
-      if (count > 1) { bot.stop();done(); }
+      if (event === 'message' && count >= 2) {
+        expect(bot.messages.pop()).toEqual('You eat the apple.');
+        count++;
+      }
+      if (count > 2) { bot.stop();done(); }
+    });
+  });
+
+  test('should take and wear item', (done) => {
+    app.cave.addItem(defaultPos, chainmail);
+    let theArmour = app.cave.getItemsAt(defaultPos)[0];
+    expect(theArmour.isWearable()).toBe(true);
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let count = 0;
+    bot.start(defaultPos, (event) => {
+      let goblin = bot.participant.getParticipant();
+      if (event === 'map') {
+        bot.participant.takeItem(theArmour);
+      }
+      if (event === 'items') {
+        count++;
+        let pos = goblin.pos;
+        let items = bot.participant.getItemsAt(pos.x, pos.y, pos.z);
+        if (count === 1) {
+          expect(items.length).toBe(1);
+        }
+        if (count === 2) {
+          expect(items).toBe(undefined);
+          let item = new Item(goblin.getInventory()[0]);
+          expect(item.getDescription()).toBe("chainmail");
+          bot.participant.wearItem(theArmour);
+        }
+      }
+      if (event === 'message' && count >= 2) {
+        expect(bot.messages.pop()).toEqual('You are wearing the chainmail.');
+        count++;
+      }
+
+      if (event === 'update' && count > 2) {
+        expect(goblin.getArmour()).toBe("chainmail");
+        expect(goblin.getAC()).toBe(7);
+        count++;
+      }
+
+      if (count > 3) { bot.stop();done(); }
+    });
+  });
+
+  test('should take and drop an item', (done) => {
+    app.cave.addItem(defaultPos, chainmail);
+    let theArmour = app.cave.getItemsAt(defaultPos)[0];
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let count = 0;
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.participant.takeItem(theArmour);
+      }
+      if (event === 'items') {
+        count++;
+        let goblin = bot.participant.getParticipant();
+        let pos = goblin.pos;
+        let items = bot.participant.getItemsAt(pos.x, pos.y, pos.z);
+        if (count === 1) {
+          expect(items.length).toBe(1);
+        }
+        if (count === 2) {
+          expect(items).toBe(undefined);
+          let item = new Item(goblin.getInventory()[0]);
+          expect(item.getDescription()).toBe("chainmail");
+          bot.participant.dropItem(theArmour);
+        }
+      }
+      if (event === 'message' && count >= 2) {
+        expect(bot.messages.pop()).toEqual('You drop the chainmail.');
+        count++;
+      }
+      if (count > 2) { bot.stop();done(); }
     });
   });
 });

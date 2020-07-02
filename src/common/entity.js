@@ -44,10 +44,6 @@ export default class Entity extends Glyph {
         return this.hunger.description;
     }
 
-    getSightRadius() {
-        return this.sight;
-    }
-
     isAlive() {
         if (this.hitPoints <=0) {
             this.alive = false;
