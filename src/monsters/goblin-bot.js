@@ -2,7 +2,7 @@
 
 import Participant from '../common/participant.js';
 import Map from '../common/map.js';
-import Brain from './brain.js';
+import GoblinBrain from './goblin-brain.js';
 
 export default class GoblinBot {
     constructor(URL, brain) {
@@ -10,7 +10,7 @@ export default class GoblinBot {
         this.map = null;
         this.messages = [];
         this.client = new Participant(this.serverAddr, this);
-        this.brain = brain || new Brain();
+        this.brain = brain || new GoblinBrain();
     }
 
     run(startPos = {x:0, y:0, z:0}) {
