@@ -31,7 +31,6 @@ export default class GoblinBot {
  
     mapAvailable(data) {
         this.map = new Map(data);
-        this.ready(this.map);
     }
 
     refresh(event) {
