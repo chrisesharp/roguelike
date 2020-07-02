@@ -8,7 +8,7 @@ export default class GoblinBot {
         this.serverAddr = URL;
         this.map = null;
         this.messages = [];
-        this.participant = new Participant(this.serverAddr, this);
+        this.client = new Participant(this.serverAddr, this);
         this.ready = () => {};
     }
 
@@ -22,11 +22,11 @@ export default class GoblinBot {
             type: 'monster',
             pos: JSON.stringify(startPos)
           };
-        this.participant.connectToServer(props)
+        this.client.connectToServer(props)
     }
 
     stop() {
-        this.participant.disconnectFromServer();
+        this.client.disconnectFromServer();
     }
  
     mapAvailable(data) {
@@ -50,6 +50,6 @@ export default class GoblinBot {
     }
 
     move(direction) {
-        this.participant.move(direction);
+        this.client.move(direction);
     }
 }
