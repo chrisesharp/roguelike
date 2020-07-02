@@ -2,19 +2,24 @@
 
 import Participant from '../common/participant.js';
 import Map from '../common/map.js';
+import Brain from './brain.js';
 
 export default class GoblinBot {
-    constructor(URL) {
+    constructor(URL, brain) {
         this.serverAddr = URL;
         this.map = null;
         this.messages = [];
         this.client = new Participant(this.serverAddr, this);
-        this.ready = () => {};
+        this.brain = brain || new Brain();
+    }
+
+    run(startPos = {x:0, y:0, z:0}) {
+        this.start(startPos);
     }
 
     start(startPos, callback) {
         if (callback) {
-            this.ready = callback;
+            this.brain.ready = callback;
         }
         let props =  {
             name: 'Gobldigook',
@@ -23,6 +28,10 @@ export default class GoblinBot {
             pos: JSON.stringify(startPos)
           };
         this.client.connectToServer(props)
+    }
+
+    ready(event) {
+        this.brain.ready(event);
     }
 
     stop() {
