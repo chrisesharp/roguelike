@@ -159,6 +159,28 @@ describe('monster connects to server', () => {
     });
   });
 
+  test('should refresh entities if out of sync', (done) => {
+    let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
+    let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let count = 0;
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        app.entities.addEntity("mock", proto);
+        app.messaging.sendToAll("position",["mock", pos]);
+      }
+      if (event === 'entities') {
+        if (count) {
+          let entity = bot.client.getEntityAt(pos.x, pos.y, pos.z);
+          expect(entity.pos).toEqual(pos);
+          bot.stop();
+          done();
+        }
+        count++;
+      }
+    }); 
+  });
+
   test('should die', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
