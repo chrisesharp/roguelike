@@ -11,6 +11,7 @@ import Dagger from "../src/server/items/dagger";
 import Apple from "../src/server/items/apple";
 import Chainmail from "../src/server/items/chainmail";
 import Item from "../src/common/item";
+import { assert } from "console";
 
 const rock = new Rock();
 const dagger = new Dagger();
@@ -59,6 +60,11 @@ afterEach((done) => {
 
 
 describe('monster connects to server', () => {
+  test('should use supplied brain', (done) => {
+    let mockBrain = {ready: (event)=>{ expect(event).toBe("entities"); done();}};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    bot.start(defaultPos);
+  });
 
   test('should return default map', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
@@ -249,11 +255,31 @@ describe('monster connects to server', () => {
         count++;
       }
 
+      if (event === 'update' && count < 2) {
+        expect(goblin.getWeapon()).toBe("");
+      }
+
       if (event === 'update' && count > 2) {
         expect(goblin.getWeapon()).toBe("dagger");
         count++;
       }
       if (count > 3) { bot.stop();done(); }
+    });
+  });
+
+  test('should unwield an item', (done) => {
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let goblin = bot.client.getParticipant();
+    goblin.inventory = ["dagger"];
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.client.wieldItem();
+      }
+
+      if (event === 'message') {
+        expect(bot.messages.pop()).toEqual('You are not wielding anything now.');
+        done();
+      }
     });
   });
 
@@ -320,6 +346,10 @@ describe('monster connects to server', () => {
         count++;
       }
 
+      if (event === 'update' && count < 2) {
+        expect(goblin.getArmour()).toBe("");
+      }
+
       if (event === 'update' && count > 2) {
         expect(goblin.getArmour()).toBe("chainmail");
         expect(goblin.getAC()).toBe(7);
@@ -327,6 +357,22 @@ describe('monster connects to server', () => {
       }
 
       if (count > 3) { bot.stop();done(); }
+    });
+  });
+
+  test('should unwear an item', (done) => {
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let goblin = bot.client.getParticipant();
+    goblin.inventory = ["chainmail"];
+    bot.start(defaultPos, (event) => {
+      if (event === 'map') {
+        bot.client.wearItem();
+      }
+
+      if (event === 'message') {
+        expect(bot.messages.pop()).toEqual('You are not wearing anything now.');
+        done();
+      }
     });
   });
 
