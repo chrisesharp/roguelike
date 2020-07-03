@@ -1,6 +1,6 @@
 "use strict";
 
-import Tile from "./tile";
+import Tile from "./tile.js";
 const nullTile = new Tile();
 
 export default class Map {

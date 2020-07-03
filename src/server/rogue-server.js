@@ -8,6 +8,8 @@ import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";
 import Messaging from "./messaging.js";
 
+import GoblinBot from "../monsters/goblin-bot.js";
+
 export default class Server {
     constructor(backend, template) {
         this.messaging = new Messaging(backend);
@@ -15,6 +17,8 @@ export default class Server {
         this.repo = new EntityFactory();
         this.repo.setMessengerForEntities(this);
         this.entities = new State(this.repo);
+        this.goblin = new GoblinBot("http://0.0.0.0:3000");
+        this.goblin.start(this.cave.getEntrance());
     }
 
     connection(socket) {

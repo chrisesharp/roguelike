@@ -1,7 +1,7 @@
 "use strict";
 
-import Entity from '../common/entity';
-import Item from '../common/item';
+import Entity from '../common/entity.js';
+import Item from '../common/item.js';
 import io from 'socket.io-client';
 
 export default class Participant {
