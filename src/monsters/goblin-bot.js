@@ -13,10 +13,6 @@ export default class GoblinBot {
         this.brain = brain || new GoblinBrain();
     }
 
-    run(startPos = {x:0, y:0, z:0}) {
-        this.start(startPos);
-    }
-
     start(startPos, callback) {
         if (callback) {
             this.brain.ready = callback;

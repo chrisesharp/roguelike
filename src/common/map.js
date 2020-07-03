@@ -4,7 +4,7 @@ import Tile from "./tile";
 const nullTile = new Tile();
 
 export default class Map {
-    constructor(template={}) {
+    constructor(template) {
         this.width = template.width;
         this.height = template.height;
         this.depth = template.depth;
@@ -25,7 +25,7 @@ export default class Map {
         if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
             return nullTile;
         } else {
-            return new Tile(this.tiles[z][y][x]) || nullTile;
+            return new Tile(this.tiles[z][y][x]);
         }
     }
 }
