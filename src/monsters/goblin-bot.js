@@ -10,7 +10,7 @@ export default class GoblinBot {
         this.map = null;
         this.messages = [];
         this.client = new Participant(this.serverAddr, this);
-        this.brain = brain || new GoblinBrain();
+        this.brain = brain || new GoblinBrain(this.map, this.client, this.messages);
     }
 
     start(startPos, callback) {
