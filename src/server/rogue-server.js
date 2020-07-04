@@ -140,8 +140,8 @@ export default class Server {
             if (!(newRoom in socket.rooms)) {
                 this.moveRooms(socket, entity, startRoom);
             }
-            this.messaging.sendToAll("position", [socket.id, entity.pos])
         }
+        this.messaging.sendToAll("position", [socket.id, entity.pos])
     }
 
     tryMove(entity, delta) {

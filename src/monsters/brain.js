@@ -15,4 +15,8 @@ export default class Brain {
     getCurrentTarget() {
         return this.currentTarget;
     }
+
+    setMap(map) {
+        this.map = map;
+    }
 }

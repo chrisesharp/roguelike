@@ -2,7 +2,7 @@
 
 import _ from "underscore";
 import Brain from './brain.js';
-import Map from '../common/map.js';
+// import Map from '../common/map.js';
 import { DIRS, getMovement, opposite } from "../common/movement.js";
 
 function distance(pos1, pos2) {
@@ -15,11 +15,8 @@ export default class GoblinBrain extends Brain {
         this.count = 0;
         this.goblin = this.client.getParticipant();
     }
-    ready(event, args) {
-        if (event === 'map') {
-            this.map = new Map(args);
-        }
 
+    ready(event, args) {
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -85,7 +82,7 @@ export default class GoblinBrain extends Brain {
         directions.forEach(dir => {
             let pos = this.nextPos(dir);
             let tile = this.map.getTile(pos.x, pos.y, pos.z);
-            if (tile.isWalkable()) {
+            if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.pos)) {
                 direction = dir;
             }
         });

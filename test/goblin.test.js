@@ -18,4 +18,10 @@ describe('goblin creation', () => {
       expect(goblin.getHitPoints()).toBe(2);
       done();
     });
+
+    test('should always be wielding', (done) => {
+      let goblin = new Goblin({server:mockServer});
+      expect(goblin.isWielding()).toBe(true);
+      done();
+    });
 });

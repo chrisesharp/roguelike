@@ -71,10 +71,10 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
       if (event === 'map') {
-        expect(bot.map.getWidth()).toBe(defaultMap.width);
-        expect(bot.map.getHeight()).toBe(defaultMap.height);
-        expect(bot.map.getTile(defaultPos.x, defaultPos.y, defaultPos.z)).toEqual(Tiles.stairsUpTile);
-        expect(bot.map.getTile(-1,-1,-1)).toEqual(Tiles.nullTile);
+        expect(bot.brain.map.getWidth()).toBe(defaultMap.width);
+        expect(bot.brain.map.getHeight()).toBe(defaultMap.height);
+        expect(bot.brain.map.getTile(defaultPos.x, defaultPos.y, defaultPos.z)).toEqual(Tiles.stairsUpTile);
+        expect(bot.brain.map.getTile(-1,-1,-1)).toEqual(Tiles.nullTile);
         bot.stop();
         done();
       }

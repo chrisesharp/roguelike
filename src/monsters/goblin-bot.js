@@ -7,10 +7,9 @@ import GoblinBrain from './goblin-brain.js';
 export default class GoblinBot {
     constructor(URL, brain) {
         this.serverAddr = URL;
-        this.map = null;
         this.messages = [];
         this.client = new Participant(this.serverAddr, this);
-        this.brain = brain || new GoblinBrain(this.map, this.client, this.messages);
+        this.brain = brain || new GoblinBrain(null, this.client, this.messages);
     }
 
     start(startPos, callback) {
@@ -35,7 +34,7 @@ export default class GoblinBot {
     }
  
     mapAvailable(data) {
-        this.map = new Map(data);
+        this.brain.setMap(new Map(data));
     }
 
     refresh(event, data) {

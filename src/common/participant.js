@@ -3,6 +3,7 @@
 import Entity from '../common/entity.js';
 import Item from '../common/item.js';
 import io from 'socket.io-client';
+import _ from 'underscore';
 
 export default class Participant {
     constructor(serverAddr, caller) {
@@ -161,6 +162,9 @@ export default class Participant {
     }
 
     moveEntity(entity, dest) {
+        if (_.isEqual(entity.pos, dest)) {
+            return;
+        }
         this.removeEntity(entity);
         entity.pos = dest;
         this.addEntity(entity);
