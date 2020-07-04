@@ -11,11 +11,14 @@ function distance(pos1, pos2) {
 export default class GoblinBrain extends Brain {
     constructor(map, client, messages) {
         super(map, client, messages);
-        this.count = 0;
+        this.syncCount = 0;
         this.goblin = this.client.getParticipant();
+        this.speed = 3;
+        this.speedCount = 0;
     }
 
     ready(event, args) {
+        this.speedCount++;
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -27,10 +30,16 @@ export default class GoblinBrain extends Brain {
         if (event === 'position') {
             if (args !== this.goblin.id) {
                 if (this.currentTarget) {
-                    let directions = this.findDirections(this.currentTarget);
-                    this.client.move(this.chooseDirection(directions));
+                    if (this.speedCount < this.speed) {
+                        return;
+                    } else {
+                        this.speedCount = 0;
+                        let directions = this.findDirections(this.currentTarget);
+                        this.client.move(this.chooseDirection(directions));
+                    }
+                    
                 } else {
-                    this.count++;
+                    this.syncCount++;
                 }
             }
         }
@@ -39,8 +48,8 @@ export default class GoblinBrain extends Brain {
             this.currentTarget = this.findTarget();
         }
 
-        if (this.count > 10) {
-            this.count = 0;
+        if (this.syncCount > 10) {
+            this.syncCount = 0;
             this.client.sync();
         }
     }

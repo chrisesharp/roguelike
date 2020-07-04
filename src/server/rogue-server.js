@@ -22,7 +22,7 @@ export default class Server {
 
     addMonsters(URL) {
         this.goblins = [];
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 3; i++) {
             this.goblins.push(new GoblinBot(URL).start(this.cave.getEntrance()));
         }
     }

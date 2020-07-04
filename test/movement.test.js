@@ -1,5 +1,5 @@
 "use strict";
-import { DIRS, opposite } from "../src/common/movement";
+import { DIRS, opposite, getMovement } from "../src/common/movement";
 
 describe('move opposite', () => {
     test('should be east opposite to west', (done) => {
@@ -24,6 +24,11 @@ describe('move opposite', () => {
     });
     test('should be up opposite to down', (done) => {
         expect(opposite(DIRS.DOWN)).toBe(DIRS.UP);
+        done();
+    });
+
+    test('should go nowhere for undefined direction', (done) => {
+        expect(getMovement()).toEqual({x:0, y:0, z:0});
         done();
     });
 });

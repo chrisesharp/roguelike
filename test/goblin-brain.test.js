@@ -27,6 +27,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.ready("entities");
         expect(brain.getCurrentTarget()).toEqual(warrior);
         done();
@@ -41,6 +42,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.ready("entities");
         expect(brain.getCurrentTarget()).toEqual(warrior);
         done();
@@ -57,6 +59,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(DIRS.SOUTH);
@@ -75,6 +78,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(DIRS.EAST);
@@ -93,6 +97,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(DIRS.NORTH);
@@ -111,6 +116,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(DIRS.WEST);
@@ -133,6 +139,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(DIRS.EAST);
@@ -155,6 +162,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position", "1");
         expect(movement).toBe(undefined);
@@ -172,6 +180,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = null;
         brain.ready("position", "1");
         expect(movement).toBe(undefined);
@@ -190,6 +199,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
         brain.currentTarget = warrior;
         brain.ready("position");
         expect(movement).toBe(undefined);
@@ -206,6 +216,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(null, client, messages);
+        brain.speed = 0;
         brain.ready("dead");
         expect(disconnected).toBe(true);
         done();
@@ -221,6 +232,7 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(null, client, messages);
+        brain.speed = 0;
         brain.ready("delete");
         expect(synched).toBe(true);
         done();
@@ -236,7 +248,8 @@ describe('goblin brain responses', () => {
         };
         let messages = [];
         let brain = new GoblinBrain(null, client, messages);
-        brain.count = 10;
+        brain.speed = 0;
+        brain.syncCount = 10;
         brain.ready("position","1");
         expect(synched).toBe(true);
         done();

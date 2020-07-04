@@ -23,7 +23,6 @@ export default class GoblinBot {
             pos: JSON.stringify(startPos)
           };
         this.client.connectToServer(props)
-        console.log("Goblin connected ");
         return this;
     }
 
