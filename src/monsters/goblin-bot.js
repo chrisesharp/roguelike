@@ -17,12 +17,14 @@ export default class GoblinBot {
             this.brain.ready = callback;
         }
         let props =  {
-            name: 'Gobldigook',
+            name: 'A Goblin',
             role: 'goblin',
             type: 'monster',
             pos: JSON.stringify(startPos)
           };
         this.client.connectToServer(props)
+        console.log("Goblin connected ");
+        return this;
     }
 
     ready(event, data) {
@@ -49,7 +51,6 @@ export default class GoblinBot {
         } else {
             this.messages.push(messages);
         }
-        
     }
 
     move(direction) {

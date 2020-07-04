@@ -2,7 +2,6 @@
 
 import _ from "underscore";
 import Brain from './brain.js';
-// import Map from '../common/map.js';
 import { DIRS, getMovement, opposite } from "../common/movement.js";
 
 function distance(pos1, pos2) {
@@ -29,9 +28,7 @@ export default class GoblinBrain extends Brain {
             if (args !== this.goblin.id) {
                 if (this.currentTarget) {
                     let directions = this.findDirections(this.currentTarget);
-                    if (directions.length) {
-                        this.client.move(this.chooseDirection(directions));
-                    }
+                    this.client.move(this.chooseDirection(directions));
                 } else {
                     this.count++;
                 }

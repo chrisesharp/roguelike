@@ -13,7 +13,8 @@ export const DIRS = {
         3: { name: "south", x: 0, y: 1, z: 0, opposite: 1 },
         4: { name: "west", x:-1, y: 0, z: 0, opposite: 2 },
         5: { name: "up", x: 0, y: 0, z:-1, opposite: 6},
-        6: { name: "down", x: 0, y: 0, z: 1, opposite: 5 }
+        6: { name: "down", x: 0, y: 0, z: 1, opposite: 5 },
+        undefined: {x:0, y:0, z:0}
     }
 } 
 

@@ -17,8 +17,14 @@ export default class Server {
         this.repo = new EntityFactory();
         this.repo.setMessengerForEntities(this);
         this.entities = new State(this.repo);
-        this.goblin = new GoblinBot("http://0.0.0.0:3000");
-        this.goblin.start(this.cave.getEntrance());
+        this.addMonsters("http://0.0.0.0:3000");
+    }
+
+    addMonsters(URL) {
+        this.goblins = [];
+        for (let i = 0; i < 1; i++) {
+            this.goblins.push(new GoblinBot(URL).start(this.cave.getEntrance()));
+        }
     }
 
     connection(socket) {

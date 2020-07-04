@@ -117,6 +117,50 @@ describe('goblin brain responses', () => {
         done();
     });
 
+    test('should move try opposite direction if cant get to target', (done) => {
+        let map = {
+            "width":10,
+            "height":10,
+            "getTile": (x,y,z) => { return (x==goblin.pos.x+1) ? Tiles.floorTile : Tiles.wallTile;}
+          };
+        const warrior = new Warrior({pos:{x:0,y:2,z:0}});
+        let movement;
+        let client = {
+            getParticipant: () => { return goblin;},
+            move: (direction) => { movement = direction; }, 
+            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
+            others: {"1": warrior, "2": wizard}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(map, client, messages);
+        brain.currentTarget = warrior;
+        brain.ready("position", "1");
+        expect(movement).toBe(DIRS.EAST);
+        done();
+    });
+
+    test('should not move if boxed in', (done) => {
+        let map = {
+            "width":10,
+            "height":10,
+            "getTile": (x,y,z) => { return  Tiles.wallTile;}
+          };
+        const warrior = new Warrior({pos:{x:0,y:2,z:0}});
+        let movement;
+        let client = {
+            getParticipant: () => { return goblin;},
+            move: (direction) => { movement = direction; }, 
+            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
+            others: {"1": warrior, "2": wizard}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(map, client, messages);
+        brain.currentTarget = warrior;
+        brain.ready("position", "1");
+        expect(movement).toBe(undefined);
+        done();
+    });
+
     test('should not move without a target', (done) => {
         let map = mockMap;
         let movement;
@@ -129,7 +173,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.currentTarget = null;
-        brain.ready("position");
+        brain.ready("position", "1");
         expect(movement).toBe(undefined);
         done();
     });
@@ -152,4 +196,49 @@ describe('goblin brain responses', () => {
         done();
     });
 
+    test('should disconnect if dead', (done) => {
+        let disconnected = false;
+        let client = {
+            getParticipant: () => { return goblin;},
+            entities: {"(0,0)": goblin },
+            others: {},
+            disconnectFromServer: () => {disconnected = true;}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(null, client, messages);
+        brain.ready("dead");
+        expect(disconnected).toBe(true);
+        done();
+    });
+
+    test('should sync if delete received', (done) => {
+        let synched = false;
+        let client = {
+            getParticipant: () => { return goblin;},
+            entities: {"(0,0)": goblin },
+            others: {},
+            sync: () => {synched = true;}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(null, client, messages);
+        brain.ready("delete");
+        expect(synched).toBe(true);
+        done();
+    });
+
+    test('should sync if no target for 10 turns', (done) => {
+        let synched = false;
+        let client = {
+            getParticipant: () => { return goblin;},
+            entities: {"(0,0)": goblin },
+            others: {},
+            sync: () => {synched = true;}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(null, client, messages);
+        brain.count = 10;
+        brain.ready("position","1");
+        expect(synched).toBe(true);
+        done();
+    });
 });
