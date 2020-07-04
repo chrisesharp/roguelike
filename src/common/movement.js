@@ -8,12 +8,12 @@ export const DIRS = {
     UP:     5,
     DOWN:   6,
     properties: {
-        1: { name: "north", x: 0, y:-1, z: 0 },
-        2: { name: "east", x: 1, y: 0, z: 0 },
-        3: { name: "south", x: 0, y: 1, z: 0 },
-        4: { name: "west", x:-1, y: 0, z: 0 },
-        5: { name: "up", x: 0, y: 0, z:-1 },
-        6: { name: "down", x: 0, y: 0, z: 1 }
+        1: { name: "north", x: 0, y:-1, z: 0, opposite: 3 },
+        2: { name: "east", x: 1, y: 0, z: 0, opposite: 4 },
+        3: { name: "south", x: 0, y: 1, z: 0, opposite: 1 },
+        4: { name: "west", x:-1, y: 0, z: 0, opposite: 2 },
+        5: { name: "up", x: 0, y: 0, z:-1, opposite: 6},
+        6: { name: "down", x: 0, y: 0, z: 1, opposite: 5 }
     }
 } 
 
@@ -25,14 +25,5 @@ export const getMovement = function(direction) {
 }
 
 export const opposite = function(direction) {
-    if (direction === DIRS.NORTH) {
-        return DIRS.SOUTH;
-    } else if (direction === DIRS.EAST) {
-        return DIRS.WEST;
-    } else if (direction === DIRS.SOUTH) {
-        return DIRS.NORTH;
-    } else if (direction === DIRS.WEST) {
-        return DIRS.EAST;
-    }
-    return direction;
+    return DIRS.properties[direction].opposite;
 }
