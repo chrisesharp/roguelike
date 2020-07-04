@@ -23,3 +23,16 @@ export const getMovement = function(direction) {
     let z = DIRS.properties[direction].z;
     return {x:x, y:y, z:z};
 }
+
+export const opposite = function(direction) {
+    if (direction === DIRS.NORTH) {
+        return DIRS.SOUTH;
+    } else if (direction === DIRS.EAST) {
+        return DIRS.WEST;
+    } else if (direction === DIRS.SOUTH) {
+        return DIRS.NORTH;
+    } else if (direction === DIRS.WEST) {
+        return DIRS.EAST;
+    }
+    return direction;
+}

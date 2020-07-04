@@ -26,8 +26,8 @@ export default class GoblinBot {
         this.client.connectToServer(props)
     }
 
-    ready(event) {
-        this.brain.ready(event);
+    ready(event, data) {
+        this.brain.ready(event, data);
     }
 
     stop() {
@@ -38,8 +38,8 @@ export default class GoblinBot {
         this.map = new Map(data);
     }
 
-    refresh(event) {
-        this.ready(event);
+    refresh(event, data) {
+        this.ready(event, data);
     }
 
     addMessage(messages) {

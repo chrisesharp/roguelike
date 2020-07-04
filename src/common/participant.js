@@ -54,7 +54,7 @@ export default class Participant {
 
         socket.on('map', (map) => {
             this.caller.mapAvailable(map);
-            this.caller.refresh('map');
+            this.caller.refresh('map', map);
         });
 
         socket.on('items',(items) => {

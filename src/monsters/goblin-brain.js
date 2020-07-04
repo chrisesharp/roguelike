@@ -2,7 +2,8 @@
 
 import _ from "underscore";
 import Brain from './brain.js';
-import { DIRS } from "../common/movement.js";
+import Map from '../common/map.js';
+import { DIRS, getMovement, opposite } from "../common/movement.js";
 
 function distance(pos1, pos2) {
     return Math.floor(Math.sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2));
@@ -15,7 +16,10 @@ export default class GoblinBrain extends Brain {
         this.goblin = this.client.getParticipant();
     }
     ready(event, args) {
-        console.log("event:",event);
+        if (event === 'map') {
+            this.map = new Map(args);
+        }
+
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -29,7 +33,7 @@ export default class GoblinBrain extends Brain {
                 if (this.currentTarget) {
                     let directions = this.findDirections(this.currentTarget);
                     if (directions.length) {
-                        this.client.move(directions.pop());
+                        this.client.move(this.chooseDirection(directions));
                     }
                 } else {
                     this.count++;
@@ -39,7 +43,6 @@ export default class GoblinBrain extends Brain {
 
         if (event === 'entities') {
             this.currentTarget = this.findTarget();
-            console.log("current target: ", this.currentTarget);
         }
 
         if (this.count > 10) {
@@ -75,5 +78,35 @@ export default class GoblinBrain extends Brain {
             directions.push(DIRS.NORTH);
         }
         return directions;
+    }
+
+    chooseDirection(directions) {
+        let direction;
+        directions.forEach(dir => {
+            let pos = this.nextPos(dir);
+            let tile = this.map.getTile(pos.x, pos.y, pos.z);
+            if (tile.isWalkable()) {
+                direction = dir;
+            }
+        });
+        if (direction === undefined) {
+            directions.forEach(dir => {
+                let pos = this.nextPos(opposite(dir));
+                let tile = this.map.getTile(pos.x, pos.y, pos.z);
+                if (tile.isWalkable()) {
+                    direction = opposite(dir);
+                }
+            });
+        }
+        return direction;
+    }
+
+    nextPos(dir) {
+        let delta = getMovement(dir);
+        let x = this.goblin.pos.x + delta.x;
+        let y = this.goblin.pos.y + delta.y;
+        let z = this.goblin.pos.z + delta.z;
+        return {x:x, y:y, z:z};
+
     }
 }
