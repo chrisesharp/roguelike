@@ -9,28 +9,51 @@ function distance(pos1, pos2) {
 }
 
 export default class GoblinBrain extends Brain {
-    ready(event) {
+    constructor(map, client, messages) {
+        super(map, client, messages);
+        this.count = 0;
+        this.goblin = this.client.getParticipant();
+    }
+    ready(event, args) {
+        console.log("event:",event);
+        if (event === 'dead') {
+            this.client.disconnectFromServer();
+        }
+
+        if (event === 'delete') {
+            this.client.sync();
+        }
+
         if (event === 'position') {
-            if (this.currentTarget) {
-                let directions = this.findDirections(this.currentTarget);
-                if (directions.length) {
-                    this.client.move(directions.pop());
+            if (args !== this.goblin.id) {
+                if (this.currentTarget) {
+                    let directions = this.findDirections(this.currentTarget);
+                    if (directions.length) {
+                        this.client.move(directions.pop());
+                    }
+                } else {
+                    this.count++;
                 }
             }
         }
 
         if (event === 'entities') {
             this.currentTarget = this.findTarget();
+            console.log("current target: ", this.currentTarget);
+        }
+
+        if (this.count > 10) {
+            this.count = 0;
+            this.client.sync();
         }
     }
 
     findTarget() {
-        let goblin = this.client.getParticipant();
         let target;
-        let closest = goblin.getSightRadius();
+        let closest = this.goblin.getSightRadius();
         Object.keys(this.client.others).forEach(key => {
             let entity = this.client.others[key];
-            let dist = distance(goblin.pos, entity.pos);
+            let dist = distance(this.goblin.pos, entity.pos);
             if (dist <= closest) {
                 closest = dist;
                 target = entity;
@@ -40,16 +63,15 @@ export default class GoblinBrain extends Brain {
     }
 
     findDirections(target) {
-        let goblin = this.client.getParticipant();
         let directions = [];
-        if (goblin.pos.x < target.pos.x) {
+        if (this.goblin.pos.x < target.pos.x) {
             directions.push(DIRS.EAST);
-        } else if (goblin.pos.x > target.pos.x) {
+        } else if (this.goblin.pos.x > target.pos.x) {
             directions.push(DIRS.WEST);
         } 
-        if (goblin.pos.y < target.pos.y) {
+        if (this.goblin.pos.y < target.pos.y) {
             directions.push(DIRS.SOUTH);
-        } else if (goblin.pos.y > target.pos.y) {
+        } else if (this.goblin.pos.y > target.pos.y) {
             directions.push(DIRS.NORTH);
         }
         return directions;

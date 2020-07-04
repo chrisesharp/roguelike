@@ -44,8 +44,12 @@ export default class Participant {
         });
 
         socket.on('delete', (pos) => {
-            this.removeEntityAt(pos);
-            this.caller.refresh('delete');
+            let entity = this.getEntityAt(pos.x, pos.y, pos.z);
+            if (entity) {
+                delete this.others[entity.id];
+                this.removeEntity(entity);
+                this.caller.refresh('delete');
+            }
         });
 
         socket.on('map', (map) => {
@@ -70,10 +74,12 @@ export default class Participant {
                 if (socket_id !== socket.id) {
                     let npc = this.others[socket_id];
                     if (npc) {
-                        npc.assume(entities[socket.id]);
+                        npc.assume(entities[socket_id]);
+                        npc.id = socket_id;
                         this.moveEntity(npc, entities[socket_id].pos);
                     } else {
                         npc = new Entity(entities[socket_id]);
+                        npc.id = socket_id;
                         this.others[socket_id] = npc;
                         this.addEntity(npc);
                     }
@@ -106,12 +112,16 @@ export default class Participant {
                 if (npc) {
                     this.moveEntity(npc, pos);
                 } else {
-                    socket.emit('get_items');
-                    socket.emit('get_entities');
+                    this.sync();
                 }
             }
-            this.caller.refresh('position');
+            this.caller.refresh('position', socket_id);
         });
+    }
+
+    sync() {
+        this.socket.emit('get_items');
+        this.socket.emit('get_entities');
     }
 
     hasChangedRoom(message) {

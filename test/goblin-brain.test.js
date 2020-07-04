@@ -57,7 +57,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.currentTarget = warrior;
-        brain.ready("position");
+        brain.ready("position", "1");
         expect(movement).toBe(DIRS.SOUTH);
         done();
     });
@@ -75,7 +75,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.currentTarget = warrior;
-        brain.ready("position");
+        brain.ready("position", "1");
         expect(movement).toBe(DIRS.EAST);
         done();
     });
@@ -93,7 +93,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.currentTarget = warrior;
-        brain.ready("position");
+        brain.ready("position", "1");
         expect(movement).toBe(DIRS.NORTH);
         done();
     });
@@ -111,7 +111,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.currentTarget = warrior;
-        brain.ready("position");
+        brain.ready("position", "1");
         expect(movement).toBe(DIRS.WEST);
         done();
     });
