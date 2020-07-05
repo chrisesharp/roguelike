@@ -14,9 +14,17 @@ export default class GoblinBrain extends Brain {
         this.syncCount = 0;
         this.goblin = this.client.getParticipant();
         this.speed = 3;
+        this.nextMove = null;
     }
 
     ready(event, args) {
+        if (event === 'ping') {
+            if (this.nextMove) {
+                this.client.move(this.nextMove);
+                this.nextMove = null;
+            }
+            
+        }
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -29,7 +37,7 @@ export default class GoblinBrain extends Brain {
             if (args !== this.goblin.id) {
                 if (this.currentTarget) {
                     let directions = this.findDirections(this.currentTarget);
-                    this.client.move(this.chooseDirection(directions));
+                    this.nextMove = this.chooseDirection(directions);
                 } else {
                     this.syncCount++;
                 }
@@ -51,6 +59,9 @@ export default class GoblinBrain extends Brain {
         let closest = this.goblin.getSightRadius();
         Object.keys(this.client.others).forEach(key => {
             let entity = this.client.others[key];
+            if (entity.role === 'goblin') {
+                return;
+            }
             let dist = distance(this.goblin.pos, entity.pos);
             if (dist <= closest) {
                 closest = dist;

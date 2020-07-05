@@ -8,7 +8,7 @@ import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
 
 
-class PlayScreen  {
+class PlayScreen {
     constructor() {
         this.gameEnded = false;
         this.subScreen = null;
@@ -140,11 +140,10 @@ class PlayScreen  {
     move(direction) {
         game.move(direction);
     }
-    
-    setGameEnded() {
+
+    gameOver() {
         this.gameEnded = true;
     }
-
     setSubScreen(subScreen) {
         this.subScreen = subScreen;
         game.refresh();

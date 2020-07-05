@@ -20,10 +20,17 @@ export default class Server {
         this.addMonsters("http://0.0.0.0:3000");
     }
 
+    stop() {
+        this.messaging.stop();
+        this.monsters.forEach((bot) => {
+            bot.stop();
+        });
+    }
+
     addMonsters(URL) {
-        this.goblins = [];
+        this.monsters = [];
         for (let i = 0; i < 3; i++) {
-            this.goblins.push(new GoblinBot(URL).start(this.cave.getEntrance()));
+            this.monsters.push(new GoblinBot(URL).start(this.cave.getEntrance()));
         }
     }
 

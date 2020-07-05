@@ -17,7 +17,7 @@ export default class GoblinBot {
             this.brain.ready = callback;
         }
         let props =  {
-            name: 'A Goblin',
+            name: 'Goblin',
             role: 'goblin',
             type: 'monster',
             pos: JSON.stringify(startPos)

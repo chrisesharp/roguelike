@@ -66,6 +66,12 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
+  test('should get pings', (done) => {
+    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === 'ping') {expect(event).toBe("ping"); done();}}};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    bot.start(defaultPos);
+  });
+
   test('should return default map', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);

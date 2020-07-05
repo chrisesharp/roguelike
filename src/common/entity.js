@@ -9,6 +9,8 @@ export default class Entity extends Glyph {
         this.pos = properties['pos'] || {"x":0, "y":0, "z":0};
         this.alive = (properties['alive'] !== undefined) ? properties['alive'] : true;
         this.name = properties['name'] || "anonymous";
+        this.role = properties['role'] || "unknown";
+        this.type = properties['type'];
         if (this.char === ' ') { 
             this.setGlyph({'char':"?"});
         }

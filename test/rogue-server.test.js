@@ -40,6 +40,7 @@ beforeAll((done) => {
 });
 
 afterAll((done) => {
+  app.stop();
   ioServer.close();
   httpServer.close();
   done();

@@ -36,6 +36,9 @@ export default class Participant {
     }
 
     registerEventHandlers(socket) {
+        socket.on('ping', () => {
+            this.caller.refresh('ping');
+        });
         socket.on('message', (message) => {
             if (this.hasChangedRoom(message)) {
                 socket.emit('get_items');

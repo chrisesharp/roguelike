@@ -1,8 +1,15 @@
 "use strict";
 
+const pingFreqInMs = 250;
 export default class Messaging{
     constructor(backend) {
         this.backend = backend;
+        const messaging = this;
+        this.pinger = setInterval(() => messaging.backend.emit('ping'), pingFreqInMs);
+    }
+
+    stop() {
+        clearInterval(this.pinger);
     }
 
     sendToRoom(room, cmd, data) {

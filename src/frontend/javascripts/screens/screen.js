@@ -7,6 +7,7 @@ export default class Screen {
         template = template || {};
         this.okFunction = template['ok'] || function(x) {return x;};
         this.captionFunction = template['caption'];
+        this.gameEnded = false;
     }
 
     setup() {
@@ -16,6 +17,10 @@ export default class Screen {
     }
 
     exit() {
+    }
+
+    gameOver() {
+        this.gameEnded = true;
     }
 
     render(display) {

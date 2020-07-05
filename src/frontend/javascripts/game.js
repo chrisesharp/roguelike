@@ -156,7 +156,10 @@ class Game {
 	    return this.screenHeight;
     }
 
-    refresh() {
+    refresh(event) {
+        if (event === 'dead') {
+            this.currentScreen.gameOver();
+        }
         this.display.clear();
         if (this.currentScreen) {
             this.currentScreen.render(this.display);
