@@ -5,7 +5,7 @@ import Goblin from "../src/server/entities/goblin";
 import Warrior from "../src/server/entities/warrior";
 import Wizard from "../src/server/entities/wizard";
 import { DIRS } from "../src/common/movement";
-import { Tiles } from "../src/server/tile-server";
+import { Tiles } from "../src/server/server-tiles";
 
 const mockMap = {
     "width":10,

@@ -1,7 +1,7 @@
 "use strict";
 
 import Cave from "./cave.js";
-import { Tiles } from "./tile-server.js";
+import { Tiles } from "./server-tiles.js";
 import { getMovement } from "../common/movement.js";
 import EntityFactory from "./entity-factory.js";
 import { MSGTYPE, Messages } from "./messages.js";

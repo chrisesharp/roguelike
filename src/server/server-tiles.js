@@ -50,5 +50,5 @@ export const waterTile = new Tile({
     description: 'Murky blue water'
 });
 
-import * as Tiles from "./tile-server.js";
+import * as Tiles from "./server-tiles.js";
 export { Tiles };

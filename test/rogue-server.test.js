@@ -5,7 +5,7 @@ import http from "http";
 import io from "socket.io";
 import RogueServer from "../src/server/rogue-server";
 import { DIRS } from "../src/common/movement";
-import { Tiles } from "../src/server/tile-server";
+import { Tiles } from "../src/server/server-tiles";
 import Entity from "../src/common/entity";
 import Item from "../src/common/item";
 import Rock from "../src/server/items/rock";

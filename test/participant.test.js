@@ -4,7 +4,7 @@ import http from "http";
 import io from "socket.io";
 import RogueServer from "../src/server/rogue-server";
 import GoblinBot from "../src/monsters/goblin-bot";
-import { Tiles } from "../src/server/tile-server";
+import { Tiles } from "../src/server/server-tiles";
 import { DIRS } from "../src/common/movement";
 import Rock from "../src/server/items/rock";
 import Dagger from "../src/server/items/dagger";

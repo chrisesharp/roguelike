@@ -1,7 +1,7 @@
 "use strict";
 
 import Cave, { DEFAULT_SIZE } from '../src/server/cave';
-import { Tiles } from '../src/server/tile-server';
+import { Tiles } from '../src/server/server-tiles';
 import Rock from '../src/server/items/rock';
 import Dagger from '../src/server/items/dagger';
 

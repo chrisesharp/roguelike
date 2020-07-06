@@ -1,6 +1,6 @@
 "use strict";
 
-import { Tiles } from "./tile-server.js";
+import { Tiles } from "./server-tiles.js";
 import { Generators } from "./generators/index.js";
 
 function dynamicGenerator(generator) {

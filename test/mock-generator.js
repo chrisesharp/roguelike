@@ -1,6 +1,6 @@
 "use strict";
 
-import { Tiles } from '../src/server/tile-server.js';
+import { Tiles } from '../src/server/server-tiles.js';
 
 export default class MockGenerator {
     constructor(width, height) {
