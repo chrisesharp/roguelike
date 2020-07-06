@@ -11,7 +11,6 @@ import Dagger from "../src/server/items/dagger";
 import Apple from "../src/server/items/apple";
 import Chainmail from "../src/server/items/chainmail";
 import Item from "../src/common/item";
-import { assert } from "console";
 
 const rock = new Rock();
 const dagger = new Dagger();
@@ -63,13 +62,13 @@ describe('monster connects to server', () => {
   test('should use supplied brain', (done) => {
     let mockBrain = {ready: (event)=>{ expect(event).toBe("entities"); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.start();
   });
 
   test('should get pings', (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === 'ping') {expect(event).toBe("ping"); done();}}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.start();
   });
 
   test('should return default map', (done) => {
