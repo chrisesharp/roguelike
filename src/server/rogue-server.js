@@ -37,7 +37,7 @@ export default class RogueServer {
     disconnect(socket) {
         let entity = this.entities.getEntity(socket.id);
         this.messaging.sendToAll("delete", entity.pos);
-        this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.name));
+        this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.describeA()));
         this.entities.removeEntity(socket.id);
     }
 
@@ -94,13 +94,13 @@ export default class RogueServer {
 
     enterRoom(socket, entity, room) {
         socket.join(room, () => {
-            socket.broadcast.to(room).emit("message", Messages.ENTER_ROOM(entity.name));
+            socket.broadcast.to(room).emit("message", Messages.ENTER_ROOM(entity.describeA()));
         });
     }
 
     leaveRoom(socket, entity, room) {
         socket.leave(room, () => {
-            this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.name));
+            this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.describeA()));
         });
     }
 

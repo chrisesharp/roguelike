@@ -38,7 +38,6 @@ export default class GoblinBot {
  
     mapAvailable(data) {
         this.brain.setMap(new Map(data));
-        // this.
     }
 
     refresh(event, data) {

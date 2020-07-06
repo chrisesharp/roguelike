@@ -155,15 +155,13 @@ describe('monster connects to server', () => {
     bot1.start(pos, () => {
       bot2.start(defaultPos, (event) => {
         if (event === 'message') {
-          expect(bot1.messages[0]).toBe("A Goblin just entered this cave.");
+          expect(bot1.messages[0]).toBe("a goblin just entered this cave.");
         }
         if (event === 'entities') {
           let goblin = bot1.client.getParticipant();
           let pos = goblin.pos;
           let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
           expect(entity.getGlyph().getChar()).toEqual("&");
-          bot2.stop();
-          bot1.stop();
           done();
         }
       }); 

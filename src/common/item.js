@@ -1,15 +1,22 @@
 "use strict";
 
-import Entity from './entity.js';
+import Glyph from './glyph.js';
 
-export default class Item extends Entity {
+export default class Item extends Glyph {
     constructor(properties={}) {
         super(properties);
         this.alive = false;
         this.walkable = true;
+        this.pos = properties['pos'] || {"x":0, "y":0, "z":0};
+        this.name = properties['name'] || "thing";
+        this.details = properties['details'] || "none";
         this.edible = (properties['edible'] !== undefined) ? properties['edible'] : false;
         this.wiedable = (properties['wiedable'] !== undefined) ? properties['wiedable'] : false;
         this.wearable = (properties['wearable'] !== undefined) ? properties['wearable'] : false;
+    }
+
+    getDescription() {
+        return this.name;
     }
 
     describeA(capitalize) {
@@ -25,6 +32,10 @@ export default class Item extends Entity {
         return prefix + ' ' + this.getDescription();
     }
 
+    getDetails() {
+        return this.details;
+    }
+
     isEdible() {
         return this.edible;
     }
@@ -35,5 +46,23 @@ export default class Item extends Entity {
 
     isWearable() {
         return this.wearable;
+    }
+
+    setGlyph(properties) {
+        this.char = properties['char'] || this.char;
+        this.foreground = properties['foreground'] || this.foreground;
+        this.background = properties['background'] || this.background;
+    }
+
+    getGlyph() {
+        return new Glyph({char:this.char, foreground:this.foreground, background:this.background});
+    }
+
+    assume(extraProperties) {
+        if (extraProperties) {
+            for (let key in extraProperties) {
+                this[key] = extraProperties[key];
+            }
+        }
     }
 }

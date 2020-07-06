@@ -13,7 +13,8 @@ describe('entity creation', () => {
       expect(glyph.getChar()).toBe('?');
       expect(glyph.getForeground()).toBe('white');
       expect(glyph.getBackground()).toBe('black');
-      expect(entity.getDescription()).toBe('anonymous');
+      expect(entity.getDescription()).toBe('unknown');
+      expect(entity.getName()).toBe('anonymous');
       expect(entity.isAlive()).toBe(true);
       entity.assume({pos:{x:1,y:1,z:1}});
       entity.assume();
