@@ -5,7 +5,7 @@ import Brain from './brain.js';
 import { DIRS, getMovement, opposite, left, right } from "../common/movement.js";
 
 function distance(pos1, pos2) {
-    return Math.floor(Math.sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2));
+    return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
 export default class GoblinBrain extends Brain {
