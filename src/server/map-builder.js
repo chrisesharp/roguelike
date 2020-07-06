@@ -108,7 +108,6 @@ export default class MapBuilder {
                     tilesFilled++;
                 }
             }
-
         }
         return tilesFilled;
     }

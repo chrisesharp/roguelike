@@ -87,11 +87,6 @@ export default class RogueServer {
         });
     }
 
-    moveRooms(socket, entity, startRoom) {
-        this.leaveRoom(socket, entity, startRoom);
-        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
-    }
-
     enterRoom(socket, entity, room) {
         socket.join(room, () => {
             socket.broadcast.to(room).emit("message", Messages.ENTER_ROOM(entity.describeA()));
@@ -102,6 +97,11 @@ export default class RogueServer {
         socket.leave(room, () => {
             this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.describeA()));
         });
+    }
+
+    moveRooms(socket, entity, startRoom) {
+        this.leaveRoom(socket, entity, startRoom);
+        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
     }
 
     sendMessage(entity, ...message) {
