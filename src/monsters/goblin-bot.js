@@ -19,9 +19,11 @@ export default class GoblinBot {
         let props =  {
             name: 'Goblin',
             role: 'goblin',
-            type: 'monster',
-            pos: JSON.stringify(startPos)
+            type: 'monster'
           };
+        if (startPos) {
+            props.pos = JSON.stringify(startPos)
+        }
         this.client.connectToServer(props)
         return this;
     }
@@ -36,6 +38,7 @@ export default class GoblinBot {
  
     mapAvailable(data) {
         this.brain.setMap(new Map(data));
+        // this.
     }
 
     refresh(event, data) {

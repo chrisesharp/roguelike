@@ -8,39 +8,30 @@ import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";
 import Messaging from "./messaging.js";
 
-import GoblinBot from "../monsters/goblin-bot.js";
-
-export default class Server {
+export default class RogueServer {
     constructor(backend, template) {
         this.messaging = new Messaging(backend);
         this.cave = new Cave(template);
         this.repo = new EntityFactory();
         this.repo.setMessengerForEntities(this);
         this.entities = new State(this.repo);
-        this.addMonsters("http://0.0.0.0:3000");
     }
 
     stop() {
         this.messaging.stop();
-        this.monsters.forEach((bot) => {
-            bot.stop();
-        });
-    }
-
-    addMonsters(URL) {
-        this.monsters = [];
-        for (let i = 0; i < 3; i++) {
-            this.monsters.push(new GoblinBot(URL).start(this.cave.getEntrance()));
-        }
     }
 
     connection(socket) {
         let prototype = socket.handshake.query;
-        prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
-        let entity = this.entities.addEntity(socket.id, prototype);
-        this.registerEventHandlers(socket, entity, this);
-        this.messaging.sendToAll("entities",this.entities.getEntities());
-        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
+        if (!prototype.role) {
+            socket.emit("missing_role");
+        } else {
+            prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
+            let entity = this.entities.addEntity(socket.id, prototype);
+            this.registerEventHandlers(socket, entity, this);
+            this.messaging.sendToAll("entities",this.entities.getEntities());
+            this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
+        }
     }
 
     disconnect(socket) {

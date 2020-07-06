@@ -2,7 +2,7 @@
 
 import http from "http";
 import io from "socket.io";
-import Server from "../src/server/rogue-server";
+import RogueServer from "../src/server/rogue-server";
 import GoblinBot from "../src/monsters/goblin-bot";
 import { Tiles } from "../src/server/tile-server";
 import { DIRS } from "../src/common/movement";
@@ -42,7 +42,7 @@ beforeEach((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
   ioServer = io(httpServer);
-  app = new Server(ioServer, defaultMap);
+  app = new RogueServer(ioServer, defaultMap);
   ioServer.on("connection",(socket)=> {
     app.connection(socket);
   });

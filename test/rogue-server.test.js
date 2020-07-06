@@ -3,7 +3,7 @@
 import { ioc } from "../src/server/socket_client";
 import http from "http";
 import io from "socket.io";
-import Server from "../src/server/rogue-server";
+import RogueServer from "../src/server/rogue-server";
 import { DIRS } from "../src/common/movement";
 import { Tiles } from "../src/server/tile-server";
 import Entity from "../src/common/entity";
@@ -32,7 +32,7 @@ beforeAll((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
   ioServer = io(httpServer);
-  app = new Server(ioServer, defaultMap);
+  app = new RogueServer(ioServer, defaultMap);
   ioServer.on("connection",(socket)=> {
     app.connection(socket);
   });
@@ -78,6 +78,17 @@ afterEach((done) => {
 
 
 describe('basic socket.io API', () => {
+  test('should require prototype', (done) => {
+    let new_socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
+    'reconnection delay': 0,
+    'reopen delay': 0,
+    'force new connection': true,
+    transports: ['websocket']
+    });
+    new_socket.on('missing_role', () => {
+      done();
+    });
+  });
 
   test('should return default map', (done) => {
     socket.emit('map');
