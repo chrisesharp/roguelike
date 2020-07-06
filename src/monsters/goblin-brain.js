@@ -2,7 +2,7 @@
 
 import _ from "underscore";
 import Brain from './brain.js';
-import { DIRS, getMovement, opposite } from "../common/movement.js";
+import { DIRS, getMovement, opposite, left, right } from "../common/movement.js";
 
 function distance(pos1, pos2) {
     return Math.floor(Math.sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2));
@@ -18,13 +18,6 @@ export default class GoblinBrain extends Brain {
     }
 
     ready(event, args) {
-        if (event === 'ping') {
-            if (this.nextMove) {
-                this.client.move(this.nextMove);
-                this.nextMove = null;
-            }
-            
-        }
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -33,14 +26,13 @@ export default class GoblinBrain extends Brain {
             this.client.sync();
         }
 
-        if (event === 'position') {
-            if (args !== this.goblin.id) {
-                if (this.currentTarget) {
-                    let directions = this.findDirections(this.currentTarget);
-                    this.nextMove = this.chooseDirection(directions);
-                } else {
-                    this.syncCount++;
-                }
+        if (event === 'ping') {
+            if (this.currentTarget && this.isSameLevel(this.currentTarget)) {
+                let directions = this.findDirections(this.currentTarget);
+                this.nextMove = this.chooseDirection(directions);
+                this.client.move(this.nextMove);
+            } else {
+                this.syncCount++;
             }
         }
 
@@ -59,7 +51,7 @@ export default class GoblinBrain extends Brain {
         let closest = this.goblin.getSightRadius();
         Object.keys(this.client.others).forEach(key => {
             let entity = this.client.others[key];
-            if (entity.role === 'goblin') {
+            if (entity.role === this.goblin.role) {
                 return;
             }
             let dist = distance(this.goblin.pos, entity.pos);
@@ -88,23 +80,41 @@ export default class GoblinBrain extends Brain {
 
     chooseDirection(directions) {
         let direction;
+        let options = [];
+        let alternatives = [];
         directions.forEach(dir => {
             let pos = this.nextPos(dir);
             let tile = this.map.getTile(pos.x, pos.y, pos.z);
             if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.pos)) {
-                direction = dir;
+                options.push(dir);
+                // direction = dir;
+            } else {
+                alternatives.push(left(dir));
+                alternatives.push(right(dir));
             }
         });
-        if (direction === undefined) {
+        // if (!direction) {
+        if (!options.length) {
+            alternatives.forEach(dir => {
+                let pos = this.nextPos(dir);
+                let tile = this.map.getTile(pos.x, pos.y, pos.z);
+                if (tile.isWalkable()) {
+                    options.push(dir);
+                    // direction = dir;
+                }
+            });
+        }
+        // if (!direction) {
+        if (!options.length) {
             directions.forEach(dir => {
                 let pos = this.nextPos(opposite(dir));
                 let tile = this.map.getTile(pos.x, pos.y, pos.z);
                 if (tile.isWalkable()) {
-                    direction = opposite(dir);
+                    options.push(opposite(dir));
                 }
             });
         }
-        return direction;
+        return this.randomOption(options);
     }
 
     nextPos(dir) {
@@ -114,5 +124,13 @@ export default class GoblinBrain extends Brain {
         let z = this.goblin.pos.z + delta.z;
         return {x:x, y:y, z:z};
 
+    }
+
+    isSameLevel(entity) {
+        return (entity.pos.z === this.goblin.pos.z);
+    }
+
+    randomOption(options) {
+        return options[Math.floor(Math.random() * options.length)];
     }
 }

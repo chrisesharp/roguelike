@@ -65,12 +65,13 @@ describe('goblin brain responses', () => {
     });
 
     test('should move south towards target', (done) => {
+        const warrior = new Warrior({pos:{x:2,y:4,z:0}});
         let map = mockMap;
         let movement;
         let client = {
             getParticipant: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(4,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
+            entities: {"(2,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
         };
         let messages = [];
@@ -140,6 +141,30 @@ describe('goblin brain responses', () => {
         brain.ready("position", "1");
         brain.ready("ping");
         expect(movement).toBe(DIRS.WEST);
+        done();
+    });
+
+    test('should move try alternative direction if cant get to target', (done) => {
+        let map = {
+            "width":10,
+            "height":10,
+            "getTile": (x,y,z) => { return (y==goblin.pos.y+1) ? Tiles.floorTile : Tiles.wallTile;}
+          };
+        const warrior = new Warrior({pos:{x:0,y:2,z:0}});
+        let movement;
+        let client = {
+            getParticipant: () => { return goblin;},
+            move: (direction) => { movement = direction; }, 
+            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
+            others: {"1": warrior, "2": wizard}
+        };
+        let messages = [];
+        let brain = new GoblinBrain(map, client, messages);
+        brain.speed = 0;
+        brain.currentTarget = warrior;
+        brain.ready("position", "1");
+        brain.ready("ping");
+        expect(movement).toBe(DIRS.SOUTH);
         done();
     });
 
