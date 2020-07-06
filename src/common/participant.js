@@ -66,8 +66,7 @@ export default class Participant {
             for (let pos in items) {
                 let here = items[pos];
                 here.forEach(item => {
-                    let thing = new Item(item);
-                    this.addItem(thing); 
+                    this.addItem(new Item(item)); 
                 });
             }
             this.caller.refresh('items');
@@ -75,22 +74,11 @@ export default class Participant {
 
         socket.on('entities', (entities) => {
             for (let socket_id in entities) {
+                let entity = entities[socket_id];
                 if (socket_id !== socket.id) {
-                    let npc = this.others[socket_id];
-                    if (npc) {
-                        npc.assume(entities[socket_id]);
-                        npc.id = socket_id;
-                        this.moveEntity(npc, entities[socket_id].pos);
-                    } else {
-                        npc = new Entity(entities[socket_id]);
-                        npc.id = socket_id;
-                        this.others[socket_id] = npc;
-                        this.addEntity(npc);
-                    }
+                    this.updateOthers(socket_id, entity);
                 } else {
-                    this.removeEntity(this.participant);
-                    this.participant.assume(entities[socket.id]);
-                    this.addEntity(this.participant);
+                    this.updateOurself(entity);
                 }
             }
             this.caller.refresh('entities');
@@ -126,6 +114,26 @@ export default class Participant {
     sync() {
         this.socket.emit('get_items');
         this.socket.emit('get_entities');
+    }
+
+    updateOthers(socket_id, entity) {
+        let npc = this.others[socket_id];
+        if (npc) {
+            npc.assume(entity);
+            npc.id = socket_id;
+            this.moveEntity(npc, entity.pos);
+        } else {
+            npc = new Entity(entity);
+            npc.id = socket_id;
+            this.others[socket_id] = npc;
+            this.addEntity(npc);
+        }
+    }
+
+    updateOurself(entity) {
+        this.removeEntity(this.participant);
+        this.participant.assume(entity);
+        this.addEntity(this.participant);
     }
 
     hasChangedRoom(message) {
