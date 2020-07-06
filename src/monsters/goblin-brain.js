@@ -17,7 +17,7 @@ export default class GoblinBrain extends Brain {
         this.nextMove = null;
     }
 
-    ready(event, args) {
+    ready(event) {
         if (event === 'dead') {
             this.client.disconnectFromServer();
         }
@@ -79,7 +79,6 @@ export default class GoblinBrain extends Brain {
     }
 
     chooseDirection(directions) {
-        let direction;
         let options = [];
         let alternatives = [];
         directions.forEach(dir => {
@@ -87,24 +86,20 @@ export default class GoblinBrain extends Brain {
             let tile = this.map.getTile(pos.x, pos.y, pos.z);
             if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.pos)) {
                 options.push(dir);
-                // direction = dir;
             } else {
                 alternatives.push(left(dir));
                 alternatives.push(right(dir));
             }
         });
-        // if (!direction) {
         if (!options.length) {
             alternatives.forEach(dir => {
                 let pos = this.nextPos(dir);
                 let tile = this.map.getTile(pos.x, pos.y, pos.z);
                 if (tile.isWalkable()) {
                     options.push(dir);
-                    // direction = dir;
                 }
             });
         }
-        // if (!direction) {
         if (!options.length) {
             directions.forEach(dir => {
                 let pos = this.nextPos(opposite(dir));
@@ -123,7 +118,6 @@ export default class GoblinBrain extends Brain {
         let y = this.goblin.pos.y + delta.y;
         let z = this.goblin.pos.z + delta.z;
         return {x:x, y:y, z:z};
-
     }
 
     isSameLevel(entity) {
