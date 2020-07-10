@@ -36,6 +36,11 @@ export default class RogueServer {
 
     disconnect(socket) {
         let entity = this.entities.getEntity(socket.id);
+        let gear = entity.getInventory();
+        gear.forEach((item) => {
+            this.dropItem(entity, item.name);
+        });
+        this.dropItem(entity, "corpse");
         this.messaging.sendToAll("delete", entity.pos);
         this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.describeA()));
         this.entities.removeEntity(socket.id);

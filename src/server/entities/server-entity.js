@@ -14,6 +14,7 @@ export default class ServerEntity extends Entity {
     constructor(properties) {
         super(properties);
         this.id = properties['id'];
+        this.corpse = properties['corpse'];
         this.rules = new Rules(properties);
         this.messenger = properties['messenger'];
         this.damage = 1;
@@ -108,6 +109,9 @@ export default class ServerEntity extends Entity {
     }
 
     dropItem(itemName) {
+        if (itemName === "corpse") {
+            return this.corpse;
+        }
         let item = this.removeItemFromInventory(itemName);
         if (item) {
             if (this.currentArmour === item) {

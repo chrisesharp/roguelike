@@ -377,6 +377,7 @@ describe('basic socket.io API', () => {
   });
 
   test('should appear when dropped', (done) => {
+    app.cave.items = {};
     let rock = new Rock();
     let dropper = app.entities.getEntity(socket.id);
     dropper.inventory.push(rock);
@@ -406,6 +407,7 @@ describe('basic socket.io API', () => {
 
   test('should not disappear when not picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
+    app.cave.items = {}
     app.cave.addItem(pos, rock);
     socket.emit('take', 'dagger');
     socket.on('message', (msg) => {

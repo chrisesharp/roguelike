@@ -6,7 +6,7 @@ export const MSGTYPE = {
 }
 
 export const Messages = {
-    LEFT_DUNGEON: (subject) => {return `${subject} just left this dungeon complex`; },
+    LEFT_DUNGEON: (subject) => {return `${subject} just shuffled off this mortal coil`; },
     ENTER_ROOM: (subject) => { return `${subject} just entered this cave.`; },
     LEAVE_ROOM: (subject) => { return `${subject} just left this cave.`; },
     NO_WALK: () => { return "You cannot walk there."; },
