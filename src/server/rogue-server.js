@@ -4,6 +4,7 @@ import Cave from "./cave.js";
 import { Tiles } from "./server-tiles.js";
 import { getMovement } from "../common/movement.js";
 import EntityFactory from "./entity-factory.js";
+import Item from '../common/item.js';
 import { MSGTYPE, Messages } from "./messages.js";
 import State from "./state.js";
 import Messaging from "./messaging.js";
@@ -40,7 +41,7 @@ export default class RogueServer {
         gear.forEach((item) => {
             this.dropItem(entity, item.name);
         });
-        this.dropItem(entity, "corpse");
+        this.dropItem(entity, entity.corpse);
         this.messaging.sendToAll("delete", entity.pos);
         this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.describeA()));
         this.entities.removeEntity(socket.id);
@@ -131,7 +132,7 @@ export default class RogueServer {
     }
 
     dropItem(entity, itemName) {
-        let item = entity.dropItem(itemName);
+        let item = (itemName instanceof Item) ? itemName : entity.dropItem(itemName);
         if (item) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.addItem(entity.pos, item);

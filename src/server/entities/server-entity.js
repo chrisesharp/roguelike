@@ -109,9 +109,6 @@ export default class ServerEntity extends Entity {
     }
 
     dropItem(itemName) {
-        if (itemName === "corpse") {
-            return this.corpse;
-        }
         let item = this.removeItemFromInventory(itemName);
         if (item) {
             if (this.currentArmour === item) {
