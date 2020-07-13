@@ -79,7 +79,7 @@ afterEach((done) => {
 
 
 describe('basic socket.io API', () => {
-  test('should require prototype', (done) => {
+  test('should require prototype on connection', (done) => {
     let new_socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,
