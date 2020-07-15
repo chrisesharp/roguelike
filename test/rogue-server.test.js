@@ -103,8 +103,8 @@ describe('basic socket.io API', () => {
   test('should return default position', (done) => {
     socket.emit('get_position');
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x);
       expect(message.y).toBe(defaultPos.y);
@@ -119,8 +119,8 @@ describe('basic socket.io API', () => {
     socket.emit('move',DIRS.EAST);
     socket.emit('get_position');
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x);
       expect(message.y).toBe(defaultPos.y);
@@ -132,8 +132,8 @@ describe('basic socket.io API', () => {
   test('should move east', (done) => {
     socket.emit('move',DIRS.EAST);
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x+1);
       expect(message.y).toBe(defaultPos.y);
@@ -145,8 +145,8 @@ describe('basic socket.io API', () => {
   test('should move west', (done) => {
     socket.emit('move',DIRS.WEST);
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x-1);
       expect(message.y).toBe(defaultPos.y);
@@ -158,8 +158,8 @@ describe('basic socket.io API', () => {
   test('should move north', (done) => {
     socket.emit('move', DIRS.NORTH);
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x);
       expect(message.y).toBe(defaultPos.y-1);
@@ -171,8 +171,8 @@ describe('basic socket.io API', () => {
   test('should move south', (done) => {
     socket.emit('move', DIRS.SOUTH);
     socket.on('position', (payload) => {
-      let socket_id = payload[0];
-      let message = payload[1];
+      let socket_id = payload.id;
+      let message = payload.pos;
       expect(socket_id).toBe(socket.id);
       expect(message.x).toBe(defaultPos.x);
       expect(message.y).toBe(defaultPos.y+1);
@@ -187,8 +187,8 @@ describe('basic socket.io API', () => {
     socket.on('message', (msg) => {
       expect(msg).toEqual([`You ascend to level ${defaultPos.z-1}!`]);
       socket.on('position', (payload) => {
-        let socket_id = payload[0];
-        let pos = payload[1];
+        let socket_id = payload.id;
+        let pos = payload.pos;
         expect(socket_id).toBe(socket.id);
         expect(pos.x).toBe(defaultPos.x);
         expect(pos.y).toBe(defaultPos.y);
@@ -206,8 +206,8 @@ describe('basic socket.io API', () => {
     socket.on('message', (msg) => {
       expect(msg).toEqual([`You descend to level ${defaultPos.z+1}!`]);
       socket.on('position', (payload) => {
-        let socket_id = payload[0];
-        let pos = payload[1];
+        let socket_id = payload.id;
+        let pos = payload.pos;
         expect(socket_id).toBe(socket.id);
         expect(pos.x).toBe(defaultPos.x);
         expect(pos.y).toBe(defaultPos.y);

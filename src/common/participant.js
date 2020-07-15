@@ -95,8 +95,8 @@ export default class Participant {
         });
 
         socket.on('position', (payload) => {
-            let socket_id = payload[0];
-            let pos = payload[1];
+            let socket_id = payload.id;
+            let pos = payload.pos;
             if (socket_id === socket.id) {
                 this.moveEntity(this.participant, pos);
             } else {

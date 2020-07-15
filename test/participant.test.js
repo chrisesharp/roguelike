@@ -176,7 +176,8 @@ describe('monster connects to server', () => {
     bot.start(defaultPos, (event) => {
       if (event === 'map') {
         app.entities.addEntity("mock", proto);
-        app.messaging.sendToAll("position",["mock", pos]);
+        // app.messaging.sendToAll("position",["mock", pos]);
+        app.messaging.sendToAll("position",{id:"mock", pos:pos});
       }
       if (event === 'entities') {
         if (count) {

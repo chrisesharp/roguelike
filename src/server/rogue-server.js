@@ -85,7 +85,7 @@ export default class RogueServer {
         });
 
         socket.on("get_position", () => {
-            socket.emit("position", [socket.id, entity.pos]);
+            socket.emit("position", {id:socket.id, pos:entity.pos});
         });
 
         socket.on("disconnect", (reason) => {
@@ -151,7 +151,7 @@ export default class RogueServer {
                 this.moveRooms(socket, entity, startRoom);
             }
         }
-        this.messaging.sendToAll("position", [socket.id, entity.pos])
+        this.messaging.sendToAll("position", {id:socket.id, pos:entity.pos});
     }
 
     tryMove(entity, delta) {
