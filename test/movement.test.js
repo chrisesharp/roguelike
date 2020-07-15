@@ -2,32 +2,32 @@
 import { DIRS, opposite, getMovement } from "../src/common/movement";
 
 describe('move opposite', () => {
-    test('should be east opposite to west', (done) => {
+    it('should be east opposite to west', (done) => {
         expect(opposite(DIRS.WEST)).toBe(DIRS.EAST);
         done();
     });
-    test('should be west opposite to east', (done) => {
+    it('should be west opposite to east', (done) => {
         expect(opposite(DIRS.EAST)).toBe(DIRS.WEST);
         done();
     });
-    test('should be south opposite to north', (done) => {
+    it('should be south opposite to north', (done) => {
         expect(opposite(DIRS.NORTH)).toBe(DIRS.SOUTH);
         done();
     });
-    test('should be north opposite to south', (done) => {
+    it('should be north opposite to south', (done) => {
         expect(opposite(DIRS.SOUTH)).toBe(DIRS.NORTH);
         done();
     });
-    test('should be down opposite to up', (done) => {
+    it('should be down opposite to up', (done) => {
         expect(opposite(DIRS.UP)).toBe(DIRS.DOWN);
         done();
     });
-    test('should be up opposite to down', (done) => {
+    it('should be up opposite to down', (done) => {
         expect(opposite(DIRS.DOWN)).toBe(DIRS.UP);
         done();
     });
 
-    test('should go nowhere for undefined direction', (done) => {
+    it('should go nowhere for undefined direction', (done) => {
         expect(getMovement()).toEqual({x:0, y:0, z:0});
         done();
     });

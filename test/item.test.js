@@ -5,7 +5,7 @@ import Apple from "../src/server/items/apple";
 const defaultPos = {"x":2,"y":2,"z":0};
 
 describe('item creation', () => {
-    test('should be describable', (done) => {
+    it('should be describable', (done) => {
         let rock = new Rock({pos:defaultPos});
         expect(rock.pos.x).toBe(defaultPos.x);
         expect(rock.describeA(true)).toBe("A rock");
@@ -15,7 +15,7 @@ describe('item creation', () => {
         done();
     });
 
-    test('should be describable with proper preposition', (done) => {
+    it('should be describable with proper preposition', (done) => {
         let apple = new Apple({pos:defaultPos});
         expect(apple.pos.x).toBe(defaultPos.x);
         expect(apple.describeA(true)).toBe("An apple");
@@ -25,7 +25,7 @@ describe('item creation', () => {
         done();
     });
 
-    test('should be edible if edible', (done) => {
+    it('should be edible if edible', (done) => {
         let apple = new Apple();
         let rock = new Rock();
         expect(apple.isEdible()).toBe(true);

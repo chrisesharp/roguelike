@@ -36,7 +36,7 @@ afterEach((done) => {
 
 
 describe('cave creation', () => {
-  test('should generate tiles according to default sizes', (done) => {
+  it('should generate tiles according to default sizes', (done) => {
     let cave = new Cave();
     let map = cave.getMap();
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
@@ -49,7 +49,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should generate tiles according to template sizes', (done) => {
+  it('should generate tiles according to template sizes', (done) => {
     let cave = new Cave({depth:3});
     let map = cave.getMap();
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
@@ -62,7 +62,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should return null tiles outside of map', (done) => {
+  it('should return null tiles outside of map', (done) => {
     let cave = new Cave(defaultTemplate);
     let map = cave.getMap();
     let tile = map.getTile(-1,0,0);
@@ -83,7 +83,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should generate tiles from map file', (done) => {
+  it('should generate tiles from map file', (done) => {
     let cave = new Cave(defaultTemplate);
     let map = cave.getMap();
     expect(map.getWidth()).toBe(defaultTemplate.width);
@@ -105,7 +105,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should connect floors by regions using random function', (done) => {
+  it('should connect floors by regions using random function', (done) => {
     let rand = (arr)=>{return arr[1];}
     let cave = new Cave({randFunc: rand});
     let map = cave.getMap();
@@ -116,7 +116,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should regions too small', (done) => {
+  it('should regions too small', (done) => {
     let cave = new Cave();
     let map = cave.getMap();
     let wasSpace = map.getTiles()[0][2][22];
@@ -124,14 +124,14 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have 0 number of items', (done) => {
+  it('should have 0 number of items', (done) => {
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
     expect(Object.keys(items).length).toBe(0);
     done();
   });
 
-  test('should have 1 number of items', (done) => {
+  it('should have 1 number of items', (done) => {
     defaultTemplate.itemTypes = {"rock":1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
@@ -140,7 +140,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have a dagger and a rock', (done) => {
+  it('should have a dagger and a rock', (done) => {
     defaultTemplate.itemTypes0 = {'rock':1,'dagger':1};
     defaultTemplate.itemTypes1 = {'rock':1,'dagger':1};
     let cave = new Cave(defaultTemplate);
@@ -163,7 +163,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have a one dagger where non-existent types requested', (done) => {
+  it('should have a one dagger where non-existent types requested', (done) => {
     defaultTemplate.itemTypes = {'dagger':1,'non-thing':1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);
@@ -180,7 +180,7 @@ describe('cave creation', () => {
     done();
   });
 
-  test('should have two daggers and no rocks', (done) => {
+  it('should have two daggers and no rocks', (done) => {
     defaultTemplate.itemTypes0 = {'rock':0,'dagger':2,'non-thing':1};
     let cave = new Cave(defaultTemplate);
     let items = cave.getItems(0);

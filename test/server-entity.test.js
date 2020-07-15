@@ -7,7 +7,7 @@ import Chainmail from '../src/server/items/chainmail.js';
 const mockServer = (obj, type, msg) => { };
 
 describe('server entity behaviour', () => {
-    test('should not attack if unarmed', (done) => {
+    it('should not attack if unarmed', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
@@ -21,7 +21,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should deal damage if armed', (done) => {
+    it('should deal damage if armed', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3});
@@ -41,7 +41,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should have better armour class if wearning armour', (done) => {
+    it('should have better armour class if wearning armour', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
         expect(defender.getAC()).toBe(10);
@@ -51,7 +51,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should miss if roll low', (done) => {
+    it('should miss if roll low', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3});
@@ -64,7 +64,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should be unarmoured if drop armour', (done) => {
+    it('should be unarmoured if drop armour', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
         let armour = new Chainmail();
@@ -77,7 +77,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should be unarmed if drop weapon', (done) => {
+    it('should be unarmed if drop weapon', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         let defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:2});
         let rock = new Rock();
@@ -89,7 +89,7 @@ describe('server entity behaviour', () => {
         done();
     });
 
-    test('should be hungry with exertion', (done) => {
+    it('should be hungry with exertion', (done) => {
         const pos1 = {"x":1,"y":2,"z":0};
         let entity = new ServerEntity({pos:pos1, messenger:mockServer, random:(()=>{return 0;})});
         expect(entity.getHunger().description).toBe("not hungry");

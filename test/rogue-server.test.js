@@ -79,7 +79,7 @@ afterEach((done) => {
 
 
 describe('basic socket.io API', () => {
-  test('should require prototype on connection', (done) => {
+  it('should require prototype on connection', (done) => {
     let new_socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,
@@ -91,7 +91,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should return default map', (done) => {
+  it('should return default map', (done) => {
     socket.emit('map');
     socket.on('map', (message) => {
       expect(message.width).toBe(defaultMap.width);
@@ -100,7 +100,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should return default position', (done) => {
+  it('should return default position', (done) => {
     socket.emit('get_position');
     socket.on('position', (payload) => {
       let socket_id = payload.id;
@@ -113,7 +113,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not move if dead', (done) => {
+  it('should not move if dead', (done) => {
     let entity = app.entities.getEntity(socket.id);
     entity.alive = false;
     socket.emit('move',DIRS.EAST);
@@ -129,7 +129,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should move east', (done) => {
+  it('should move east', (done) => {
     socket.emit('move',DIRS.EAST);
     socket.on('position', (payload) => {
       let socket_id = payload.id;
@@ -142,7 +142,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should move west', (done) => {
+  it('should move west', (done) => {
     socket.emit('move',DIRS.WEST);
     socket.on('position', (payload) => {
       let socket_id = payload.id;
@@ -155,7 +155,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should move north', (done) => {
+  it('should move north', (done) => {
     socket.emit('move', DIRS.NORTH);
     socket.on('position', (payload) => {
       let socket_id = payload.id;
@@ -168,7 +168,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should move south', (done) => {
+  it('should move south', (done) => {
     socket.emit('move', DIRS.SOUTH);
     socket.on('position', (payload) => {
       let socket_id = payload.id;
@@ -181,7 +181,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should move up', (done) => {
+  it('should move up', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     socket.emit('move', DIRS.UP);
     socket.on('message', (msg) => {
@@ -200,7 +200,7 @@ describe('basic socket.io API', () => {
     
   });
 
-  test('should descend stairs down', (done) => {
+  it('should descend stairs down', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     socket.emit('move', DIRS.DOWN);
     socket.on('message', (msg) => {
@@ -218,7 +218,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not descend stairs up', (done) => {
+  it('should not descend stairs up', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     socket.emit('move', DIRS.DOWN);
     socket.on('message', (msg) => {
@@ -227,7 +227,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not ascend stairs down', (done) => {
+  it('should not ascend stairs down', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     socket.emit('move', DIRS.UP);
     socket.on('message', (msg) => {
@@ -236,7 +236,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not move onto another live entity', (done) => {
+  it('should not move onto another live entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", pos:pos};
     app.entities.addEntity("mock", proto);
@@ -247,7 +247,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not move onto another dead entity', (done) => {
+  it('should not move onto another dead entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
     app.entities.addEntity("mock", proto);
@@ -258,7 +258,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should update entity if hit', (done) => {
+  it('should update entity if hit', (done) => {
     let entity = app.entities.getEntity(socket.id);
     entity.hitPoints = 2;
     entity.hitFor(1);
@@ -268,7 +268,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should update entity if killed', (done) => {
+  it('should update entity if killed', (done) => {
     let entity = app.entities.getEntity(socket.id);
     entity.hitPoints = 1;
     entity.hitFor(1);
@@ -278,7 +278,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not move onto non-walkable tiles', (done) => {
+  it('should not move onto non-walkable tiles', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let water = Tiles.waterTile;
     app.cave.map.addTile(pos.x, pos.y, pos.z, water);
@@ -289,7 +289,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should see an item in same place', (done) => {
+  it('should see an item in same place', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     app.cave.addItem(pos, rock);
     socket.emit('move', DIRS.SOUTH);
@@ -300,7 +300,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should see multiple items in same place', (done) => {
+  it('should see multiple items in same place', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     app.cave.addItem(pos, dagger);
     app.cave.addItem(pos, rock);
@@ -312,7 +312,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should provide entities', (done) => {
+  it('should provide entities', (done) => {
     socket.emit('get_entities');
     socket.on('entities', (entities) => {
       let entity = new Entity(entities[socket.id]);
@@ -327,7 +327,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should provide single item', (done) => {
+  it('should provide single item', (done) => {
     app.cave.addItem({x:1,y:1,z:0}, rock);
     socket.emit('get_items');
     socket.on('items', (items) => {
@@ -343,7 +343,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should provide multiple items', (done) => {
+  it('should provide multiple items', (done) => {
     app.cave.addItem({x:1,y:1,z:0}, rock);
     app.cave.addItem({x:1,y:1,z:0}, apple);
     socket.emit('get_items');
@@ -366,7 +366,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should disappear when picked up', (done) => {
+  it('should disappear when picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.addItem(pos, rock);
     socket.emit('take', 'rock');
@@ -376,7 +376,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should appear when dropped', (done) => {
+  it('should appear when dropped', (done) => {
     app.cave.items = {};
     let rock = new Rock();
     let dropper = app.entities.getEntity(socket.id);
@@ -391,7 +391,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not drop non-existent things', (done) => {
+  it('should not drop non-existent things', (done) => {
     let dagger = new Dagger();
     let dropper = app.entities.getEntity(socket.id);
     dropper.inventory.push(dagger);
@@ -405,7 +405,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not disappear when not picked up', (done) => {
+  it('should not disappear when not picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.items = {}
     app.cave.addItem(pos, rock);
@@ -416,7 +416,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should be in entities inventory when picked up', (done) => {
+  it('should be in entities inventory when picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
     app.cave.addItem(pos, rock);
     let taker = app.entities.getEntity(socket.id);
@@ -430,7 +430,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should disappear from inventory when eaten', (done) => {
+  it('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
     let eater = app.entities.getEntity(socket.id);
     eater.inventory.push(apple);
@@ -442,7 +442,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should disappear from inventory when eaten', (done) => {
+  it('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
     let eater = app.entities.getEntity(socket.id);
     eater.inventory.push(apple);
@@ -454,7 +454,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should wield a dagger', (done) => {
+  it('should wield a dagger', (done) => {
     let dagger = new Dagger();
     let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(dagger);
@@ -466,7 +466,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test("should not wield a dagger if you don't have one", (done) => {
+  it("should not wield a dagger if you don't have one", (done) => {
     let rock = new Rock();
     let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
@@ -477,7 +477,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not wield a dagger if wield nothing', (done) => {
+  it('should not wield a dagger if wield nothing', (done) => {
     let rock = new Rock();
     let wielder = app.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
@@ -491,7 +491,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should wear chainmail', (done) => {
+  it('should wear chainmail', (done) => {
     let armour = new Chainmail();
     let wearer = app.entities.getEntity(socket.id);
     wearer.inventory.push(armour);
@@ -503,7 +503,7 @@ describe('basic socket.io API', () => {
     });
   });
 
-  test('should not wear chainmail if not in inventory', (done) => {
+  it('should not wear chainmail if not in inventory', (done) => {
     let wearer = app.entities.getEntity(socket.id);
     socket.emit('wear', 'chainmail');
     socket.on('message', (msg) => {

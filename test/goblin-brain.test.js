@@ -18,7 +18,7 @@ const wizard = new Wizard({pos:{x:5,y:5,z:0}});
 const goblin = new Goblin({pos:{x:2,y:2,z:0}});
 
 describe('goblin brain responses', () => {
-    test('should identify targets', (done) => {
+    it('should identify targets', (done) => {
         let map = mockMap;
         let client = {
             getParticipant: () => { return goblin;},
@@ -33,7 +33,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should ignore other goblins', (done) => {
+    it('should ignore other goblins', (done) => {
         let otherGoblin = new Goblin({pos:{x:4,y:4,z:0}});
         let map = mockMap;
         let client = {
@@ -49,7 +49,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should identify closest target', (done) => {
+    it('should identify closest target', (done) => {
         let map = mockMap;
         let client = {
             getParticipant: () => { return goblin;},
@@ -64,7 +64,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move south towards target', (done) => {
+    it('should move south towards target', (done) => {
         const warrior = new Warrior({pos:{x:2,y:4,z:0}});
         let map = mockMap;
         let movement;
@@ -84,7 +84,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move east towards target', (done) => {
+    it('should move east towards target', (done) => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:4,y:2,z:0}});
         let movement;
@@ -104,7 +104,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move north towards target', (done) => {
+    it('should move north towards target', (done) => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:2,y:0,z:0}});
         let movement;
@@ -124,7 +124,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move west towards target', (done) => {
+    it('should move west towards target', (done) => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
@@ -144,7 +144,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move try alternative direction if cant get to target', (done) => {
+    it('should move try alternative direction if cant get to target', (done) => {
         let map = {
             "width":10,
             "height":10,
@@ -168,7 +168,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should move try opposite direction if cant get to target', (done) => {
+    it('should move try opposite direction if cant get to target', (done) => {
         let map = {
             "width":10,
             "height":10,
@@ -192,7 +192,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should not move if boxed in', (done) => {
+    it('should not move if boxed in', (done) => {
         let map = {
             "width":10,
             "height":10,
@@ -216,7 +216,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should not move without a target', (done) => {
+    it('should not move without a target', (done) => {
         let map = mockMap;
         let movement;
         let client = {
@@ -235,7 +235,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should not move when target below or above', (done) => {
+    it('should not move when target below or above', (done) => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:0,y:0,z:1}});
         let movement;
@@ -255,7 +255,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should disconnect if dead', (done) => {
+    it('should disconnect if dead', (done) => {
         let disconnected = false;
         let client = {
             getParticipant: () => { return goblin;},
@@ -271,7 +271,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should sync if delete received', (done) => {
+    it('should sync if delete received', (done) => {
         let synched = false;
         let client = {
             getParticipant: () => { return goblin;},
@@ -287,7 +287,7 @@ describe('goblin brain responses', () => {
         done();
     });
 
-    test('should sync if no target for 10 turns', (done) => {
+    it('should sync if no target for 10 turns', (done) => {
         let synched = false;
         let client = {
             getParticipant: () => { return goblin;},

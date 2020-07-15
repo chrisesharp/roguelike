@@ -59,19 +59,19 @@ afterEach((done) => {
 
 
 describe('monster connects to server', () => {
-  test('should use supplied brain', (done) => {
+  it('should use supplied brain', (done) => {
     let mockBrain = {ready: (event)=>{ expect(event).toBe("entities"); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
-  test('should get pings', (done) => {
+  it('should get pings', (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === 'ping') {expect(event).toBe("ping"); done();}}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
-  test('should return default map', (done) => {
+  it('should return default map', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
@@ -86,7 +86,7 @@ describe('monster connects to server', () => {
     });    
   });
 
-  test('should move', (done) => {
+  it('should move', (done) => {
     let newPos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z}
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
@@ -101,7 +101,7 @@ describe('monster connects to server', () => {
     });    
   });
 
-  test('should see items ', (done) => {
+  it('should see items ', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     app.cave.addItem(pos, dagger);
     app.cave.addItem(pos, rock);
@@ -119,7 +119,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should see new items changing rooms ', (done) => {
+  it('should see new items changing rooms ', (done) => {
     app.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z+1};
     app.cave.addItem(pos, dagger);
@@ -148,7 +148,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should see other entities', (done) => {
+  it('should see other entities', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
@@ -168,7 +168,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should refresh entities if out of sync', (done) => {
+  it('should refresh entities if out of sync', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
@@ -191,7 +191,7 @@ describe('monster connects to server', () => {
     }); 
   });
 
-  test('should die', (done) => {
+  it('should die', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
       if (event === 'map') {
@@ -207,7 +207,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should see other entities move', (done) => {
+  it('should see other entities move', (done) => {
     let pos1 = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     let pos2 = {x:defaultPos.x, y:defaultPos.y+2, z:defaultPos.z};
     let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
@@ -229,7 +229,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should take and wield item', (done) => {
+  it('should take and wield item', (done) => {
     app.cave.addItem(defaultPos, dagger);
     let theDagger = app.cave.getItemsAt(defaultPos)[0];
     expect(theDagger.isWieldable()).toBe(true);
@@ -271,7 +271,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should unwield an item', (done) => {
+  it('should unwield an item', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let goblin = bot.client.getParticipant();
     goblin.inventory = ["dagger"];
@@ -287,7 +287,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should take and eat item', (done) => {
+  it('should take and eat item', (done) => {
     app.cave.addItem(defaultPos, apple);
     let theApple = app.cave.getItemsAt(defaultPos)[0];
     expect(theApple.isEdible()).toBe(true);
@@ -320,7 +320,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should take and wear item', (done) => {
+  it('should take and wear item', (done) => {
     app.cave.addItem(defaultPos, chainmail);
     let theArmour = app.cave.getItemsAt(defaultPos)[0];
     expect(theArmour.isWearable()).toBe(true);
@@ -364,7 +364,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should unwear an item', (done) => {
+  it('should unwear an item', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let goblin = bot.client.getParticipant();
     goblin.inventory = ["chainmail"];
@@ -380,7 +380,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  test('should take and drop an item', (done) => {
+  it('should take and drop an item', (done) => {
     app.cave.addItem(defaultPos, chainmail);
     let theArmour = app.cave.getItemsAt(defaultPos)[0];
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);

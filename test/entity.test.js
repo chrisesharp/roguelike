@@ -4,7 +4,7 @@ import Entity from '../src/common/entity.js';
 const defaultPos = {"x":2,"y":2,"z":0};
 
 describe('entity creation', () => {
-    test('should assume properties', (done) => {
+    it('should assume properties', (done) => {
       let entity = new Entity({pos:defaultPos});
       expect(entity.pos.x).toBe(defaultPos.x);
       expect(entity.pos.y).toBe(defaultPos.y);
@@ -28,7 +28,7 @@ describe('entity creation', () => {
       done();
     });
 
-    test('should change glyph properties', (done) => {
+    it('should change glyph properties', (done) => {
       let entity = new Entity({pos:defaultPos});
       expect(entity.getGlyph().getForeground()).toBe('white');
       entity.setGlyph({foreground:'red'});
@@ -36,20 +36,20 @@ describe('entity creation', () => {
       done();
     });
 
-    test('should have 1 hit point by default', (done) => {
+    it('should have 1 hit point by default', (done) => {
       let entity = new Entity();
       expect(entity.getHitPoints()).toBe(1);
       expect(entity.getMaxHitPoints()).toBe(1);
       done();
     });
 
-    test('should not be hungry by default', (done) => {
+    it('should not be hungry by default', (done) => {
       let entity = new Entity();
       expect(entity.getHunger()).toBe("not hungry");
       done();
     });
 
-    test('should have 10 feet vision by default', (done) => {
+    it('should have 10 feet vision by default', (done) => {
       let entity = new Entity();
       expect(entity.getSightRadius()).toBe(10);
       done();

@@ -6,26 +6,26 @@ const mockServer = {
 };
 
 describe('warriors creation', () => {
-    test('should be yellow', (done) => {
+    it('should be yellow', (done) => {
       let warrior = new Warrior({server:mockServer});
       expect(warrior.getGlyph().getForeground()).toBe('yellow');
       expect(warrior.getGlyph().getChar()).toBe('@');
       done();
     });
 
-    test('should have 10 hit points', (done) => {
+    it('should have 10 hit points', (done) => {
       let warrior = new Warrior({server:mockServer});
       expect(warrior.getHitPoints()).toBe(10);
       done();
     });
 
-    test('should have a positive to-hit bonus', (done) => {
+    it('should have a positive to-hit bonus', (done) => {
       let warrior = new Warrior({server:mockServer});
       expect(warrior.toHitBonus()>0).toBe(true);
       done();
     });
 
-    test('should have no inventory', (done) => {
+    it('should have no inventory', (done) => {
       let warrior = new Warrior({server:mockServer});
       expect(warrior.getInventory()).toEqual([]);
       done();
