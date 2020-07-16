@@ -182,4 +182,8 @@ export default class ServerEntity extends Entity {
     getAC() {
         return this.ac;
     }
+
+    getPos() {
+        return {id:this.id, pos:this.pos};
+    }
 }

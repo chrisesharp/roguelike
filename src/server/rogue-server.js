@@ -6,115 +6,51 @@ import { getMovement } from "../common/movement.js";
 import EntityFactory from "./entity-factory.js";
 import Item from '../common/item.js';
 import { MSGTYPE, Messages } from "./messages.js";
+import { EVENTS } from "../common/events.js";
 import State from "./state.js";
-import Messaging from "./messaging.js";
 
 export default class RogueServer {
     constructor(backend, template) {
-        this.messaging = new Messaging(backend);
+        this.messaging = backend;
         this.cave = new Cave(template);
         this.repo = new EntityFactory();
         this.repo.setMessengerForEntities(this);
         this.entities = new State(this.repo);
     }
 
-    stop() {
-        this.messaging.stop();
+    createEntity(id, prototype) {
+        prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
+        return this.entities.addEntity(id, prototype);
     }
 
-    connection(socket) {
-        let prototype = socket.handshake.query;
-        if (!prototype.role) {
-            socket.emit("missing_role");
-        } else {
-            prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
-            let entity = this.entities.addEntity(socket.id, prototype);
-            this.registerEventHandlers(socket, entity, this);
-            this.messaging.sendToAll("entities",this.entities.getEntities());
-            this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
-        }
-    }
-
-    disconnect(socket) {
-        let entity = this.entities.getEntity(socket.id);
+    deleteEntity(entity) {
         let gear = entity.getInventory();
         gear.forEach((item) => {
             this.dropItem(entity, item.name);
         });
         this.dropItem(entity, entity.corpse);
-        this.messaging.sendToAll("delete", entity.pos);
-        this.messaging.sendToAll("message", Messages.LEFT_DUNGEON(entity.describeA()));
-        this.entities.removeEntity(socket.id);
+        this.messaging.sendToAll(EVENTS.delete, entity.pos);
+        this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
+        this.entities.removeEntity(entity);
     }
 
-    registerEventHandlers(socket, entity, server) {
-        socket.on("get_entities", () => {
-            socket.emit("entities", server.entities.getEntities());
-        });
-
-        socket.on("get_items", () => {
-            socket.emit("items", server.cave.getItems(entity.pos.z));
-        });
-
-        socket.on("take", (itemName) => {
-            server.takeItem(entity, itemName);
-        });
-
-        socket.on("drop", (itemName) => {
-            server.dropItem(entity, itemName);
-        });
-
-        socket.on("eat", (food) => {
-            entity.eat(food);
-        });
-
-        socket.on("wield", (weapon) => {
-            entity.wield(weapon);
-        });
-
-        socket.on("wear", (armour) => {
-            entity.wear(armour);
-        });
-
-        socket.on("move", direction => {
-            server.moveEntity(socket, entity, direction);
-        });
-
-        socket.on("map", () => {
-            socket.emit("map", server.getMap(entity));
-        });
-
-        socket.on("get_position", () => {
-            socket.emit("position", {id:socket.id, pos:entity.pos});
-        });
-
-        socket.on("disconnect", (reason) => {
-            server.disconnect(socket);
-        });
+    getEntities() {
+        return this.entities.getEntities();
     }
 
-    enterRoom(socket, entity, room) {
-        socket.join(room, () => {
-            socket.broadcast.to(room).emit("message", Messages.ENTER_ROOM(entity.describeA()));
-        });
+    getItemsForLevel(level) {
+        return this.cave.getItems(level);
     }
 
-    leaveRoom(socket, entity, room) {
-        socket.leave(room, () => {
-            this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.describeA()));
-        });
-    }
-
-    moveRooms(socket, entity, startRoom) {
-        this.leaveRoom(socket, entity, startRoom);
-        this.enterRoom(socket, entity, this.cave.getRegion(entity.pos));
+    getRoom(pos) {
+        return this.cave.getRegion(pos);
     }
 
     sendMessage(entity, ...message) {
         let type = message.shift();
-        this.messaging.sendMessageToEntity(entity, "message", message);
+        this.messaging.sendMessageToEntity(entity, EVENTS.message, message);
         if (type === MSGTYPE.UPD) {
-            let cmd = (entity.isAlive()) ? "update" : "dead";
+            let cmd = (entity.isAlive()) ? EVENTS.update : EVENTS.dead;
             this.messaging.sendMessageToEntity(entity, cmd, entity);
         }
     }
@@ -125,7 +61,7 @@ export default class RogueServer {
         if (item && entity.tryTake(item)) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.removeItem(item);
-            this.messaging.sendToRoom(room, "items", this.cave.getItems(room));
+            this.messaging.sendToRoom(room, EVENTS.items, this.cave.getItems(room));
         } else {
             entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE(itemName));
         }
@@ -136,22 +72,18 @@ export default class RogueServer {
         if (item) {
             let room = this.cave.getRegion(entity.pos);
             this.cave.addItem(entity.pos, item);
-            this.messaging.sendToRoom(room, "items", this.cave.getItems(room));
+            this.messaging.sendToRoom(room, EVENTS.items, this.cave.getItems(room));
         }
     }
 
-    moveEntity(socket, entity, direction) {
+    moveEntity(entity, direction) {
         let delta = getMovement(direction);
         let position = (entity.isAlive()) ? this.tryMove(entity, delta) : null;
         if (position) {
-            let startRoom = this.cave.getRegion(entity.pos);
-            let newRoom = this.cave.getRegion(position);
             entity.pos = position;
-            if (!(newRoom in socket.rooms)) {
-                this.moveRooms(socket, entity, startRoom);
-            }
+            this.messaging.sendToAll(EVENTS.position, entity.getPos());
         }
-        this.messaging.sendToAll("position", {id:socket.id, pos:entity.pos});
+        return position;
     }
 
     tryMove(entity, delta) {

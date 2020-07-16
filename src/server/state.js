@@ -33,7 +33,11 @@ export default class State {
         }
     }
 
-    removeEntity(id) {
+    removeEntityByID(id) {
         delete this.connections[id];
+    }
+
+    removeEntity(entity) {
+        this.removeEntityByID(entity.id);
     }
 }

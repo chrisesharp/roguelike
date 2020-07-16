@@ -2,6 +2,7 @@
 
 import Entity from '../common/entity.js';
 import Item from '../common/item.js';
+import { EVENTS } from '../common/events.js';
 import io from 'socket.io-client';
 import _ from 'underscore';
 
@@ -26,8 +27,8 @@ export default class Participant {
             query: properties,
         });
         this.registerEventHandlers(socket);
-        socket.emit('map');
-        socket.emit('get_items');
+        socket.emit(EVENTS.getMap);
+        socket.emit(EVENTS.getItems);
         this.socket = socket;
     }
 
@@ -36,32 +37,32 @@ export default class Participant {
     }
 
     registerEventHandlers(socket) {
-        socket.on('ping', () => {
-            this.caller.refresh('ping');
+        socket.on(EVENTS.ping, () => {
+            this.caller.refresh(EVENTS.ping);
         });
-        socket.on('message', (message) => {
+        socket.on(EVENTS.message, (message) => {
             if (this.hasChangedRoom(message)) {
-                socket.emit('get_items');
+                socket.emit(EVENTS.getItems);
             }
             this.caller.addMessage(message);
-            this.caller.refresh('message');
+            this.caller.refresh(EVENTS.message);
         });
 
-        socket.on('delete', (pos) => {
+        socket.on(EVENTS.delete, (pos) => {
             let entity = this.getEntityAt(pos.x, pos.y, pos.z);
             if (entity) {
                 delete this.others[entity.id];
                 this.removeEntity(entity);
-                this.caller.refresh('delete');
+                this.caller.refresh(EVENTS.delete);
             }
         });
 
-        socket.on('map', (map) => {
+        socket.on(EVENTS.map, (map) => {
             this.caller.mapAvailable(map);
-            this.caller.refresh('map', map);
+            this.caller.refresh(EVENTS.map, map);
         });
 
-        socket.on('items',(items) => {
+        socket.on(EVENTS.items,(items) => {
             this.items = {};
             for (let pos in items) {
                 let here = items[pos];
@@ -69,10 +70,10 @@ export default class Participant {
                     this.addItem(new Item(item)); 
                 });
             }
-            this.caller.refresh('items');
+            this.caller.refresh(EVENTS.items);
         });
 
-        socket.on('entities', (entities) => {
+        socket.on(EVENTS.entities, (entities) => {
             for (let socket_id in entities) {
                 let entity = entities[socket_id];
                 if (socket_id !== socket.id) {
@@ -81,20 +82,20 @@ export default class Participant {
                     this.updateOurself(entity);
                 }
             }
-            this.caller.refresh('entities');
+            this.caller.refresh(EVENTS.entities);
         });
 
-        socket.on('update', (entity) => {
+        socket.on(EVENTS.update, (entity) => {
             this.participant.assume(entity);
-            this.caller.refresh('update');
+            this.caller.refresh(EVENTS.update);
         });
 
-        socket.on('dead', (entity) => {
+        socket.on(EVENTS.dead, (entity) => {
             this.participant.assume(entity);
-            this.caller.refresh('dead');
+            this.caller.refresh(EVENTS.dead);
         });
 
-        socket.on('position', (payload) => {
+        socket.on(EVENTS.position, (payload) => {
             let socket_id = payload.id;
             let pos = payload.pos;
             if (socket_id === socket.id) {
@@ -107,13 +108,13 @@ export default class Participant {
                     this.sync();
                 }
             }
-            this.caller.refresh('position', socket_id);
+            this.caller.refresh(EVENTS.position, socket_id);
         });
     }
 
     sync() {
-        this.socket.emit('get_items');
-        this.socket.emit('get_entities');
+        this.socket.emit(EVENTS.getItems);
+        this.socket.emit(EVENTS.getEntities);
     }
 
     updateOthers(socket_id, entity) {
@@ -141,7 +142,7 @@ export default class Participant {
     }
 
     move(direction) {
-        this.socket.emit("move", direction);
+        this.socket.emit(EVENTS.move, direction);
     }
 
     key(x, y, z) {
@@ -186,25 +187,25 @@ export default class Participant {
     }
 
     takeItem(item) {
-        this.socket.emit("take", item.name);
+        this.socket.emit(EVENTS.take, item.name);
     }
 
     dropItem(item) {
-        this.socket.emit("drop", item.name);
+        this.socket.emit(EVENTS.drop, item.name);
     }
 
     eat(item) {
-        this.socket.emit("eat", item.name);
+        this.socket.emit(EVENTS.eat, item.name);
     }
 
     wieldItem(item) {
         let weapon = (item) ? item.name : null;
-        this.socket.emit("wield", weapon);
+        this.socket.emit(EVENTS.wield, weapon);
     }
 
     wearItem(item) {
         let armour = (item) ? item.name : null;
-        this.socket.emit("wear", armour);
+        this.socket.emit(EVENTS.wear, armour);
     }
 
     addItem(item) {
