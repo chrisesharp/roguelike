@@ -4,19 +4,18 @@
 // import { pactWith } from 'jest-pact';
 import path from 'path';
 // import { healthRequest, healthyResponse } from "./pact.fixtures";
+import RogueServer from '../src/server/rogue-server';
+
 import { Matchers, MessageConsumerPact, synchronousBodyHandler } from "@pact-foundation/pact";
 import { string } from '@pact-foundation/pact/dsl/matchers';
 const { like, term } = Matchers;
 
-function dogApiHandler(dog) {
-    if (!dog.id && !dog.name && !dog.type) {
-      throw new Error("missing fields")
-    }
-  
-    // do some other things to dog...
-    // e.g. dogRepository.save(dog)
-    return
+function entityApiHandler(dog) {
+  if (!dog.pos) {
+    throw new Error("missing fields")
   }
+  return
+}
 
 describe("Rogue message consumer tests", () => {
     const messagePact = new MessageConsumerPact({
@@ -27,20 +26,18 @@ describe("Rogue message consumer tests", () => {
       logLevel: "info",
     });
   
-    describe("receive position event", () => {
-      it("accepts a valid position", () => {
+    describe("receive connection event", () => {
+      it("accepts a valid connection", () => {
         return messagePact
-          .given("some state")
-          .expectsToReceive("an entity position")
+          .given("no entities")
+          .expectsToReceive("an entity")
           .withContent({
-            id: string,
-            pos: like({ x: 1, y:1, z:1 }),
-            // pos: term({ generate: "bulldog", matcher: "^(bulldog|sheepdog)$" }),
+            pos: term({ generate: "bulldog", matcher: "^(bulldog|sheepdog)$" }),
           })
           .withMetadata({
             "content-type": "application/json",
           })
-          .verify(synchronousBodyHandler(dogApiHandler))
+          .verify(synchronousBodyHandler(entityApiHandler))
       });
     });
 });

@@ -104,7 +104,7 @@ describe('basic socket.io API', () => {
   it('should not move if dead', (done) => {
     let entity = app.rogueServer.entities.getEntity(socket.id);
     entity.alive = false;
-    socket.emit(EVENTS.move,DIRS.EAST);
+    socket.emit(EVENTS.move, DIRS.EAST);
     socket.emit(EVENTS.getPosition);
     socket.on(EVENTS.position, (payload) => {
       let socket_id = payload.id;
