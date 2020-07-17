@@ -9,10 +9,7 @@ import { EVENTS } from "../common/events.js";
 export default class ConnectionServer {
     constructor(http, template) {
         this.backend = io(http);
-        let server = this;
-        this.backend.on("connection",(socket)=> {
-            server.connection(socket);
-          });
+        this.backend.on("connection", (socket) => { this.connection(socket); });
         this.messaging = new Messaging(this.backend);
         this.rogueServer = new RogueServer(this.messaging, template);
     }
@@ -30,8 +27,8 @@ export default class ConnectionServer {
     }
 
     stop() {
-        this.backend.close();
         this.messaging.stop();
+        this.backend.close();
     }
 
     registerEventHandlers(socket, entity, server) {
