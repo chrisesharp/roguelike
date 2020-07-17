@@ -11,10 +11,10 @@ export default class RogueClient {
         this.serverAddr = serverAddr;
         this.caller = caller;
         this.entities = {};
+        this.others = {};
         this.items = {};
         this.entity = new Entity();
         this.addEntity(this.entity);
-        this.others = {};
         this.socket = null;
     }
 
@@ -54,7 +54,6 @@ export default class RogueClient {
         });
 
         socket.on(EVENTS.map, (map) => {
-            this.caller.mapAvailable(map);
             this.caller.refresh(EVENTS.map, map);
         });
 

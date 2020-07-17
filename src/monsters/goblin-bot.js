@@ -45,6 +45,10 @@ export default class GoblinBot {
         if (event === EVENTS.message) {
             this.addMessage(data);
         }
+
+        if (event === EVENTS.map) {
+            this.mapAvailable(data);
+        }
         this.ready(event, data);
     }
 

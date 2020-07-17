@@ -166,6 +166,10 @@ class Game {
             this.addMessage(data);
         }
 
+        if (event === EVENTS.map) {
+            this.mapAvailable(data);
+        }
+
         this.display.clear();
         if (this.currentScreen) {
             this.currentScreen.render(this.display);

@@ -54,7 +54,7 @@ afterEach((done) => {
 
 describe('monster connects to server', () => {
   it('should use supplied brain', (done) => {
-    let mockBrain = {ready: (event)=>{ expect(event).toBe("entities"); done();}};
+    let mockBrain = {ready: (event)=>{ expect(event).toBe(EVENTS.entities); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
