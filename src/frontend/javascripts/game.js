@@ -4,6 +4,7 @@ import axios from 'axios';
 import ServerHealth from './server-health';
 import ExplorerMap from './explorer-map';
 import Participant from '../../common/participant';
+import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';
 import { startScreen } from './screens/start';
@@ -156,10 +157,15 @@ class Game {
 	    return this.screenHeight;
     }
 
-    refresh(event) {
-        if (event === 'dead') {
+    refresh(event, data) {
+        if (event === EVENTS.dead) {
             this.currentScreen.gameOver();
         }
+        
+        if (event === EVENTS.message) {
+            this.addMessage(data);
+        }
+
         this.display.clear();
         if (this.currentScreen) {
             this.currentScreen.render(this.display);
@@ -220,8 +226,8 @@ class Game {
         return this.currentScreen;
     }
 
-    getParticipant() {
-        return this.client.getParticipant();
+    getEntity() {
+        return this.client.getEntity();
     }
 }
 

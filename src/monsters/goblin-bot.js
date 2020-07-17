@@ -3,6 +3,7 @@
 import Participant from '../common/participant.js';
 import Map from '../common/map.js';
 import GoblinBrain from './goblin-brain.js';
+import { EVENTS } from '../common/events.js';
 
 export default class GoblinBot {
     constructor(URL, brain) {
@@ -41,6 +42,9 @@ export default class GoblinBot {
     }
 
     refresh(event, data) {
+        if (event === EVENTS.message) {
+            this.addMessage(data);
+        }
         this.ready(event, data);
     }
 

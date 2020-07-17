@@ -96,7 +96,7 @@ describe('monster connects to server', () => {
         bot.move(DIRS.SOUTH);
       }
       if (event == EVENTS.position) {
-        expect(bot.client.getParticipant().pos).toEqual(newPos);
+        expect(bot.client.getEntity().pos).toEqual(newPos);
         bot.stop();
         done();
       }
@@ -109,7 +109,7 @@ describe('monster connects to server', () => {
     app.rogueServer.cave.addItem(pos, rock);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
-      let goblin = bot.client.getParticipant();
+      let goblin = bot.client.getEntity();
       if (event === EVENTS.items) {
         bot.move(DIRS.SOUTH);
       } else if (event == EVENTS.message) {
@@ -138,7 +138,7 @@ describe('monster connects to server', () => {
       }
 
       if (event === EVENTS.position) {
-        if (bot.client.getParticipant().pos.z === pos.z) {
+        if (bot.client.getEntity().pos.z === pos.z) {
           descended = true;
         }
       }
@@ -160,7 +160,7 @@ describe('monster connects to server', () => {
           expect(bot1.messages[0]).toBe("a goblin just entered this cave.");
         }
         if (event === EVENTS.entities) {
-          let goblin = bot1.client.getParticipant();
+          let goblin = bot1.client.getEntity();
           let pos = goblin.pos;
           let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
           expect(entity.getGlyph().getChar()).toEqual("&");
@@ -196,12 +196,12 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     bot.start(defaultPos, (event) => {
       if (event === EVENTS.map) {
-        expect(bot.client.getParticipant().isAlive()).toBe(true);
+        expect(bot.client.getEntity().isAlive()).toBe(true);
         let goblin = app.rogueServer.entities.getEntityAt(defaultPos);
         goblin.hitFor(10);
       }
       if (event === EVENTS.dead) {
-        expect(bot.client.getParticipant().isAlive()).toBe(false);
+        expect(bot.client.getEntity().isAlive()).toBe(false);
         bot.stop();
         done();
       }
@@ -224,7 +224,7 @@ describe('monster connects to server', () => {
       }); 
       if (event === EVENTS.position) {
         let other = bot1.client.getEntityAt(pos2.x, pos2.y, pos2.z);
-        expect(other.getDescription()).toEqual(bot2.client.getParticipant().getDescription());
+        expect(other.getDescription()).toEqual(bot2.client.getEntity().getDescription());
         done();
       }
     });
@@ -237,7 +237,7 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let count = 0;
     bot.start(defaultPos, (event) => {
-      let goblin = bot.client.getParticipant();
+      let goblin = bot.client.getEntity();
       if (event === EVENTS.map) {
         bot.client.takeItem(theDagger);
       }
@@ -274,7 +274,7 @@ describe('monster connects to server', () => {
 
   it('should unwield an item', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let goblin = bot.client.getParticipant();
+    let goblin = bot.client.getEntity();
     goblin.inventory = ["dagger"];
     bot.start(defaultPos, (event) => {
       if (event === EVENTS.map) {
@@ -300,7 +300,7 @@ describe('monster connects to server', () => {
       }
       if (event === EVENTS.items) {
         count++;
-        let goblin = bot.client.getParticipant();
+        let goblin = bot.client.getEntity();
         let pos = goblin.pos;
         let items = bot.client.getItemsAt(pos.x, pos.y, pos.z);
         if (count === 1) {
@@ -328,7 +328,7 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let count = 0;
     bot.start(defaultPos, (event) => {
-      let goblin = bot.client.getParticipant();
+      let goblin = bot.client.getEntity();
       if (event === EVENTS.map) {
         bot.client.takeItem(theArmour);
       }
@@ -367,7 +367,7 @@ describe('monster connects to server', () => {
 
   it('should unwear an item', (done) => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let goblin = bot.client.getParticipant();
+    let goblin = bot.client.getEntity();
     goblin.inventory = ["chainmail"];
     bot.start(defaultPos, (event) => {
       if (event === EVENTS.map) {
@@ -392,7 +392,7 @@ describe('monster connects to server', () => {
       }
       if (event === EVENTS.items) {
         count++;
-        let goblin = bot.client.getParticipant();
+        let goblin = bot.client.getEntity();
         let pos = goblin.pos;
         let items = bot.client.getItemsAt(pos.x, pos.y, pos.z);
         if (count === 1) {

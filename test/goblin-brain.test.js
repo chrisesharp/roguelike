@@ -22,7 +22,7 @@ describe('goblin brain responses', () => {
     it('should identify targets', (done) => {
         let map = mockMap;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(4,4)": warrior, "(2,2)": goblin },
             others: {"1": warrior}
         };
@@ -38,7 +38,7 @@ describe('goblin brain responses', () => {
         let otherGoblin = new Goblin({pos:{x:4,y:4,z:0}});
         let map = mockMap;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(4,4)": otherGoblin, "(2,2)": goblin },
             others: {"1": otherGoblin}
         };
@@ -53,7 +53,7 @@ describe('goblin brain responses', () => {
     it('should identify closest target', (done) => {
         let map = mockMap;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(4,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
         };
@@ -70,7 +70,7 @@ describe('goblin brain responses', () => {
         let map = mockMap;
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(2,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -90,7 +90,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:4,y:2,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(4,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -110,7 +110,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:2,y:0,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(2,0)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -130,7 +130,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -154,7 +154,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -178,7 +178,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -202,7 +202,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -221,7 +221,7 @@ describe('goblin brain responses', () => {
         let map = mockMap;
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,0)": goblin },
             others: {}
@@ -241,7 +241,7 @@ describe('goblin brain responses', () => {
         const warrior = new Warrior({pos:{x:0,y:0,z:1}});
         let movement;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
             entities: {"(0,0)": warrior, "(3,3)": wizard, "(0,0)": goblin },
             others: {"1": warrior, "2": wizard}
@@ -259,7 +259,7 @@ describe('goblin brain responses', () => {
     it('should disconnect if dead', (done) => {
         let disconnected = false;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(0,0)": goblin },
             others: {},
             disconnectFromServer: () => {disconnected = true;}
@@ -275,7 +275,7 @@ describe('goblin brain responses', () => {
     it('should sync if delete received', (done) => {
         let synched = false;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(0,0)": goblin },
             others: {},
             sync: () => {synched = true;}
@@ -291,7 +291,7 @@ describe('goblin brain responses', () => {
     it('should sync if no target for 10 turns', (done) => {
         let synched = false;
         let client = {
-            getParticipant: () => { return goblin;},
+            getEntity: () => { return goblin;},
             entities: {"(0,0)": goblin },
             others: {},
             sync: () => {synched = true;}

@@ -13,32 +13,31 @@ export default class GoblinBrain extends Brain {
     constructor(map, client, messages) {
         super(map, client, messages);
         this.syncCount = 0;
-        this.goblin = this.client.getParticipant();
+        this.goblin = this.client.getEntity();
         this.speed = 3;
         this.nextMove = null;
     }
 
     ready(event) {
-        if (event === EVENTS.dead) {
-            this.client.disconnectFromServer();
-        }
-
-        if (event === EVENTS.delete) {
-            this.client.sync();
-        }
-
-        if (event === EVENTS.ping) {
-            if (this.currentTarget && this.isSameLevel(this.currentTarget)) {
-                let directions = this.findDirections(this.currentTarget);
-                this.nextMove = this.chooseDirection(directions);
-                this.client.move(this.nextMove);
-            } else {
-                this.syncCount++;
-            }
-        }
-
-        if (event === EVENTS.entities) {
-            this.currentTarget = this.findTarget();
+        switch(event) {
+            case EVENTS.dead:
+                this.client.disconnectFromServer();
+                break;
+            case EVENTS.delete:
+                this.client.sync();
+                break;
+            case EVENTS.ping:
+                if (this.currentTarget && this.isSameLevel(this.currentTarget)) {
+                    let directions = this.findDirections(this.currentTarget);
+                    this.nextMove = this.chooseDirection(directions);
+                    this.client.move(this.nextMove);
+                } else {
+                    this.syncCount++;
+                }
+                break;
+            case EVENTS.entities:
+                this.currentTarget = this.findTarget();
+                break;
         }
 
         if (this.syncCount > 10) {

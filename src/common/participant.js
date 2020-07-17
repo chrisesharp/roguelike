@@ -12,8 +12,8 @@ export default class Participant {
         this.caller = caller;
         this.entities = {};
         this.items = {};
-        this.participant = new Entity();
-        this.addEntity(this.participant);
+        this.entity = new Entity();
+        this.addEntity(this.entity);
         this.others = {};
         this.socket = null;
     }
@@ -40,21 +40,17 @@ export default class Participant {
         socket.on(EVENTS.ping, () => {
             this.caller.refresh(EVENTS.ping);
         });
+
         socket.on(EVENTS.message, (message) => {
             if (this.hasChangedRoom(message)) {
                 socket.emit(EVENTS.getItems);
             }
-            this.caller.addMessage(message);
-            this.caller.refresh(EVENTS.message);
+            this.caller.refresh(EVENTS.message, message);
         });
 
         socket.on(EVENTS.delete, (pos) => {
-            let entity = this.getEntityAt(pos.x, pos.y, pos.z);
-            if (entity) {
-                delete this.others[entity.id];
-                this.removeEntity(entity);
-                this.caller.refresh(EVENTS.delete);
-            }
+            this.removeEntityAt(pos);
+            this.caller.refresh(EVENTS.delete, pos);
         });
 
         socket.on(EVENTS.map, (map) => {
@@ -63,57 +59,53 @@ export default class Participant {
         });
 
         socket.on(EVENTS.items,(items) => {
-            this.items = {};
-            for (let pos in items) {
-                let here = items[pos];
-                here.forEach(item => {
-                    this.addItem(new Item(item)); 
-                });
-            }
+            this.updateItems(items);
             this.caller.refresh(EVENTS.items);
         });
 
         socket.on(EVENTS.entities, (entities) => {
-            entities.forEach(entity => {
-                if (entity.id !== socket.id) {
-                    this.updateOthers(entity);
-                } else {
-                    this.updateOurself(entity);
-                }
-            });
+            this.updateEntities(socket.id, entities);
             this.caller.refresh(EVENTS.entities);
         });
 
         socket.on(EVENTS.update, (entity) => {
-            this.participant.assume(entity);
+            this.entity.assume(entity);
             this.caller.refresh(EVENTS.update);
         });
 
         socket.on(EVENTS.dead, (entity) => {
-            this.participant.assume(entity);
+            this.entity.assume(entity);
             this.caller.refresh(EVENTS.dead);
         });
 
-        socket.on(EVENTS.position, (payload) => {
-            let socket_id = payload.id;
-            let pos = payload.pos;
-            if (socket_id === socket.id) {
-                this.moveEntity(this.participant, pos);
-            } else {
-                let npc = this.others[socket_id];
-                if (npc) {
-                    this.moveEntity(npc, pos);
-                } else {
-                    this.sync();
-                }
-            }
-            this.caller.refresh(EVENTS.position, socket_id);
+        socket.on(EVENTS.position, (event) => {
+            this.updateEntityPosition(event);
+            this.caller.refresh(EVENTS.position, event.id);
         });
     }
 
     sync() {
         this.socket.emit(EVENTS.getItems);
         this.socket.emit(EVENTS.getEntities);
+    }
+
+    updateEntityPosition(event) {
+        let entity =  (event.id === this.socket.id) ? this.entity : this.others[event.id];
+        if (entity) {
+            this.moveEntity(entity, event.pos);
+        } else {
+            this.sync();
+        }
+    }
+
+    updateEntities(ourId, entities) {
+        entities.forEach(entity => {
+            if (entity.id !== ourId) {
+                this.updateOthers(entity);
+            } else {
+                this.updateOurself(entity);
+            }
+        });
     }
 
     updateOthers(entity) {
@@ -129,9 +121,19 @@ export default class Participant {
     }
 
     updateOurself(entity) {
-        this.removeEntity(this.participant);
-        this.participant.assume(entity);
-        this.addEntity(this.participant);
+        this.removeEntity(this.entity);
+        this.entity.assume(entity);
+        this.addEntity(this.entity);
+    }
+
+    updateItems(items) {
+        this.items = {};
+        for (let pos in items) {
+            let here = items[pos];
+            here.forEach(item => {
+                this.addItem(new Item(item)); 
+            });
+        }
     }
 
     hasChangedRoom(message) {
@@ -214,7 +216,7 @@ export default class Participant {
         }
     }
 
-    getParticipant() {
-        return this.participant;
+    getEntity() {
+        return this.entity ;
     }
 }
