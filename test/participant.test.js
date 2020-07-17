@@ -1,8 +1,6 @@
 "use strict";
 
 import http from "http";
-import io from "socket.io";
-// import RogueServer from "../src/server/rogue-server";
 import SocketServer from "../src/server/socket-server";
 import GoblinBot from "../src/monsters/goblin-bot";
 import { Tiles } from "../src/server/server-tiles";
@@ -21,7 +19,6 @@ const chainmail = new Chainmail();
 
 let httpServer;
 let httpServerAddr;
-let ioServer;
 let app;
 const defaultPos = {"x":2,"y":2,"z":0};
 
@@ -42,19 +39,14 @@ afterAll((done) => {
 beforeEach((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
-  ioServer = io(httpServer);
-  app = new SocketServer(ioServer, defaultMap);
-  ioServer.on("connection",(socket)=> {
-    app.connection(socket);
-  });
+  app = new SocketServer(httpServer, defaultMap);
   done();
 });
 
 afterEach((done) => {
-  ioServer.close();
+  app.stop();
   httpServer.close();
   app = null;
-  ioServer = null;
   httpServer = null;
   done();
 });

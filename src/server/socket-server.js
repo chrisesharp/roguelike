@@ -1,13 +1,19 @@
 "use strict";
 
+import io from "socket.io";
 import RogueServer from "./rogue-server.js";
 import Messaging from "./messaging.js";
 import { Messages } from "./messages.js";
 import { EVENTS } from "../common/events.js";
 
 export default class ConnectionServer {
-    constructor(backend, template) {
-        this.messaging = new Messaging(backend);
+    constructor(http, template) {
+        this.backend = io(http);
+        let server = this;
+        this.backend.on("connection",(socket)=> {
+            server.connection(socket);
+          });
+        this.messaging = new Messaging(this.backend);
         this.rogueServer = new RogueServer(this.messaging, template);
     }
 
@@ -24,6 +30,7 @@ export default class ConnectionServer {
     }
 
     stop() {
+        this.backend.close();
         this.messaging.stop();
     }
 

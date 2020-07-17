@@ -2,8 +2,6 @@
 
 import express from "express";
 import http from "http";
-import io from "socket.io";
-// import RogueServer from "./server/rogue-server.js";
 import SocketServer from "./server/socket-server.js";
 import fs from "fs";
 
@@ -28,13 +26,7 @@ let filepath = process.env.npm_package_config_file || './src/server/defaults.jso
 let file = fs.readFileSync(filepath, 'utf8');
 let template = JSON.parse(file);
 
-let ioServer = io(httpServer);
-// let server = new RogueServer(ioServer, template);
-let server = new SocketServer(ioServer, template);
-
-ioServer.on("connection",(socket)=> {
-  server.connection(socket);
-});
+const server = new SocketServer(httpServer, template);
 
 function normalizePort(val) {
     let port = parseInt(val, 10);

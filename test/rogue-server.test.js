@@ -1,8 +1,7 @@
 "use strict";
 
-import { ioc } from "../src/server/socket_client";
+import io from "socket.io-client";
 import http from "http";
-import io from "socket.io";
 import SocketServer from "../src/server/socket-server";
 import { DIRS } from "../src/common/movement";
 import { Tiles } from "../src/server/server-tiles";
@@ -17,7 +16,6 @@ import Chainmail from "../src/server/items/chainmail";
 let socket;
 let httpServer;
 let httpServerAddr;
-let ioServer;
 let app;
 const defaultPos = {"x":2,"y":2,"z":0};
 const rock = new Rock();
@@ -33,24 +31,19 @@ const defaultMap = {
 beforeAll((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
-  ioServer = io(httpServer);
-  app = new SocketServer(ioServer, defaultMap);
-  ioServer.on("connection",(socket)=> {
-    app.connection(socket);
-  });
+  app = new SocketServer(httpServer, defaultMap);
   done();
 });
 
 afterAll((done) => {
   app.stop();
-  ioServer.close();
   httpServer.close();
   done();
 });
 
 beforeEach((done) => {
   // square brackets are used for IPv6
-  socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
+  socket = io.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,
     'force new connection': true,
@@ -81,7 +74,7 @@ afterEach((done) => {
 
 describe('basic socket.io API', () => {
   it('should require prototype on connection', (done) => {
-    let new_socket = ioc.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
+    let new_socket = io.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,
     'force new connection': true,
