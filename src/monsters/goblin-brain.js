@@ -3,6 +3,7 @@
 import _ from "underscore";
 import Brain from './brain.js';
 import { DIRS, getMovement, opposite, left, right } from "../common/movement.js";
+import { EVENTS } from "../common/events.js";
 
 function distance(pos1, pos2) {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
@@ -18,15 +19,15 @@ export default class GoblinBrain extends Brain {
     }
 
     ready(event) {
-        if (event === 'dead') {
+        if (event === EVENTS.dead) {
             this.client.disconnectFromServer();
         }
 
-        if (event === 'delete') {
+        if (event === EVENTS.delete) {
             this.client.sync();
         }
 
-        if (event === 'ping') {
+        if (event === EVENTS.ping) {
             if (this.currentTarget && this.isSameLevel(this.currentTarget)) {
                 let directions = this.findDirections(this.currentTarget);
                 this.nextMove = this.chooseDirection(directions);
@@ -36,7 +37,7 @@ export default class GoblinBrain extends Brain {
             }
         }
 
-        if (event === 'entities') {
+        if (event === EVENTS.entities) {
             this.currentTarget = this.findTarget();
         }
 

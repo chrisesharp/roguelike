@@ -2,7 +2,7 @@
 
 import io from 'socket.io-client';
 import GoblinBot from './monsters/goblin-bot.js';
-import { EVENTS } from '../common/events.js';
+import { EVENTS } from './common/events.js';
 
 const serverAddr = process.env.server || "http://0.0.0.0:3000";
 const monsters = [];

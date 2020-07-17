@@ -74,14 +74,13 @@ export default class Participant {
         });
 
         socket.on(EVENTS.entities, (entities) => {
-            for (let socket_id in entities) {
-                let entity = entities[socket_id];
-                if (socket_id !== socket.id) {
-                    this.updateOthers(socket_id, entity);
+            entities.forEach(entity => {
+                if (entity.id !== socket.id) {
+                    this.updateOthers(entity);
                 } else {
                     this.updateOurself(entity);
                 }
-            }
+            });
             this.caller.refresh(EVENTS.entities);
         });
 
@@ -117,16 +116,14 @@ export default class Participant {
         this.socket.emit(EVENTS.getEntities);
     }
 
-    updateOthers(socket_id, entity) {
-        let npc = this.others[socket_id];
+    updateOthers(entity) {
+        let npc = this.others[entity.id];
         if (npc) {
             npc.assume(entity);
-            npc.id = socket_id;
             this.moveEntity(npc, entity.pos);
         } else {
             npc = new Entity(entity);
-            npc.id = socket_id;
-            this.others[socket_id] = npc;
+            this.others[npc.id] = npc;
             this.addEntity(npc);
         }
     }

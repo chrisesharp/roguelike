@@ -303,7 +303,7 @@ describe('basic socket.io API', () => {
   it('should provide entities', (done) => {
     socket.emit(EVENTS.getEntities);
     socket.on(EVENTS.entities, (entities) => {
-      let entity = new Entity(entities[socket.id]);
+      let entity = new Entity(entities[0]);
       expect(entity.pos.x).toBe(defaultPos.x);
       expect(entity.pos.y).toBe(defaultPos.y);
       expect(entity.pos.z).toBe(defaultPos.z);

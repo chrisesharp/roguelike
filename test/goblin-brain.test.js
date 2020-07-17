@@ -5,6 +5,7 @@ import Goblin from "../src/server/entities/goblin";
 import Warrior from "../src/server/entities/warrior";
 import Wizard from "../src/server/entities/wizard";
 import { DIRS } from "../src/common/movement";
+import { EVENTS } from "../src/common/events";
 import { Tiles } from "../src/server/server-tiles";
 
 const mockMap = {
@@ -28,7 +29,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
-        brain.ready("entities");
+        brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(warrior);
         done();
     });
@@ -44,7 +45,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
-        brain.ready("entities");
+        brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(undefined);
         done();
     });
@@ -59,7 +60,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
-        brain.ready("entities");
+        brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(warrior);
         done();
     });
@@ -78,8 +79,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.SOUTH);
         done();
     });
@@ -98,8 +99,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.EAST);
         done();
     });
@@ -118,8 +119,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.NORTH);
         done();
     });
@@ -138,8 +139,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.WEST);
         done();
     });
@@ -162,8 +163,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.SOUTH);
         done();
     });
@@ -186,8 +187,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.EAST);
         done();
     });
@@ -210,8 +211,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
         done();
     });
@@ -229,8 +230,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = null;
-        brain.ready("position", "1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position, "1");
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
         done();
     });
@@ -249,8 +250,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(map, client, messages);
         brain.speed = 0;
         brain.currentTarget = warrior;
-        brain.ready("position");
-        brain.ready("ping");
+        brain.ready(EVENTS.position);
+        brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
         done();
     });
@@ -266,7 +267,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(null, client, messages);
         brain.speed = 0;
-        brain.ready("dead");
+        brain.ready(EVENTS.dead);
         expect(disconnected).toBe(true);
         done();
     });
@@ -282,7 +283,7 @@ describe('goblin brain responses', () => {
         let messages = [];
         let brain = new GoblinBrain(null, client, messages);
         brain.speed = 0;
-        brain.ready("delete");
+        brain.ready(EVENTS.delete);
         expect(synched).toBe(true);
         done();
     });
@@ -299,8 +300,8 @@ describe('goblin brain responses', () => {
         let brain = new GoblinBrain(null, client, messages);
         brain.speed = 0;
         brain.syncCount = 10;
-        brain.ready("position","1");
-        brain.ready("ping");
+        brain.ready(EVENTS.position,"1");
+        brain.ready(EVENTS.ping);
         expect(synched).toBe(true);
         done();
     });

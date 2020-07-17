@@ -6,6 +6,7 @@ import Item from './item.js';
 export default class Entity extends Item {
     constructor(properties = {}) {
         super(properties);
+        this.id = properties['id'];
         this.alive = (properties['alive'] !== undefined) ? properties['alive'] : true;
         this.name = properties['name'] || "anonymous";
         this.role = properties['role'] || "unknown";

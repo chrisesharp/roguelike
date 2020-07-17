@@ -17,7 +17,7 @@ export default class State {
     }
 
     getEntities() {
-        return this.connections;
+        return Object.keys(this.connections).map((v) => { return this.connections[v]; });
     }
 
     getEntity(id) {
