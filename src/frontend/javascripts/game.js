@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import ServerHealth from './server-health';
 import ExplorerMap from './explorer-map';
-import Participant from '../../common/participant';
+import RogueClient from '../../common/rogue-client';
 import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';
@@ -24,7 +24,7 @@ class Game {
         this.screenHeight = dispOpts.height - 1,
         this.display = new Display(dispOpts);
         this.title = " NodeJS Roguelike ";
-        this.client = new Participant(BASE_URL, this);
+        this.client = new RogueClient(BASE_URL, this);
         this.messages = [];
 
         let bindEventToScreen = (event) => {

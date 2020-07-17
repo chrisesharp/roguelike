@@ -1,6 +1,6 @@
 "use strict";
 
-import Participant from '../common/participant.js';
+import RogueClient from '../common/rogue-client.js';
 import Map from '../common/map.js';
 import GoblinBrain from './goblin-brain.js';
 import { EVENTS } from '../common/events.js';
@@ -9,7 +9,7 @@ export default class GoblinBot {
     constructor(URL, brain) {
         this.serverAddr = URL;
         this.messages = [];
-        this.client = new Participant(this.serverAddr, this);
+        this.client = new RogueClient(this.serverAddr, this);
         this.brain = brain || new GoblinBrain(null, this.client, this.messages);
     }
 

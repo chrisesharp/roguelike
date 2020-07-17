@@ -1,12 +1,12 @@
 "use strict";
 
-import Entity from '../common/entity.js';
-import Item from '../common/item.js';
-import { EVENTS } from '../common/events.js';
+import Entity from './entity.js';
+import Item from './item.js';
+import { EVENTS } from './events.js';
 import io from 'socket.io-client';
 import _ from 'underscore';
 
-export default class Participant {
+export default class RogueClient {
     constructor(serverAddr, caller) {
         this.serverAddr = serverAddr;
         this.caller = caller;

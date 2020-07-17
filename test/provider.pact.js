@@ -31,7 +31,7 @@ describe("Rogue message provider tests", () => {
   });
 
   // 3 Verify the interactions
-  describe("Dog API Client", () => {
+  describe("Dog API RogueClient", () => {
     it("sends a valid dog", () => {
       return pact.verify()
     })
