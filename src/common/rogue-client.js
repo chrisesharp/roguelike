@@ -19,17 +19,15 @@ export default class RogueClient {
     }
 
     connectToServer(properties) {
-        let socket = io(this.serverAddr, {
+        this.socket = io(this.serverAddr, {
             'reconnection delay': 0,
             'reopen delay': 0,
             'force new connection': true,
             transports: ['websocket'],
             query: properties,
         });
-        this.registerEventHandlers(socket);
-        socket.emit(EVENTS.getMap);
-        socket.emit(EVENTS.getItems);
-        this.socket = socket;
+        this.registerEventHandlers(this.socket);
+        this.socket.emit(EVENTS.getMap);
     }
 
     disconnectFromServer() {
@@ -130,10 +128,6 @@ export default class RogueClient {
                 this.addItem(new Item(item)); 
             });
         }
-    }
-
-    hasChangedRoom(message) {
-        return (message[0].search('level')>0);
     }
 
     move(direction) {

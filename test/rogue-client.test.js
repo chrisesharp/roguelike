@@ -228,7 +228,7 @@ describe('monster connects to server', () => {
     let theDagger = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     expect(theDagger.isWieldable()).toBe(true);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let count = -1;
+    let count = 0;
     bot.start(defaultPos, (event) => {
       let goblin = bot.client.getEntity();
       if (event === EVENTS.map) {
@@ -286,7 +286,7 @@ describe('monster connects to server', () => {
     let theApple = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     expect(theApple.isEdible()).toBe(true);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let count = -1;
+    let count = 0;
     bot.start(defaultPos, (event) => {
       if (event === EVENTS.map) {
         bot.client.takeItem(theApple);
@@ -319,7 +319,7 @@ describe('monster connects to server', () => {
     let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     expect(theArmour.isWearable()).toBe(true);
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let count = -1;
+    let count = 0;
     bot.start(defaultPos, (event) => {
       let goblin = bot.client.getEntity();
       if (event === EVENTS.map) {
@@ -378,7 +378,7 @@ describe('monster connects to server', () => {
     app.rogueServer.cave.addItem(defaultPos, chainmail);
     let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
-    let count = -1;
+    let count = 0;
     bot.start(defaultPos, (event) => {
       if (event === EVENTS.map) {
         bot.client.takeItem(theArmour);
