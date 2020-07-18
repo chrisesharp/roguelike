@@ -42,9 +42,6 @@ export default class RogueClient {
         });
 
         socket.on(EVENTS.message, (message) => {
-            if (this.hasChangedRoom(message)) {
-                socket.emit(EVENTS.getItems);
-            }
             this.caller.refresh(EVENTS.message, message);
         });
 

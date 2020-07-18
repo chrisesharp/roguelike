@@ -89,7 +89,7 @@ export default class ConnectionServer {
     enterRoom(socket, entity, room) {
         socket.join(room, () => {
             socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-            // socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
+            socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
         });
     }
 
