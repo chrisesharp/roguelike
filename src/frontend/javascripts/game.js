@@ -24,7 +24,7 @@ class Game {
         this.screenHeight = dispOpts.height - 1,
         this.display = new Display(dispOpts);
         this.title = " NodeJS Roguelike ";
-        this.client = new RogueClient(BASE_URL, this);
+        this.client = new RogueClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
 
         let bindEventToScreen = (event) => {
@@ -104,18 +104,6 @@ class Game {
 
     wearItem(item) {
         this.client.wearItem(item);
-    }
-
-    key(x, y, z) {
-        return this.client.key(x, y, z);
-    }
-
-    posToKey(pos) {
-        return this.client.posToKey(pos);
-    }
-
-    addEntity(entity) {
-        this.client.addEntity(entity);
     }
 
     getEntityAt(x, y, z) {

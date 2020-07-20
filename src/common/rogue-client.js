@@ -7,9 +7,9 @@ import io from 'socket.io-client';
 import _ from 'underscore';
 
 export default class RogueClient {
-    constructor(serverAddr, caller) {
+    constructor(serverAddr, callback) {
         this.serverAddr = serverAddr;
-        this.caller = caller;
+        this.callback = callback;
         this.entities = {};
         this.others = {};
         this.items = {};
@@ -26,7 +26,7 @@ export default class RogueClient {
             transports: ['websocket'],
             query: properties,
         });
-        this.registerEventHandlers(this.socket);
+        this.registerEventHandlers(this.socket, this.callback);
         this.socket.emit(EVENTS.getMap);
     }
 
@@ -34,47 +34,47 @@ export default class RogueClient {
         this.socket.disconnect();
     }
 
-    registerEventHandlers(socket) {
+    registerEventHandlers(socket, callback) {
         socket.on(EVENTS.ping, () => {
-            this.caller.refresh(EVENTS.ping);
+            callback(EVENTS.ping);
         });
 
         socket.on(EVENTS.message, (message) => {
-            this.caller.refresh(EVENTS.message, message);
+            callback(EVENTS.message, message);
         });
 
         socket.on(EVENTS.delete, (pos) => {
             this.removeEntityAt(pos);
-            this.caller.refresh(EVENTS.delete, pos);
+            callback(EVENTS.delete, pos);
         });
 
         socket.on(EVENTS.map, (map) => {
-            this.caller.refresh(EVENTS.map, map);
+            callback(EVENTS.map, map);
         });
 
         socket.on(EVENTS.items,(items) => {
             this.updateItems(items);
-            this.caller.refresh(EVENTS.items);
+            callback(EVENTS.items, items);
         });
 
         socket.on(EVENTS.entities, (entities) => {
             this.updateEntities(socket.id, entities);
-            this.caller.refresh(EVENTS.entities);
+            callback(EVENTS.entities, entities);
         });
 
         socket.on(EVENTS.update, (entity) => {
             this.entity.assume(entity);
-            this.caller.refresh(EVENTS.update);
+            callback(EVENTS.update);
         });
 
         socket.on(EVENTS.dead, (entity) => {
             this.entity.assume(entity);
-            this.caller.refresh(EVENTS.dead);
+            callback(EVENTS.dead);
         });
 
         socket.on(EVENTS.position, (event) => {
             this.updateEntityPosition(event);
-            this.caller.refresh(EVENTS.position, event.id);
+            callback(EVENTS.position, event.id);
         });
     }
 

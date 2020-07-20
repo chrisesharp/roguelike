@@ -9,7 +9,7 @@ export default class GoblinBot {
     constructor(URL, brain) {
         this.serverAddr = URL;
         this.messages = [];
-        this.client = new RogueClient(this.serverAddr, this);
+        this.client = new RogueClient(this.serverAddr, (event, data) => {this.refresh(event, data);});
         this.brain = brain || new GoblinBrain(null, this.client, this.messages);
     }
 

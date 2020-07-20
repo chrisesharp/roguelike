@@ -52,6 +52,9 @@ export default class RogueServer {
         if (type === MSGTYPE.UPD) {
             let cmd = (entity.isAlive()) ? EVENTS.update : EVENTS.dead;
             this.messaging.sendMessageToEntity(entity, cmd, entity);
+            if (cmd === EVENTS.dead) {
+                this.deleteEntity(entity);
+            }
         }
     }
 
