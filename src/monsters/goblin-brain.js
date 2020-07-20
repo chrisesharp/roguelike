@@ -49,8 +49,7 @@ export default class GoblinBrain extends Brain {
     findTarget() {
         let target;
         let closest = this.goblin.getSightRadius();
-        Object.keys(this.client.others).forEach(key => {
-            let entity = this.client.others[key];
+        this.client.getOtherEntities().forEach( entity => {
             if (entity.role === this.goblin.role) {
                 return;
             }

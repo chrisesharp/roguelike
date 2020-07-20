@@ -23,8 +23,7 @@ describe('goblin brain responses', () => {
         let map = mockMap;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(4,4)": warrior, "(2,2)": goblin },
-            others: {"1": warrior}
+            getOtherEntities: () => { return [warrior];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -39,8 +38,7 @@ describe('goblin brain responses', () => {
         let map = mockMap;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(4,4)": otherGoblin, "(2,2)": goblin },
-            others: {"1": otherGoblin}
+            getOtherEntities: () => { return [otherGoblin];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -54,8 +52,7 @@ describe('goblin brain responses', () => {
         let map = mockMap;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(4,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -72,8 +69,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(2,4)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -92,8 +88,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(4,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -112,8 +107,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(2,0)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -132,8 +126,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -156,8 +149,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -180,8 +172,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -204,8 +195,7 @@ describe('goblin brain responses', () => {
         let client = {
             getEntity: () => { return goblin;},
             move: (direction) => { movement = direction; }, 
-            entities: {"(0,2)": warrior, "(5,5)": wizard, "(2,2)": goblin },
-            others: {"1": warrior, "2": wizard}
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -222,9 +212,8 @@ describe('goblin brain responses', () => {
         let movement;
         let client = {
             getEntity: () => { return goblin;},
-            move: (direction) => { movement = direction; }, 
-            entities: {"(0,0)": goblin },
-            others: {}
+            move: (direction) => { movement = direction; },
+            getOtherEntities: () => { return [];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -242,9 +231,8 @@ describe('goblin brain responses', () => {
         let movement;
         let client = {
             getEntity: () => { return goblin;},
-            move: (direction) => { movement = direction; }, 
-            entities: {"(0,0)": warrior, "(3,3)": wizard, "(0,0)": goblin },
-            others: {"1": warrior, "2": wizard}
+            move: (direction) => { movement = direction; },
+            getOtherEntities: () => { return [warrior, wizard];}
         };
         let messages = [];
         let brain = new GoblinBrain(map, client, messages);
@@ -260,8 +248,7 @@ describe('goblin brain responses', () => {
         let disconnected = false;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(0,0)": goblin },
-            others: {},
+            getOtherEntities: () => { return [];},
             disconnectFromServer: () => {disconnected = true;}
         };
         let messages = [];
@@ -276,8 +263,7 @@ describe('goblin brain responses', () => {
         let synched = false;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(0,0)": goblin },
-            others: {},
+            getOtherEntities: () => { return [];},
             sync: () => {synched = true;}
         };
         let messages = [];
@@ -292,8 +278,7 @@ describe('goblin brain responses', () => {
         let synched = false;
         let client = {
             getEntity: () => { return goblin;},
-            entities: {"(0,0)": goblin },
-            others: {},
+            getOtherEntities: () => { return [];},
             sync: () => {synched = true;}
         };
         let messages = [];

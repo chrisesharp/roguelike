@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import ServerHealth from './server-health';
 import ExplorerMap from './explorer-map';
-import RogueClient from '../../common/rogue-client';
+import RogueClient from '../../client/rogue-client';
 import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';
@@ -52,7 +52,7 @@ class Game {
                 timeout: 2500
             }).then( (result) => {
                 game.updateRolesOptions(result.data);
-            }).catch( (error) => {
+            }).catch( () => {
                 game.updateRolesOptions(DEFAULT_ROLES);
             });
     }

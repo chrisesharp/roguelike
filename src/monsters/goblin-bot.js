@@ -1,6 +1,6 @@
 "use strict";
 
-import RogueClient from '../common/rogue-client.js';
+import RogueClient from '../client/rogue-client.js';
 import Map from '../common/map.js';
 import GoblinBrain from './goblin-brain.js';
 import { EVENTS } from '../common/events.js';
