@@ -2,14 +2,11 @@
  * @jest-environment node
  */
 import path from 'path';
-import RogueClient from '../src/client/rogue-client';
-import RogueServer from '../src/server/rogue-server';
 import { Tiles } from '../src/server/server-tiles';
 import { EVENTS } from '../src/common/events';
 
 import { Matchers, MessageConsumerPact, synchronousBodyHandler } from "@pact-foundation/pact";
-import { string } from '@pact-foundation/pact/dsl/matchers';
-const { like, term } = Matchers;
+const { like, eachLike } = Matchers;
 
 const rogueClientAPIHandler = function (payload) {
   return;
@@ -59,6 +56,46 @@ describe("Rogue message consumer tests", () => {
             id: "mock",
             pos: { x: 1, y: 3, z: 0 }
         }))
+          .withMetadata({
+            "content-type": "application/json",
+          })
+          .verify(synchronousBodyHandler(rogueClientAPIHandler));
+      });
+
+      it("accepts a valid entities list", () => {
+        return clientMessagePact
+          .given(`a ${EVENTS.getEntities} event`)
+          .expectsToReceive(`an ${EVENTS.entities} event`)
+          .withContent(eachLike({
+            char: "&",
+            foreground:"green",
+            background:"black",
+            pos:{"x":1,"y":3,"z":0},
+            name:"anonymous",
+            details:"none",
+            id:"mock",
+            role:"goblin",
+            entrance:{"x":1,"y":1,"z":1}
+          }))
+          .withMetadata({
+            "content-type": "application/json",
+          })
+          .verify(synchronousBodyHandler(rogueClientAPIHandler));
+      });
+
+      it("accepts a valid items list", () => {
+        return clientMessagePact
+          .given(`a ${EVENTS.getItems} event`)
+          .expectsToReceive(`an ${EVENTS.items} event`)
+          .withContent(like({
+            "(1,1,0)": eachLike({ 
+                char: "*",
+                foreground:"grey",
+                background:"black",
+                pos:{"x":1,"y":1,"z":0},
+                name:"rock"
+              })
+          }))
           .withMetadata({
             "content-type": "application/json",
           })
