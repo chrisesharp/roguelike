@@ -24,10 +24,10 @@ export default class State {
 
     updateEntities(ourId, entities) {
         entities.forEach(entity => {
-            if (entity.id !== ourId) {
-                this.updateOthers(entity);
-            } else {
+            if (entity.id === ourId) {
                 this.updateOurself(entity);
+            } else {
+                this.updateOthers(entity);
             }
         });
     }

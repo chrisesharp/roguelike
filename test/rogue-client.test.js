@@ -45,6 +45,7 @@ beforeEach((done) => {
 
 afterEach((done) => {
   app.stop();
+  app.rogueServer.state = null;
   httpServer.close();
   app = null;
   httpServer = null;
@@ -54,13 +55,13 @@ afterEach((done) => {
 
 describe('monster connects to server', () => {
   it('should use supplied brain', (done) => {
-    let mockBrain = {ready: (event)=>{ done();}};
+    let mockBrain = {ready: (event)=>{ bot.stop(); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
   it('should get pings', (done) => {
-    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === EVENTS.ping) {expect(event).toBe(EVENTS.ping); done();}}};
+    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === EVENTS.ping) {expect(event).toBe(EVENTS.ping); bot.stop(); done();}}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
@@ -147,19 +148,25 @@ describe('monster connects to server', () => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    let bot2started = false;
     bot1.start(pos, () => {
-      bot2.start(defaultPos, (event) => {
-        if (event === EVENTS.message) {
-          expect(bot1.messages[0]).toBe("a goblin just entered this cave.");
-        }
-        if (event === EVENTS.entities) {
-          let goblin = bot1.client.getEntity();
-          let pos = goblin.pos;
-          let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
-          expect(entity.getGlyph().getChar()).toEqual("&");
-          done();
-        }
-      }); 
+      if (!bot2started) {
+        bot2started = true;
+        bot2.start(defaultPos, (event) => {
+          if (event === EVENTS.message) {
+            expect(bot1.messages[0]).toBe("a goblin just entered this cave.");
+          }
+          if (event === EVENTS.entities) {
+            let goblin = bot1.client.getEntity();
+            let pos = goblin.pos;
+            let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
+            expect(entity.getGlyph().getChar()).toEqual("&");
+            bot1.stop();
+            bot2.stop();
+            done();
+          }
+        }); 
+      }
     });
   });
 
@@ -202,23 +209,38 @@ describe('monster connects to server', () => {
   });
 
   it('should see other entities move', (done) => {
-    let pos1 = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
-    let pos2 = {x:defaultPos.x, y:defaultPos.y+2, z:defaultPos.z};
+    let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
+    let pos2 = {x:defaultPos.x+1, y:defaultPos.y+2, z:defaultPos.z};
     let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
     let bot2moved = false;
+    let bot2started = false;
+    let movecount = 0;
     bot1.start(defaultPos, (event) => {
-      bot2.start(pos1, (event) => {
-        if (event === EVENTS.map && !bot2moved) {
-          bot2moved = true;
+      if (!bot2started) {
+        bot2started = true;
+        bot2.start(pos1, (event) => {
+          if (event === EVENTS.map && !bot2moved) {
+            bot2moved = true;
+            bot2.move(DIRS.SOUTH);
+          }
+        });
+      }
+      
+      if (event === EVENTS.position) {
+        if (movecount == 0) {
           bot2.move(DIRS.SOUTH);
         }
-        
-      }); 
-      if (event === EVENTS.position) {
-        let other = bot1.client.getEntityAt(pos2.x, pos2.y, pos2.z);
-        expect(other.getDescription()).toEqual(bot2.client.getEntity().getDescription());
-        done();
+        if (movecount == 1) {
+          let other = bot1.client.getEntityAt(pos2.x, pos2.y, pos2.z);
+          let others = bot1.client.getOtherEntities();
+          expect(others[0]).toEqual(other);
+          expect(other.getDescription()).toEqual(bot2.client.getEntity().getDescription());
+          bot1.stop();
+          bot2.stop();
+          done();
+        }
+        movecount++;
       }
     });
   });
@@ -276,6 +298,7 @@ describe('monster connects to server', () => {
 
       if (event === EVENTS.message) {
         expect(bot.messages.pop()).toEqual('You are not wielding anything now.');
+        bot.stop();
         done();
       }
     });
@@ -369,6 +392,7 @@ describe('monster connects to server', () => {
 
       if (event === EVENTS.message) {
         expect(bot.messages.pop()).toEqual('You are not wearing anything now.');
+        bot.stop();
         done();
       }
     });

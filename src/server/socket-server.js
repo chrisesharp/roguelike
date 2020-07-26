@@ -8,6 +8,7 @@ import { EVENTS } from "../common/events.js";
 
 export default class ConnectionServer {
     constructor(http, template) {
+        this.open = true;
         this.backend = io(http);
         this.backend.on("connection", (socket) => { this.connection(socket); });
         this.messaging = new Messaging(this.backend);
@@ -15,20 +16,23 @@ export default class ConnectionServer {
     }
 
     connection(socket) {
-        let prototype = socket.handshake.query;
-        if (!prototype.role) {
-            socket.emit(EVENTS.missingRole);
-        } else {
-            let entity = this.rogueServer.createEntity(socket.id, prototype);
-            this.registerEventHandlers(socket, entity, this.rogueServer);
-            this.messaging.sendToAll(EVENTS.entities,this.rogueServer.getEntities());
-            this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+        if (this.open) {
+            let prototype = socket.handshake.query;
+            if (!prototype.role) {
+                socket.emit(EVENTS.missingRole);
+            } else {
+                let entity = this.rogueServer.createEntity(socket.id, prototype);
+                this.registerEventHandlers(socket, entity, this.rogueServer);
+                this.messaging.sendToAll(EVENTS.entities,this.rogueServer.getEntities());
+                this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+            }
         }
     }
 
     stop() {
         this.messaging.stop();
         this.backend.close();
+        this.open = false;
     }
 
     registerEventHandlers(socket, entity, server) {
