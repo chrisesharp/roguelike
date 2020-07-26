@@ -144,7 +144,7 @@ describe('monster connects to server', () => {
   });
 
   it('should see other entities', (done) => {
-    let mockBrain = {ready: (event)=>{ done();},setMap: ()=> {}};
+    let mockBrain = {ready: (event)=>{ },setMap: ()=> {}};
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
@@ -166,6 +166,34 @@ describe('monster connects to server', () => {
             done();
           }
         }); 
+      }
+    });
+  });
+
+  it('should refresh existing entities', (done) => {
+    let mockBrain = {ready: (event)=>{ },setMap: ()=> {}};
+    let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
+    let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    let bot2started = false;
+    let count = 0;
+    bot1.start(pos, (event1) => {
+      if (!bot2started) {
+        bot2started = true;
+        bot2.start(defaultPos, (event2) => {
+          if (count < 2 && event2 === EVENTS.entities) {
+            count++;
+            return;
+          }
+          if (count == 2  && event2 === EVENTS.entities) {
+            let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
+            expect(entity.getGlyph().getChar()).toEqual("&");
+            bot1.stop();
+            bot2.stop();
+            done();
+          }
+        });
+        bot2.client.sync();
       }
     });
   });
@@ -241,6 +269,31 @@ describe('monster connects to server', () => {
           done();
         }
         movecount++;
+      }
+    });
+  });
+
+  it('should see other entities die', (done) => {
+    let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
+    let pos2 = {x:defaultPos.x+1, y:defaultPos.y+2, z:defaultPos.z};
+    let bot1 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let bot2 = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`);
+    let bot2started = false;
+    bot1.start(defaultPos, (event) => {
+      if (!bot2started) {
+        bot2started = true;
+        bot2.start(pos1, (event) => {
+          if (event === EVENTS.map) {
+            bot2.stop();
+          }
+        });
+      }
+      
+      if (event === EVENTS.delete) {
+        let other = bot1.client.getItemsAt(pos1.x, pos1.y, pos1.z)[0];
+        expect(other.getDescription()).toEqual("goblin corpse");
+        bot1.stop();
+        done();
       }
     });
   });

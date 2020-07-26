@@ -19,10 +19,14 @@ export const DIRS = {
 } 
 
 export const getMovement = function(direction) {
-    let x = DIRS.properties[direction].x;
-    let y = DIRS.properties[direction].y;
-    let z = DIRS.properties[direction].z;
-    return {x:x, y:y, z:z};
+    if (direction) {
+        let x = DIRS.properties[direction].x;
+        let y = DIRS.properties[direction].y;
+        let z = DIRS.properties[direction].z;
+        return {x:x, y:y, z:z};
+    }
+    return {x:0, y:0, z:0};
+    
 }
 
 export const opposite = function(direction) {
