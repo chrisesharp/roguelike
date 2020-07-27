@@ -4,8 +4,10 @@ import ServerEntity from './server-entity.js';
 import Item from '../../common/item.js';
 
 export default class Goblin extends ServerEntity {
+    static level = 1;
     constructor(properties) {
         super(properties);
+        this.level = this.level || Goblin.level;
         this.hitPoints = this.maxHitPoints = 2;
         this.details = "a creeping goblin";
         this.role = "goblin";

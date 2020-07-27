@@ -54,8 +54,8 @@ export default class Cave {
         }
     }
 
-    getEntrance() {
-        return (this.entrance) ? this.entrance : this.map.getEntrance();
+    getEntrance(level) {
+        return (this.entrance) ? this.entrance : this.map.getEntrance(level);
     }
 
     key(pos) {

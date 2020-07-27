@@ -24,4 +24,10 @@ describe('goblin creation', () => {
       expect(goblin.isWielding()).toBe(true);
       done();
     });
+
+    it('should be level 1', (done) => {
+      let goblin = new Goblin({server:mockServer});
+      expect(goblin.getLevel()).toBe(1);
+      done();
+    });
 });

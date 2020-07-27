@@ -25,8 +25,9 @@ export default class MapBuilder {
         return new genClass(width, height);
     }
 
-    getEntrance() {
-        return this.getRandomFloorPosition(0);
+    getEntrance(level) {
+        level = level || 0;
+        return this.getRandomFloorPosition(level);
     }
     
     generate() {

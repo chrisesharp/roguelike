@@ -70,7 +70,7 @@ export default class RogueClient {
             if (!this.state.updateEntityPosition(socket.id, event)) {
                 this.sync();
             }
-            callback(EVENTS.position, event.id);
+            callback(EVENTS.position, event);
         });
     }
 

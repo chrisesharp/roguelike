@@ -14,6 +14,7 @@ export default class Entity extends Item {
         if (this.char === ' ') { 
             this.setGlyph({'char':"?"});
         }
+        this.level = properties['level'] || 0;
         this.speed = properties['speed'] || 1000;
         this.maxHitPoints = (properties['hp'] !== undefined) ? properties['hp'] : 1;
         this.hitPoints = this.maxHitPoints;
@@ -43,6 +44,10 @@ export default class Entity extends Item {
 
     getMaxHitPoints() {
         return this.maxHitPoints;
+    }
+
+    getLevel() {
+        return this.level;
     }
 
     getAC() {

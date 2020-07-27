@@ -19,7 +19,15 @@ export default class RogueServer {
     }
 
     createEntity(id, prototype) {
-        prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance();
+        if (prototype.pos) {
+            prototype.pos = JSON.parse(prototype.pos);
+            if (prototype.pos.x == undefined || prototype.pos.y == undefined)  {
+                prototype.pos = this.cave.getEntrance(prototype.pos.z);
+            }
+        } else {
+            prototype.pos = this.cave.getEntrance();
+        }
+        // prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance(level);
         return this.entities.addEntity(id, prototype);
     }
 

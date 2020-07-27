@@ -25,6 +25,7 @@ const defaultPos = {"x":2,"y":2,"z":0};
 const defaultMap = {
   "width":4,
   "height":5,
+  "depth":2
 };
 
 
@@ -58,6 +59,13 @@ describe('monster connects to server', () => {
     let mockBrain = {ready: (event)=>{ bot.stop(); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
+  });
+
+  it('should get an entrance on specified level for type', (done) => {
+    let mockBrain = {setMap: ()=>{}, ready: (event, data)=>{  if (event === EVENTS.position) {expect(data.pos.z).toBe(1); bot.stop(); done();}}};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    bot.start();
+    bot.move(DIRS.SOUTH);
   });
 
   it('should get pings', (done) => {
