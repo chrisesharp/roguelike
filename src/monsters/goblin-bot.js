@@ -2,7 +2,7 @@
 
 import Bot from './bot.js';
 import GoblinBrain from './goblin-brain.js';
-import Goblin from '../server/entities/Goblin.js';
+import Goblin from '../server/entities/goblin.js';
 
 export default class GoblinBot extends Bot {
     static numberOccuring = 3;
