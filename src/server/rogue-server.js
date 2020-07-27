@@ -27,7 +27,6 @@ export default class RogueServer {
         } else {
             prototype.pos = this.cave.getEntrance();
         }
-        // prototype.pos = (prototype.pos) ? JSON.parse(prototype.pos) : this.cave.getEntrance(level);
         return this.entities.addEntity(id, prototype);
     }
 

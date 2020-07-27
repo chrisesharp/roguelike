@@ -14,11 +14,11 @@ export default class Bot {
     }
 
     start(props, callback) {
-        if (callback) {
-            this.brain.ready = callback;
-        }
         props.type = 'monster';
         this.client.connectToServer(props)
+        if (callback) {
+            callback(this);
+        }
         return this;
     }
 

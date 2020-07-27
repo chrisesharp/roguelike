@@ -26,7 +26,8 @@ describe('goblin brain responses', () => {
             getOtherEntities: () => { return [warrior];}
         };
         let messages = [];
-        let brain = new GoblinBrain(map, client, messages);
+        let brain = new GoblinBrain(null, client, messages);
+        brain.setMap(map);
         brain.speed = 0;
         brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(warrior);

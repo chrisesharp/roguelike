@@ -20,8 +20,9 @@ export default class GoblinBot extends Bot {
             name: GoblinBot.name,
             role: this.role
           };
-        this.startPos =  (startPos) ? startPos : {z:Goblin.level};
+        this.startPos =  (startPos) ? startPos : {z:Goblin.level - 1};
         props.pos = JSON.stringify(this.startPos)
-        return super.start(props, callback);
+        super.start(props, callback);
+        return this;
     }
 }

@@ -9,7 +9,7 @@ const serverAddr = process.env.server || "http://0.0.0.0:3000";
 const monsters = [];
 Object.keys(Bots).forEach(key => {
     let type = Bots[key];
-    monsters.push({type:type, frequency: Math.max(1,Math.round(Math.random()*type.numberOccuring))})
+    monsters.push({type:type, frequency: Math.max(1, Math.round(Math.random() * type.numberOccuring))})
   });
 
 const live = [];
@@ -36,8 +36,10 @@ function addMonsters(URL) {
         let freq = entry.frequency;
         for (let i=1; i <= freq; i++) {
             let monster = new entry.type(URL);
-            live.push(monster.start());
-            console.log(`Started ${monster.role} (${i}/${freq}) on level ${monster.startPos.z}`);
+            live.push(monster.start(null, ()=> {
+                monster.client.sync();
+                console.log(`Started ${monster.role} (${i}/${freq})`);
+            }));
         }
     });
 }
