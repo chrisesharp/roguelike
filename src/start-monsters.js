@@ -4,14 +4,23 @@ import io from 'socket.io-client';
 import { Bots } from './monsters/index.js';
 import { EVENTS } from './common/events.js';
 
+const botConstructors =  {};
 const serverAddr = process.env.server || "http://0.0.0.0:3000";
+const monsters = process.env.monsters || [];
 
-const monsters = [];
 Object.keys(Bots).forEach(key => {
-    let type = Bots[key];
-    monsters.push({type:type, frequency: Math.max(1, Math.round(Math.random() * type.numberOccuring))})
-  });
+    let ctor = Bots[key];
+    let type = ctor.toString().split(' ')[1];
+    botConstructors[type] = ctor;
+});
 
+if (monsters.length == 0) {
+    Object.keys(botConstructors).forEach(type => {
+        let ctor = botConstructors[type];
+        let freq = Math.max(1, Math.round(Math.random() * ctor.numberOccuring));
+        monsters.push(`{"type":"${type}", "frequency": "${freq}"}`);
+    });
+}
 const live = [];
 
 let socket = io(serverAddr, {
@@ -33,11 +42,11 @@ socket.once(EVENTS.missingRole, (error) => {
 
 function addMonsters(URL) {
     monsters.forEach(entry => {
+        entry = JSON.parse(entry);
         let freq = entry.frequency;
         for (let i=1; i <= freq; i++) {
-            let monster = new entry.type(URL);
+            let monster = new botConstructors[entry.type](URL);
             live.push(monster.start(null, ()=> {
-                monster.client.sync();
                 console.log(`Started ${monster.role} (${i}/${freq})`);
             }));
         }
