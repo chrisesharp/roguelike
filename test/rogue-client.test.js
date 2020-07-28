@@ -77,6 +77,7 @@ describe('monster connects to server', () => {
     let bot = new OrcBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start(null, () => {
       bot.move(DIRS.SOUTH);
+      bot.move(DIRS.NORTH);
     });
   });
 
