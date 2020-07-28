@@ -72,7 +72,7 @@ export default class ConnectionServer {
             entity.wear(armour);
         });
 
-        socket.on(EVENTS.move, direction => {
+        socket.on(EVENTS.move, (direction) => {
             let startRoom = server.getRoom(entity.pos);
             let newPos = server.moveEntity(entity, direction);
             if (newPos && startRoom !== server.getRoom(newPos)) {
