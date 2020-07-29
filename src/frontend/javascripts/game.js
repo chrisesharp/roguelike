@@ -127,9 +127,11 @@ class Game {
         this.messages = [];
     }
 
-    connectToServer() {
-        let properties = this.updateName();
-        properties.type = "player";
+    connectToServer(properties) {
+        if (!properties) {
+            properties = this.updateName();
+            properties.type = "player";
+        }
         this.client.connectToServer(properties);
     }
 
