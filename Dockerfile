@@ -1,7 +1,9 @@
 FROM node:14
 WORKDIR /usr/src/app
-COPY package*.json ./
+RUN chown node:node /usr/src/app
+COPY --chown=node:node package*.json ./
 RUN npm install
-COPY . .
+COPY --chown=node:node . .
 EXPOSE 3000 8080
 CMD [ "npm", "start" ]
+USER node
