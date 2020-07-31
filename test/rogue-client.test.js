@@ -57,9 +57,17 @@ afterEach((done) => {
 
 describe('monster connects to server', () => {
   it('should use supplied brain', (done) => {
-    let mockBrain = {ready: (event)=>{ bot.stop(); done();}};
+    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ bot.stop(); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
+  });
+
+  it('should reconnect if reset', (done) => {
+    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event == EVENTS.reset) { bot.stop(); done(); }}};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    bot.start(null, ()=> {
+      app.reset();
+    });
   });
 
   it('should use supplied brain as orc', (done) => {

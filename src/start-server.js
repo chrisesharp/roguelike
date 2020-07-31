@@ -17,16 +17,19 @@ const httpServer = http.createServer(app);
 httpServer.listen(port, host);
 httpServer.on('listening', onListen);
 httpServer.on('error', onError);
-(async () => {
-    const routes = await import('./routes/index.js');
-    routes.use(app);
-})();
 
 let filepath = process.env.npm_package_config_file || './src/server/defaults.json';
 let file = fs.readFileSync(filepath, 'utf8');
 let template = JSON.parse(file);
 
 const server = new SocketServer(httpServer, template);
+
+(async () => {
+    const routes = await import('./routes/index.js');
+    routes.use(app, server);
+})();
+
+
 
 function normalizePort(val) {
     let port = parseInt(val, 10);

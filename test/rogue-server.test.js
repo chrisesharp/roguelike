@@ -94,6 +94,13 @@ describe('basic socket.io API', () => {
     });
   });
 
+  it('should send reset on reset', (done) => {
+    app.reset();
+    socket.on(EVENTS.reset, () => {
+        done();
+    });
+  });
+
   it('should not move if dead', (done) => {
     let entity = app.rogueServer.entities.getEntity(socket.id);
     entity.alive = false;

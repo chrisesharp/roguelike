@@ -148,6 +148,9 @@ class Game {
     }
 
     refresh(event, data) {
+        if (event === EVENTS.reset) {
+            console.log("Reset called in game");
+        }
         if (event === EVENTS.dead) {
             this.currentScreen.gameOver();
         }

@@ -15,10 +15,7 @@ export default class Bot {
 
     start(props, callback) {
         props.type = 'monster';
-        this.client.connectToServer(props)
-        if (callback) {
-            callback(this);
-        }
+        this.client.connectToServer(props, callback)
         return this;
     }
 

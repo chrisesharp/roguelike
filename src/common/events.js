@@ -21,5 +21,6 @@ export const EVENTS = {
     update: 'update',
     delete: 'delete',
     ping: 'ping',
-    missingRole: 'missing_role'
+    missingRole: 'missing_role',
+    reset: 'reset'
 }

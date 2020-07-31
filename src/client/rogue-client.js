@@ -12,7 +12,7 @@ export default class RogueClient {
         this.socket = null;
     }
 
-    connectToServer(properties) {
+    connectToServer(properties, callback) {
         this.socket = io(this.serverAddr, {
             'reconnection delay': 0,
             'reopen delay': 0,
@@ -20,6 +20,11 @@ export default class RogueClient {
             transports: ['websocket'],
             query: properties,
         });
+        if (callback) {
+            this.socket.once("connect", () => {
+                callback();
+            });
+        }
         this.registerEventHandlers(this.socket, this.callback);
         this.socket.emit(EVENTS.getMap);
     }
@@ -72,9 +77,15 @@ export default class RogueClient {
             }
             callback(EVENTS.position, event);
         });
+
+        socket.on(EVENTS.reset, () => {
+            this.sync();
+            callback(EVENTS.reset);
+        });
     }
 
     sync() {
+        this.socket.emit(EVENTS.getMap);
         this.socket.emit(EVENTS.getItems);
         this.socket.emit(EVENTS.getEntities);
     }

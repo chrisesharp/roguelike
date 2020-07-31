@@ -8,6 +8,7 @@ import { EVENTS } from "../common/events.js";
 
 export default class ConnectionServer {
     constructor(http, template) {
+        this.template = template;
         this.open = true;
         this.backend = io(http);
         this.backend.on("connection", (socket) => { this.connection(socket); });
@@ -21,12 +22,17 @@ export default class ConnectionServer {
             if (!prototype.role) {
                 socket.emit(EVENTS.missingRole);
             } else {
-                let entity = this.rogueServer.createEntity(socket.id, prototype);
-                this.registerEventHandlers(socket, entity, this.rogueServer);
-                this.messaging.sendToAll(EVENTS.entities,this.rogueServer.getEntities());
-                this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+                this.enter(socket, prototype);
             }
         }
+    }
+
+    enter(socket, prototype) {
+        let entity = this.rogueServer.createEntity(socket.id, prototype);
+        this.registerEventHandlers(socket, entity, this.rogueServer);
+        this.messaging.sendToAll(EVENTS.entities,this.rogueServer.getEntities());
+        this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+        return entity;
     }
 
     stop() {
@@ -101,5 +107,11 @@ export default class ConnectionServer {
         socket.leave(room, () => {
             this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.describeA()));
         });
+    }
+
+    reset() {
+        this.rogueServer = new RogueServer(this.messaging, this.template);
+        this.messaging.sendToAll(EVENTS.reset);
+        console.log("Server reset");
     }
 }
