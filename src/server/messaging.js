@@ -20,6 +20,9 @@ export default class Messaging{
         this.backend.emit(cmd, data);
     }
 
+    sendMessageToAll(...message) {
+        this.backend.emit('message', message);
+    }
     sendMessageToRoom(room, ...message) {
         this.backend.in(room).emit('message', message); 
     }

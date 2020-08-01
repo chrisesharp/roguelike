@@ -111,7 +111,6 @@ export default class ConnectionServer {
 
     reset() {
         this.rogueServer.reset();
-        this.messaging.sendToAll(EVENTS.reset);
         console.log("Server reset");
     }
 }
