@@ -110,7 +110,7 @@ export default class ConnectionServer {
     }
 
     reset() {
-        this.rogueServer = new RogueServer(this.messaging, this.template);
+        this.rogueServer.reset();
         this.messaging.sendToAll(EVENTS.reset);
         console.log("Server reset");
     }

@@ -7,12 +7,14 @@ import io from 'socket.io-client';
 export default class RogueClient {
     constructor(serverAddr, callback) {
         this.serverAddr = serverAddr;
-        this.callback = callback;
+        this.refreshCallback = callback;
         this.state = new State();
         this.socket = null;
+        this.properties = null;
     }
 
     connectToServer(properties, callback) {
+        this.properties = properties;
         this.socket = io(this.serverAddr, {
             'reconnection delay': 0,
             'reopen delay': 0,
@@ -25,7 +27,7 @@ export default class RogueClient {
                 callback();
             });
         }
-        this.registerEventHandlers(this.socket, this.callback);
+        this.registerEventHandlers(this.socket, this.refreshCallback);
         this.socket.emit(EVENTS.getMap);
     }
 
@@ -79,7 +81,7 @@ export default class RogueClient {
         });
 
         socket.on(EVENTS.reset, () => {
-            this.sync();
+            this.reset();
             callback(EVENTS.reset);
         });
     }
@@ -88,6 +90,12 @@ export default class RogueClient {
         this.socket.emit(EVENTS.getMap);
         this.socket.emit(EVENTS.getItems);
         this.socket.emit(EVENTS.getEntities);
+    }
+
+    reset() {
+        this.state = new State();
+        this.disconnectFromServer();
+        this.connectToServer(this.properties);
     }
 
     getEntityAt(x, y, z) {

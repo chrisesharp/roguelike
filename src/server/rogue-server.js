@@ -11,6 +11,7 @@ import State from "./state.js";
 
 export default class RogueServer {
     constructor(backend, template) {
+        this.template = template;
         this.messaging = backend;
         this.cave = new Cave(template);
         this.repo = new EntityFactory();
@@ -145,5 +146,10 @@ export default class RogueServer {
         let map = this.cave.getMap();
         map.entrance = entity.entrance;
         return map;
+    }
+
+    reset() {
+        this.cave = new Cave(this.template);
+        this.entities = new State(this.repo);
     }
 }
