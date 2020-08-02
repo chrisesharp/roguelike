@@ -109,8 +109,8 @@ export default class ConnectionServer {
         });
     }
 
-    reset() {
-        this.rogueServer.reset();
+    reset(properties) {
+        this.rogueServer.reset(properties);
         console.log("Server reset");
     }
 }

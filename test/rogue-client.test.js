@@ -63,10 +63,18 @@ describe('monster connects to server', () => {
   });
 
   it('should reconnect if reset', (done) => {
-    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event == EVENTS.reset) { bot.stop(); done(); }}};
+    let httpServer2 = http.createServer();
+    let httpServerAddr2 = httpServer2.listen().address();
+    let app2 = new SocketServer(httpServer2, defaultMap);
+    let resetReceived = false;
+    let mockBrain = {setMap: ()=>{}, ready: (event)=>{ 
+      if (event == EVENTS.reset && !resetReceived) {expect(app2.rogueServer.getEntities().length).toBe(0); resetReceived = true; }
+      if (event == EVENTS.map && resetReceived) { expect(app.rogueServer.getEntities().length).toBe(0); expect(app2.rogueServer.getEntities().length).toBe(1); app2.stop(); httpServer2.close(); done();}
+    }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start(null, ()=> {
-      app.reset();
+      expect(app.rogueServer.getEntities().length).toBe(1); 
+      app.reset({url:`http://[${httpServerAddr2.address}]:${httpServerAddr2.port}`});
     });
   });
 

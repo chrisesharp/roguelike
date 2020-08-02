@@ -148,9 +148,9 @@ export default class RogueServer {
         return map;
     }
 
-    reset() {
+    reset(properties) {
         this.messaging.sendMessageToAll(Messages.TELEPORT());
-        this.messaging.sendToAll(EVENTS.reset);
+        this.messaging.sendToAll(EVENTS.reset, properties);
         this.cave = new Cave(this.template);
         this.entities = new State(this.repo);
     }

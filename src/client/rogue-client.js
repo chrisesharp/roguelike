@@ -15,7 +15,8 @@ export default class RogueClient {
 
     connectToServer(properties, callback) {
         this.properties = properties;
-        this.socket = io(this.serverAddr, {
+        let url = properties.url || this.serverAddr;
+        this.socket = io(url, {
             'reconnection delay': 0,
             'reopen delay': 0,
             'force new connection': true,
@@ -80,8 +81,8 @@ export default class RogueClient {
             callback(EVENTS.position, event);
         });
 
-        socket.on(EVENTS.reset, () => {
-            this.reset();
+        socket.on(EVENTS.reset, (properties) => {
+            this.reconnect(properties);
             callback(EVENTS.reset);
         });
     }
@@ -92,7 +93,10 @@ export default class RogueClient {
         this.socket.emit(EVENTS.getEntities);
     }
 
-    reset() {
+    reconnect(properties) {
+        if (properties && properties.url) {
+            this.properties.url = properties.url;
+        }
         this.state = new State();
         this.disconnectFromServer();
         this.connectToServer(this.properties);
