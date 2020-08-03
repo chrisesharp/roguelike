@@ -2,7 +2,7 @@
 
 import express from "express";
 import http from "http";
-import SocketServer from "./server/socket-server.js";
+import ConnectionServer from "./server/connection-server.js";
 import fs from "fs";
 
 const port = normalizePort(process.env.npm_package_config_port || '3000');
@@ -22,7 +22,7 @@ let filepath = process.env.npm_package_config || './src/config/defaults.json';
 let file = fs.readFileSync(filepath, 'utf8');
 let template = JSON.parse(file);
 
-const server = new SocketServer(httpServer, template);
+const server = new ConnectionServer(httpServer, template);
 
 (async () => {
     const routes = await import('./routes/index.js');

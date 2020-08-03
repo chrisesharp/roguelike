@@ -2,7 +2,7 @@
 
 import io from "socket.io-client";
 import http from "http";
-import SocketServer from "../src/server/socket-server";
+import ConnectionServer from "../src/server/connection-server";
 import { DIRS } from "../src/common/movement";
 import { Tiles } from "../src/server/server-tiles";
 import { EVENTS } from "../src/common/events";
@@ -31,7 +31,7 @@ const defaultMap = {
 beforeAll((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
-  app = new SocketServer(httpServer, defaultMap);
+  app = new ConnectionServer(httpServer, defaultMap);
   done();
 });
 

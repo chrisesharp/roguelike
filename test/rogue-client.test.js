@@ -1,7 +1,7 @@
 "use strict";
 
 import http from "http";
-import SocketServer from "../src/server/socket-server";
+import ConnectionServer from "../src/server/connection-server";
 import GoblinBot from "../src/monsters/goblin-bot";
 import OrcBot from "../src/monsters/orc-bot";
 import { Tiles } from "../src/server/server-tiles";
@@ -41,7 +41,7 @@ afterAll((done) => {
 beforeEach((done) => {
   httpServer = http.createServer();
   httpServerAddr = httpServer.listen().address();
-  app = new SocketServer(httpServer, defaultMap);
+  app = new ConnectionServer(httpServer, defaultMap);
   done();
 });
 
@@ -65,7 +65,7 @@ describe('monster connects to server', () => {
   it('should reconnect if reset', (done) => {
     let httpServer2 = http.createServer();
     let httpServerAddr2 = httpServer2.listen().address();
-    let app2 = new SocketServer(httpServer2, defaultMap);
+    let app2 = new ConnectionServer(httpServer2, defaultMap);
     let resetReceived = false;
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ 
       if (event == EVENTS.reset && !resetReceived) {expect(app2.rogueServer.getEntities().length).toBe(0); resetReceived = true; }
