@@ -6,7 +6,8 @@
   "config": {
     "port": "3000",
     "host": "localhost",
-    "maps": "./test/test-cave"
+    "maps": "./test/test-cave",
+    "file": "./src/config/entrance.json"
   },
   "main": "index.js",
   "scripts": {
