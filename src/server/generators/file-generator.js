@@ -2,16 +2,18 @@
 import fs from "fs";
 import { floorTile, wallTile } from  '../server-tiles.js';
 
-const mapsDir = process.env.npm_package_config_maps;
+const mapsDir = process.env.maps || process.env.npm_package_config_maps;
 
 export default class FileGenerator {
-    constructor(width, height) {
+    constructor(width, height, template) {
         this.width = width;
         this.height = height;
+        this.mapsDir = template.maps || mapsDir;
+        console.log("in fileL",this.mapsDir);
     }
     
     generateLevel(level) {
-        return this.fileMap(`${mapsDir}/level-${level}.txt`);
+        return this.fileMap(`${this.mapsDir}/level-${level}.txt`);
     }
 
     emptyMap() {
@@ -23,6 +25,7 @@ export default class FileGenerator {
     }
 
     fileMap(filepath) {
+        let output = "";
         let file = fs.readFileSync(filepath, 'utf8');
         let contents = file.split('\n');
         let map = new Array(this.height);
@@ -31,8 +34,11 @@ export default class FileGenerator {
             for (let x = 0; x < this.width; x++) {
                 let tile = contents[y%contents.length][x%contents[0].length];
                 map[y][x] = (tile===".") ? floorTile : wallTile;
+                output += (map[y][x] === floorTile) ? "." : "#";
             }
+            output += "\n";
         }
+        console.log(output);
         return map;
     }
 }

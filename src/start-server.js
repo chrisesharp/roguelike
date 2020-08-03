@@ -18,7 +18,7 @@ httpServer.listen(port, host);
 httpServer.on('listening', onListen);
 httpServer.on('error', onError);
 
-let filepath = process.env.npm_package_config || './src/config/defaults.json';
+let filepath = process.env.npm_package_config_file || './src/config/defaults.json';
 let file = fs.readFileSync(filepath, 'utf8');
 let template = JSON.parse(file);
 

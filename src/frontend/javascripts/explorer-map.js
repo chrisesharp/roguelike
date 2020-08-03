@@ -27,7 +27,7 @@ export default class ExplorerMap extends Map {
     }
 
     isExplored(x, y, z) {
-        return this.explored[z][y][x];
+        return (this.onMap(x,y,z) && this.explored[z][y][x]);
     }
 
     setExplored(x, y, z, state) {

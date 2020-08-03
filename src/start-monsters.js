@@ -47,6 +47,7 @@ function addMonsters(URL) {
         for (let i=1; i <= freq; i++) {
             let monster = new botConstructors[entry.type](URL);
             live.push(monster.start(null, ()=> {
+            // live.push(monster.start({z:0}, ()=> {
                 console.log(`Started ${monster.role} (${i}/${freq})`);
             }));
         }

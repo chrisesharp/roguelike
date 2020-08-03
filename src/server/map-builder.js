@@ -8,7 +8,7 @@ function dynamicGenerator(generator) {
 }
 
 export default class MapBuilder {
-    constructor(generator, width, height, depth, randomized, regionSize) {
+    constructor(generator, width, height, depth, randomized, regionSize, template) {
         this.regionSize = regionSize;
         this.randomized = randomized;
         this.width = width;
@@ -16,13 +16,13 @@ export default class MapBuilder {
         this.depth = depth;
         this.tiles = new Array(this.depth);
         this.regions = new Array(depth);
-        this.generator = MapBuilder.createGenerator(generator, width, height);
+        this.generator = MapBuilder.createGenerator(generator, width, height, template);
         this.fov = [];
     }
 
-    static createGenerator(generator, width, height) {
+    static createGenerator(generator, width, height, template) {
         let genClass = dynamicGenerator(generator);
-        return new genClass(width, height);
+        return new genClass(width, height, template);
     }
 
     getEntrance(level) {
@@ -165,8 +165,8 @@ export default class MapBuilder {
         let overlap = this.findRegionOverlaps(z, r1, r2);
         if (overlap.length) {
             let point = this.randomized(overlap);
-            this.tiles[z][point.x][point.y] = Tiles.stairsDownTile;
-            this.tiles[z+1][point.x][point.y] = Tiles.stairsUpTile;
+            this.tiles[z][point.y][point.x] = Tiles.stairsDownTile;
+            this.tiles[z+1][point.y][point.x] = Tiles.stairsUpTile;
             return true;
         }
         return false;
@@ -178,10 +178,10 @@ export default class MapBuilder {
 
         for (let x = 0; x < this.width; x++) {
             for (let y = 0; y < this.height; y++) {
-                if (this.tiles[z][x][y]  == Tiles.floorTile &&
-                    this.tiles[z+1][x][y] == Tiles.floorTile &&
-                    this.regions[z][x][y] == r1 &&
-                    this.regions[z+1][x][y] == r2) {
+                if (this.tiles[z][y][x]  == Tiles.floorTile &&
+                    this.tiles[z+1][y][x] == Tiles.floorTile &&
+                    this.regions[z][y][x] == r1 &&
+                    this.regions[z+1][y][x] == r2) {
                     matches.push({x: x, y: y});
                 }
             }
