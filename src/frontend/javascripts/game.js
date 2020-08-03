@@ -7,7 +7,7 @@ import RogueClient from '../../client/rogue-client';
 import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';
-import { startScreen } from './screens/start';
+import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
 
 const stats = document.getElementById('stats_pane');
@@ -42,7 +42,7 @@ class Game {
         this.nameField = nameField;
         this.messageField = messageField;
         this.statsField = statsField;
-        this.switchScreen(startScreen);
+        this.switchScreen(loginScreen);
     }
 
     initRoles(roleField, rolePrototype) {

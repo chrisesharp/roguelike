@@ -2,8 +2,8 @@
 
 const Screens = {};
 
-import {startScreen}  from "./start.js"; 
-Screens.startScreen = startScreen;
+import {loginScreen}  from "./login.js"; 
+Screens.loginScreen = loginScreen;
 
 import {helpScreen}  from "./help.js"; 
 Screens.helpScreen = helpScreen;

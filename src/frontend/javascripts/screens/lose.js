@@ -3,7 +3,7 @@
 import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey } from '../keys.js';
-import { startScreen } from './start.js';
+import { loginScreen } from './login.js';
 import { Color } from '../display.js';
 
 export default class LoseScreen extends Screen {
@@ -25,7 +25,7 @@ export default class LoseScreen extends Screen {
 
     handleInput(inputType, inputData) {
         if (inputType === 'keydown' && isReturnKey(inputData)) {
-            game.switchScreen(startScreen);
+            game.switchScreen(loginScreen);
         }
     }
 };

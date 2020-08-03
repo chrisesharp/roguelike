@@ -4,7 +4,7 @@ import Screen from './screen.js';
 import { isReturnKey } from '../keys.js';
 import { game } from '../game.js';
 
-export default class StartScreen extends Screen {
+export default class LoginScreen extends Screen {
     constructor(template) {
         super(template);
         this.ended = false;
@@ -58,4 +58,4 @@ export default class StartScreen extends Screen {
     }
 };
 
-export const startScreen = new StartScreen();
+export const loginScreen = new LoginScreen();
