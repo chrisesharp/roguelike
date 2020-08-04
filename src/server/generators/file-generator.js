@@ -9,7 +9,6 @@ export default class FileGenerator {
         this.width = width;
         this.height = height;
         this.mapsDir = template.maps || mapsDir;
-        console.log("in fileL",this.mapsDir);
     }
     
     generateLevel(level) {
@@ -25,7 +24,7 @@ export default class FileGenerator {
     }
 
     fileMap(filepath) {
-        let output = "";
+        // let output = "";
         let file = fs.readFileSync(filepath, 'utf8');
         let contents = file.split('\n');
         let map = new Array(this.height);
@@ -34,11 +33,11 @@ export default class FileGenerator {
             for (let x = 0; x < this.width; x++) {
                 let tile = contents[y%contents.length][x%contents[0].length];
                 map[y][x] = (tile===".") ? floorTile : wallTile;
-                output += (map[y][x] === floorTile) ? "." : "#";
+                // output += (map[y][x] === floorTile) ? "." : "#";
             }
-            output += "\n";
+            // output += "\n";
         }
-        console.log(output);
+        // console.log(output);
         return map;
     }
 }
