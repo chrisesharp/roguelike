@@ -9,14 +9,12 @@ import Dagger from '../src/server/items/dagger';
 const defaultTemplate = {
   "width": 4,
   "height": 5,
-  "depth": 1,
+  "depth": 3,
   "generator": "MockGenerator",
   "entrance": {'x':0,'y':0,'z':0}
 };
-let cave;
 
 beforeAll((done) => {
-  cave = new Cave(defaultTemplate);
   done();
 });
 
@@ -106,8 +104,8 @@ describe('cave creation', () => {
   });
 
   it('should connect floors by regions using random function', (done) => {
-    let rand = (arr)=>{return arr[1];}
-    let cave = new Cave({randFunc: rand});
+    let rand = (arr)=>{return arr[0];}
+    let cave = new Cave({width:25, height:10, depth:3, randFunc: rand});
     let map = cave.getMap();
     let tileLvl0 = map.getTiles()[0][1][0];
     let tileLvl1 = map.getTiles()[1][1][0];

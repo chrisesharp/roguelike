@@ -19,22 +19,16 @@ The architecture aims to enable easy extensibility of the game with new features
 
 ```bash
 src/
-├── client/
-├── common/
-├── config/
-│   └── maps/
-├── frontend/
-│   ├── images/
-│   ├── javascripts/
-│   │   └── screens/
-│   └── stylesheets/
-├── monsters/
-├── routes/
-├── server/
-│   ├── entities/
-│   ├── generators/
-│   └── items/
-├── start-monsters.js
-├── start-server.js
-└── start.sh
+├── client/           # client used in web frontend and bots
+├── common/           # common abstractions used in front and backend
+├── frontend/         # Web frontend for players
+├── monsters/         # Bot code for each type of monster
+├── routes/           # REST API code
+├── server/           # Code for the backend server
+│   ├── config/       # home for configuration of server
+│   │   └── maps/     # home for map configuration files
+│   ├── entities/     # Code for each type of player or monster entity
+│   ├── generators/   # Code for different types of cave generation
+│   └── items/        # Code for each type of item - weapons, armour, food, etc.
+└── start.sh          # Entry point for microservice
 ```

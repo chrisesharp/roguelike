@@ -169,8 +169,6 @@ export default class MapBuilder {
             this.tiles[z+1][point.y][point.x] = Tiles.stairsUpTile;
             return true;
         }
-        return false;
-        
     }
 
     findRegionOverlaps(z, r1, r2) {
