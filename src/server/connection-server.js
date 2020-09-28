@@ -22,16 +22,16 @@ export default class ConnectionServer {
             if (!prototype.role) {
                 socket.emit(EVENTS.missingRole);
             } else {
-                this.enter(socket, prototype);
+                this.enter(this.rogueServer, socket, prototype);
             }
         }
     }
 
-    enter(socket, prototype) {
-        let entity = this.rogueServer.createEntity(socket.id, prototype);
-        this.registerEventHandlers(socket, entity, this.rogueServer);
-        this.messaging.sendToAll(EVENTS.entities,this.rogueServer.getEntities());
-        this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+    enter(server, socket, prototype) {
+        let entity = server.createEntity(socket.id, prototype);
+        this.registerEventHandlers(socket, entity, server);
+        this.messaging.sendToAll(EVENTS.entities, server.getEntities());
+        this.enterRoom(socket, entity, server.getRoom(entity.pos));
         return entity;
     }
 

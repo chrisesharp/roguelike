@@ -29,11 +29,12 @@
     "underscore": "^1.10.2"
   },
   "devDependencies": {
-    "dot-prop": "^5.1.1",
     "@babel/preset-env": "^7.9.6",
     "@pact-foundation/pact": "^9.11.0",
     "babel-jest": "^26.0.1",
+    "dot-prop": "^5.3.0",
     "jest": "^26.0.1",
-    "jest-pact": "^0.6.0"
+    "jest-pact": "^0.6.0",
+    "node-forge": ">=0.10.0"
   }
 }
