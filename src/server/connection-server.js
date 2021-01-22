@@ -1,6 +1,7 @@
 "use strict";
 
-import io from "socket.io";
+// import io from "socket.io";
+import { Server } from "socket.io";
 import RogueServer from "./rogue-server.js";
 import Messaging from "./messaging.js";
 import { Messages } from "./messages.js";
@@ -10,7 +11,7 @@ export default class ConnectionServer {
     constructor(http, template) {
         this.template = template;
         this.open = true;
-        this.backend = io(http);
+        this.backend = new Server(http);
         this.backend.on("connection", (socket) => { this.connection(socket); });
         this.messaging = new Messaging(this.backend);
         this.rogueServer = new RogueServer(this.messaging, template);
@@ -18,7 +19,7 @@ export default class ConnectionServer {
 
     connection(socket) {
         if (this.open) {
-            let prototype = socket.handshake.query;
+            let prototype = socket.handshake.auth;
             if (!prototype.role) {
                 socket.emit(EVENTS.missingRole);
             } else {
@@ -97,10 +98,13 @@ export default class ConnectionServer {
     }
 
     enterRoom(socket, entity, room) {
-        socket.join(room, () => {
-            socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-            socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
-        });
+        socket.join(room);
+        socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
+        socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
+        // socket.join(room, () => {
+        //     socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
+        //     socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
+        // });
     }
 
     leaveRoom(socket, entity, room) {

@@ -1,6 +1,6 @@
 "use strict";
 
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 import { Bots } from './monsters/index.js';
 import { EVENTS } from './common/events.js';
 
@@ -24,9 +24,10 @@ if (monsters.length == 0) {
 const live = [];
 
 let socket = io(serverAddr, {
-    'reconnection delay': 0,
-    'reopen delay': 0,
-    'force new connection': true,
+    reconnectionDelay: 0,
+    // 'reconnection delay': 0,
+    // 'reopen delay': 0,
+    // 'force new connection': true,
     transports: ['websocket'],
 });
 

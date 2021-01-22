@@ -48,7 +48,7 @@ beforeEach((done) => {
     'reopen delay': 0,
     'force new connection': true,
     transports: ['websocket'],
-    query: {
+    auth: {
       name: 'test',
       role: 'testcode'
     }

@@ -2,7 +2,7 @@
 
 import State from './rogue-client-state.js';
 import { EVENTS } from '../common/events.js';
-import io from 'socket.io-client';
+import { io } from 'socket.io-client';
 
 export default class RogueClient {
     constructor(serverAddr, callback) {
@@ -17,11 +17,11 @@ export default class RogueClient {
         this.properties = properties;
         let url = properties.url || this.serverAddr;
         this.socket = io(url, {
-            'reconnection delay': 0,
-            'reopen delay': 0,
-            'force new connection': true,
+            reconnectionDelay: 0,
+            // 'reopen delay': 0,
+            // 'force new connection': true,
             transports: ['websocket'],
-            query: properties,
+            auth: properties,
         });
         if (callback) {
             this.socket.once("connect", () => {
