@@ -1,4 +1,6 @@
 "use strict";
+// fix for getting tests working properly in GitHub Actions
+delete require.cache[require.resolve('../src/server/connection-server')];
 
 import io from "socket.io-client";
 import http from "http";

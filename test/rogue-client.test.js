@@ -1,4 +1,6 @@
 "use strict";
+// fix for getting tests working properly in GitHub Actions
+delete require.cache[require.resolve('../src/server/connection-server')];
 
 import http from "http";
 import ConnectionServer from "../src/server/connection-server";
@@ -56,13 +58,13 @@ afterEach((done) => {
 
 
 describe('monster connects to server', () => {
-  it('should use supplied brain', (done) => {
+  it('should use supplied brain', async (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ bot.stop(); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
-  it('should reconnect if reset', (done) => {
+  it('should reconnect if reset', async (done) => {
     let httpServer2 = http.createServer();
     let httpServerAddr2 = httpServer2.listen().address();
     let app2 = new ConnectionServer(httpServer2, defaultMap);
@@ -78,13 +80,13 @@ describe('monster connects to server', () => {
     });
   });
 
-  it('should use supplied brain as orc', (done) => {
+  it('should use supplied brain as orc', async (done) => {
     let mockBrain = {ready: (event)=>{ bot.stop(); done();}};
     let bot = new OrcBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
-  it('should get an entrance on specified level for type', (done) => {
+  it('should get an entrance on specified level for type', async (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event, data)=>{ 
       if (event === EVENTS.position) {
         expect(data.pos.z).toBe(1); bot.stop(); done();
@@ -97,13 +99,13 @@ describe('monster connects to server', () => {
     });
   });
 
-  it('should get pings', (done) => {
+  it('should get pings', async (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === EVENTS.ping) {expect(event).toBe(EVENTS.ping); bot.stop(); done();}}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start();
   });
 
-  it('should return default map', (done) => {
+  it('should return default map', async (done) => {
     app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
@@ -119,7 +121,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);    
   });
 
-  it('should move', (done) => {
+  it('should move', async (done) => {
     let newPos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
@@ -135,7 +137,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);    
   });
 
-  it('should see items ', (done) => {
+  it('should see items ', async (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
     app.rogueServer.cave.addItem(pos, dagger);
     app.rogueServer.cave.addItem(pos, rock);
@@ -154,7 +156,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should see new items changing rooms ', (done) => {
+  it('should see new items changing rooms ', async (done) => {
     app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z+1};
     app.rogueServer.cave.addItem(pos, dagger);
@@ -184,7 +186,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should see other entities', (done) => {
+  it('should see other entities', async (done) => {
     let mockBrain1 = {ready: ()=>{ },setMap: ()=> {}};
     let mockBrain2 = {ready: (event) => {
       if (event === EVENTS.message) {
@@ -208,7 +210,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  it('should refresh existing entities', (done) => {
+  it('should refresh existing entities', async (done) => {
     let mockBrain1 = {ready: ()=>{ },setMap: ()=> {}};
     let count = 0;
     let mockBrain2 = {ready: (event) => {
@@ -235,7 +237,7 @@ describe('monster connects to server', () => {
     });
   });
 
-  it('should refresh entities if out of sync', (done) => {
+  it('should refresh entities if out of sync', async (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
     let count = 0;
@@ -258,7 +260,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos); 
   });
 
-  it('should die', (done) => {
+  it('should die', async (done) => {
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
         expect(bot.client.getEntity().isAlive()).toBe(true);
@@ -275,7 +277,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should see other entities move', (done) => {
+  it('should see other entities move', async (done) => {
     let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let pos2 = {x:defaultPos.x+1, y:defaultPos.y+2, z:defaultPos.z};
     let bot2moved = false;
@@ -316,7 +318,7 @@ describe('monster connects to server', () => {
     bot1.start(defaultPos);
   });
 
-  it('should see other entities die', (done) => {
+  it('should see other entities die', async (done) => {
     let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let mockBrain1 = {ready: (event) => {
       if (!bot2started) {
@@ -344,7 +346,7 @@ describe('monster connects to server', () => {
     bot1.start(defaultPos);
   });
 
-  it('should take and wield item', (done) => {
+  it('should take and wield item', async (done) => {
     app.rogueServer.cave.addItem(defaultPos, dagger);
     let theDagger = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     expect(theDagger.isWieldable()).toBe(true);
@@ -388,7 +390,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should unwield an item', (done) => {
+  it('should unwield an item', async (done) => {
     let mockBrain = {ready: (event) => {
       if (event === EVENTS.map) {
         bot.client.wieldItem();
@@ -442,7 +444,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should take and wear item', (done) => {
+  it('should take and wear item', async (done) => {
     app.rogueServer.cave.addItem(defaultPos, chainmail);
     let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     expect(theArmour.isWearable()).toBe(true);
@@ -488,7 +490,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should unwear an item', (done) => {
+  it('should unwear an item', async (done) => {
     let mockBrain = {ready: (event) => {
       if (event === EVENTS.map) {
         bot.client.wearItem();
@@ -507,7 +509,7 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
-  it('should take and drop an item', (done) => {
+  it('should take and drop an item', async (done) => {
     app.rogueServer.cave.addItem(defaultPos, chainmail);
     let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
     let count = 0;
