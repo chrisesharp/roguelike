@@ -73,7 +73,7 @@ afterEach((done) => {
 
 
 describe('basic socket.io API', () => {
-  it('should require prototype on connection', (done) => {
+  it('should require prototype on connection', async (done) => {
     let new_socket = io.connect(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, {
     'reconnection delay': 0,
     'reopen delay': 0,
