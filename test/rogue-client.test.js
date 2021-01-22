@@ -1,6 +1,4 @@
 "use strict";
-// fix for getting tests working properly in GitHub Actions
-delete require.cache[require.resolve('../src/server/connection-server')];
 
 import http from "http";
 import ConnectionServer from "../src/server/connection-server";
