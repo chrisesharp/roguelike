@@ -25,9 +25,6 @@ const live = [];
 
 let socket = io(serverAddr, {
     reconnectionDelay: 0,
-    // 'reconnection delay': 0,
-    // 'reopen delay': 0,
-    // 'force new connection': true,
     transports: ['websocket'],
 });
 

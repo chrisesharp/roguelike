@@ -18,8 +18,6 @@ export default class RogueClient {
         let url = properties.url || this.serverAddr;
         this.socket = io(url, {
             reconnectionDelay: 0,
-            // 'reopen delay': 0,
-            // 'force new connection': true,
             transports: ['websocket'],
             auth: properties,
         });
