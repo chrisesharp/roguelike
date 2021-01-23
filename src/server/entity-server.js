@@ -48,8 +48,8 @@ export default class EntityServer {
         return this.entities.getEntities();
     }
 
-    getItemsForLevel(level) {
-        return this.cave.getItems(level);
+    getItemsForRoom(pos) {
+        return this.cave.getItems(this.getRoom(pos));
     }
 
     getRoom(pos) {

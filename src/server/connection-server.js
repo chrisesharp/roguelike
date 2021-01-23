@@ -47,7 +47,7 @@ export default class ConnectionServer {
         });
 
         socket.on(EVENTS.getItems, () => {
-            socket.emit(EVENTS.items, server.getItemsForLevel(entity.pos.z));
+            socket.emit(EVENTS.items, server.getItemsForRoom(entity.pos));
         });
 
         socket.on(EVENTS.getMap, () => {
@@ -99,7 +99,7 @@ export default class ConnectionServer {
     enterRoom(socket, entity, room) {
         socket.join(room);
         socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-        socket.emit(EVENTS.items, this.entityServer.getItemsForLevel(entity.pos.z));
+        socket.emit(EVENTS.items, this.entityServer.getItemsForRoom(entity.pos));
     }
 
     leaveRoom(socket, entity, room) {

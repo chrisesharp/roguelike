@@ -37,7 +37,7 @@ const rogueClientApi = {
   },
   getItems: () => {
     return new Promise((resolve, reject) => {
-      resolve(server.getItemsForLevel(0));
+      resolve(server.getItemsForRoom({x:0, y:0, z:0}));
     });
   }
 };
