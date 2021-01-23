@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import ServerHealth from './server-health';
 import ExplorerMap from './explorer-map';
-import RogueClient from '../../client/rogue-client';
+import EntityClient from '../../client/entity-client';
 import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';
@@ -24,7 +24,7 @@ class Game {
         this.screenHeight = dispOpts.height - 1,
         this.display = new Display(dispOpts);
         this.title = " NodeJS Roguelike ";
-        this.client = new RogueClient(BASE_URL,(event, data) => {this.refresh(event, data);});
+        this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
 
         let bindEventToScreen = (event) => {

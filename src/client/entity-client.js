@@ -1,10 +1,10 @@
 "use strict";
 
-import State from './rogue-client-state.js';
+import State from './state.js';
 import { EVENTS } from '../common/events.js';
 import { io } from 'socket.io-client';
 
-export default class RogueClient {
+export default class EntityClient {
     constructor(serverAddr, callback) {
         this.serverAddr = serverAddr;
         this.refreshCallback = callback;

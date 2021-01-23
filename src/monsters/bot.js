@@ -1,6 +1,6 @@
 "use strict";
 
-import RogueClient from '../client/rogue-client.js';
+import EntityClient from '../client/entity-client.js';
 import Map from '../common/map.js';
 import { EVENTS } from '../common/events.js';
 
@@ -8,7 +8,7 @@ export default class Bot {
     constructor(URL, brain) {
         this.serverAddr = URL;
         this.messages = [];
-        this.client = new RogueClient(this.serverAddr, (event, data) => {this.refresh(event, data);});
+        this.client = new EntityClient(this.serverAddr, (event, data) => {this.refresh(event, data);});
         this.brain = brain;
         this.startPos = null;
     }
