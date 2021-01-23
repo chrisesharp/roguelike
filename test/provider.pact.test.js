@@ -4,7 +4,7 @@ import path from 'path';
 import { Matchers, MessageProviderPact  } from "@pact-foundation/pact";
 const { like, term } = Matchers;
 
-import RogueServer from '../src/server/rogue-server';
+import EntityServer from '../src/server/entity-server';
 import Rock from "../src/server/items/rock";
 const rock = new Rock();
 
@@ -14,7 +14,7 @@ const defaultMapTemplate = {
   "height":5,
 };
 
-const server = new RogueServer(null, defaultMapTemplate);
+const server = new EntityServer(null, defaultMapTemplate);
 server.cave.addItem({x:1,y:1,z:0}, rock);
 const entity = server.createEntity("mock", {});
 entity.entrance =  {x:1,y:1,z:1};

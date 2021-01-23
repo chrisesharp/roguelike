@@ -1,8 +1,7 @@
 "use strict";
 
-// import io from "socket.io";
 import { Server } from "socket.io";
-import RogueServer from "./rogue-server.js";
+import EntityServer from "./entity-server.js";
 import Messaging from "./messaging.js";
 import { Messages } from "./messages.js";
 import { EVENTS } from "../common/events.js";
@@ -14,7 +13,7 @@ export default class ConnectionServer {
         this.backend = new Server(http);
         this.backend.on("connection", (socket) => { this.connection(socket); });
         this.messaging = new Messaging(this.backend);
-        this.rogueServer = new RogueServer(this.messaging, template);
+        this.entityServer = new EntityServer(this.messaging, template);
     }
 
     connection(socket) {
@@ -23,7 +22,7 @@ export default class ConnectionServer {
             if (!prototype.role) {
                 socket.emit(EVENTS.missingRole);
             } else {
-                this.enter(this.rogueServer, socket, prototype);
+                this.enter(this.entityServer, socket, prototype);
             }
         }
     }
@@ -94,17 +93,13 @@ export default class ConnectionServer {
 
     moveRooms(socket, entity, startRoom) {
         this.leaveRoom(socket, entity, startRoom);
-        this.enterRoom(socket, entity, this.rogueServer.getRoom(entity.pos));
+        this.enterRoom(socket, entity, this.entityServer.getRoom(entity.pos));
     }
 
     enterRoom(socket, entity, room) {
         socket.join(room);
         socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-        socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
-        // socket.join(room, () => {
-        //     socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-        //     socket.emit(EVENTS.items, this.rogueServer.getItemsForLevel(entity.pos.z));
-        // });
+        socket.emit(EVENTS.items, this.entityServer.getItemsForLevel(entity.pos.z));
     }
 
     leaveRoom(socket, entity, room) {
@@ -114,7 +109,7 @@ export default class ConnectionServer {
     }
 
     reset(properties) {
-        this.rogueServer.reset(properties);
+        this.entityServer.reset(properties);
         console.log("Server reset");
     }
 }

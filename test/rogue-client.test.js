@@ -47,7 +47,7 @@ beforeEach((done) => {
 
 afterEach((done) => {
   app.stop();
-  app.rogueServer.state = null;
+  app.entityServer.state = null;
   httpServer.close();
   app = null;
   httpServer = null;
@@ -68,12 +68,12 @@ describe('monster connects to server', () => {
     let app2 = new ConnectionServer(httpServer2, defaultMap);
     let resetReceived = false;
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ 
-      if (event == EVENTS.reset && !resetReceived) {expect(app2.rogueServer.getEntities().length).toBe(0); resetReceived = true; }
-      if (event == EVENTS.map && resetReceived) { expect(app.rogueServer.getEntities().length).toBe(0); expect(app2.rogueServer.getEntities().length).toBe(1); app2.stop(); httpServer2.close(); done();}
+      if (event == EVENTS.reset && !resetReceived) {expect(app2.entityServer.getEntities().length).toBe(0); resetReceived = true; }
+      if (event == EVENTS.map && resetReceived) { expect(app.entityServer.getEntities().length).toBe(0); expect(app2.entityServer.getEntities().length).toBe(1); app2.stop(); httpServer2.close(); done();}
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     bot.start(null, ()=> {
-      expect(app.rogueServer.getEntities().length).toBe(1); 
+      expect(app.entityServer.getEntities().length).toBe(1); 
       app.reset({url:`http://[${httpServerAddr2.address}]:${httpServerAddr2.port}`});
     });
   });
@@ -104,7 +104,7 @@ describe('monster connects to server', () => {
   });
 
   it('should return default map', async (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
         expect(bot.brain.map.getWidth()).toBe(defaultMap.width);
@@ -137,8 +137,8 @@ describe('monster connects to server', () => {
 
   it('should see items ', async (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
-    app.rogueServer.cave.addItem(pos, dagger);
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.addItem(pos, dagger);
+    app.entityServer.cave.addItem(pos, rock);
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       let goblin = bot.client.getEntity();
       if (event === EVENTS.items) {
@@ -155,10 +155,10 @@ describe('monster connects to server', () => {
   });
 
   it('should see new items changing rooms ', async (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z+1};
-    app.rogueServer.cave.addItem(pos, dagger);
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.addItem(pos, dagger);
+    app.entityServer.cave.addItem(pos, rock);
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
         bot.move(DIRS.DOWN);
@@ -241,8 +241,8 @@ describe('monster connects to server', () => {
     let count = 0;
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
-        app.rogueServer.entities.addEntity("mock", proto);
-        app.rogueServer.messaging.sendToAll("position",{id:"mock", pos:pos});
+        app.entityServer.entities.addEntity("mock", proto);
+        app.entityServer.messaging.sendToAll("position",{id:"mock", pos:pos});
       }
       if (event === EVENTS.entities) {
         if (count) {
@@ -262,7 +262,7 @@ describe('monster connects to server', () => {
     let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
       if (event === EVENTS.map) {
         expect(bot.client.getEntity().isAlive()).toBe(true);
-        let goblin = app.rogueServer.entities.getEntityAt(defaultPos);
+        let goblin = app.entityServer.entities.getEntityAt(defaultPos);
         goblin.hitFor(10);
       }
       if (event === EVENTS.dead) {
@@ -345,8 +345,8 @@ describe('monster connects to server', () => {
   });
 
   it('should take and wield item', async (done) => {
-    app.rogueServer.cave.addItem(defaultPos, dagger);
-    let theDagger = app.rogueServer.cave.getItemsAt(defaultPos)[0];
+    app.entityServer.cave.addItem(defaultPos, dagger);
+    let theDagger = app.entityServer.cave.getItemsAt(defaultPos)[0];
     expect(theDagger.isWieldable()).toBe(true);
     let count = 0;
     let mockBrain = {ready: (event) => {
@@ -408,8 +408,8 @@ describe('monster connects to server', () => {
   });
 
   it('should take and eat item', (done) => {
-    app.rogueServer.cave.addItem(defaultPos, apple);
-    let theApple = app.rogueServer.cave.getItemsAt(defaultPos)[0];
+    app.entityServer.cave.addItem(defaultPos, apple);
+    let theApple = app.entityServer.cave.getItemsAt(defaultPos)[0];
     expect(theApple.isEdible()).toBe(true);
     let count = 0;
     let mockBrain = {ready: (event) => {
@@ -443,8 +443,8 @@ describe('monster connects to server', () => {
   });
 
   it('should take and wear item', async (done) => {
-    app.rogueServer.cave.addItem(defaultPos, chainmail);
-    let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
+    app.entityServer.cave.addItem(defaultPos, chainmail);
+    let theArmour = app.entityServer.cave.getItemsAt(defaultPos)[0];
     expect(theArmour.isWearable()).toBe(true);
     let count = 0;
     let mockBrain = {ready: (event) => {
@@ -508,8 +508,8 @@ describe('monster connects to server', () => {
   });
 
   it('should take and drop an item', async (done) => {
-    app.rogueServer.cave.addItem(defaultPos, chainmail);
-    let theArmour = app.rogueServer.cave.getItemsAt(defaultPos)[0];
+    app.entityServer.cave.addItem(defaultPos, chainmail);
+    let theArmour = app.entityServer.cave.getItemsAt(defaultPos)[0];
     let count = 0;
     let mockBrain = {ready: (event) => {
       if (event === EVENTS.map) {

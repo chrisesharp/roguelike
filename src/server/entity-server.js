@@ -9,7 +9,7 @@ import { MSGTYPE, Messages } from "./messages.js";
 import { EVENTS } from "../common/events.js";
 import State from "./state.js";
 
-export default class RogueServer {
+export default class EntityServer {
     constructor(backend, template) {
         this.template = template;
         this.messaging = backend;

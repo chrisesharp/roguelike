@@ -55,7 +55,7 @@ beforeEach((done) => {
   });
 
   socket.on('connect', () => {
-    app.rogueServer.entities.getEntity(socket.id).pos = defaultPos;
+    app.entityServer.entities.getEntity(socket.id).pos = defaultPos;
     done();
   });
 });
@@ -64,10 +64,10 @@ afterEach((done) => {
   if (socket.connected) {
     socket.disconnect();
   }
-  app.rogueServer.entities.removeEntityByID("mock");
-  app.rogueServer.cave.removeItem(apple);
-  app.rogueServer.cave.removeItem(dagger);
-  app.rogueServer.cave.removeItem(rock);
+  app.entityServer.entities.removeEntityByID("mock");
+  app.entityServer.cave.removeItem(apple);
+  app.entityServer.cave.removeItem(dagger);
+  app.entityServer.cave.removeItem(rock);
   done();
 });
 
@@ -102,7 +102,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should not move if dead', (done) => {
-    let entity = app.rogueServer.entities.getEntity(socket.id);
+    let entity = app.entityServer.entities.getEntity(socket.id);
     entity.alive = false;
     socket.emit(EVENTS.move, DIRS.EAST);
     socket.emit(EVENTS.getPosition);
@@ -170,7 +170,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should move up', (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     socket.emit(EVENTS.move, DIRS.UP);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual([`You ascend to level ${defaultPos.z-1}!`]);
@@ -189,7 +189,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should descend stairs down', (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     socket.emit(EVENTS.move, DIRS.DOWN);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual([`You descend to level ${defaultPos.z+1}!`]);
@@ -207,7 +207,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should not descend stairs up', (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsUpTile);
     socket.emit(EVENTS.move, DIRS.DOWN);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["You can't go that way!"]);
@@ -216,7 +216,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should not ascend stairs down', (done) => {
-    app.rogueServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
+    app.entityServer.cave.getMap().addTile(defaultPos.x,defaultPos.y,defaultPos.z, Tiles.stairsDownTile);
     socket.emit(EVENTS.move, DIRS.UP);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["You can't go that way!"]);
@@ -227,7 +227,7 @@ describe('basic socket.io API', () => {
   it('should not move onto another live entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", pos:pos};
-    app.rogueServer.entities.addEntity("mock", proto);
+    app.entityServer.entities.addEntity("mock", proto);
     socket.emit(EVENTS.move, DIRS.EAST);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["Tester is there."]);
@@ -238,7 +238,7 @@ describe('basic socket.io API', () => {
   it('should not move onto another dead entity', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let proto = {name:"Tester", role:"mock", type:"npc", hp:0, pos:pos};
-    app.rogueServer.entities.addEntity("mock", proto);
+    app.entityServer.entities.addEntity("mock", proto);
     socket.emit(EVENTS.move, DIRS.EAST);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(['You see a dead Tester.']);
@@ -247,7 +247,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should update entity if hit', (done) => {
-    let entity = app.rogueServer.entities.getEntity(socket.id);
+    let entity = app.entityServer.entities.getEntity(socket.id);
     entity.hitPoints = 2;
     entity.hitFor(1);
     socket.on(EVENTS.update, (msg) => {
@@ -257,7 +257,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should update entity if killed', (done) => {
-    let entity = app.rogueServer.entities.getEntity(socket.id);
+    let entity = app.entityServer.entities.getEntity(socket.id);
     entity.hitPoints = 1;
     entity.hitFor(1);
     socket.on(EVENTS.dead, (msg) => {
@@ -269,7 +269,7 @@ describe('basic socket.io API', () => {
   it('should not move onto non-walkable tiles', (done) => {
     let pos = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let water = Tiles.waterTile;
-    app.rogueServer.cave.map.addTile(pos.x, pos.y, pos.z, water);
+    app.entityServer.cave.map.addTile(pos.x, pos.y, pos.z, water);
     socket.emit(EVENTS.move, DIRS.EAST);
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["You cannot walk there."]);
@@ -279,7 +279,7 @@ describe('basic socket.io API', () => {
 
   it('should see an item in same place', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.addItem(pos, rock);
     socket.emit(EVENTS.move, DIRS.SOUTH);
 
     socket.on(EVENTS.message, (msg) => {
@@ -290,8 +290,8 @@ describe('basic socket.io API', () => {
 
   it('should see multiple items in same place', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y+1, z:defaultPos.z};
-    app.rogueServer.cave.addItem(pos, dagger);
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.addItem(pos, dagger);
+    app.entityServer.cave.addItem(pos, rock);
     socket.emit(EVENTS.move, DIRS.SOUTH);
 
     socket.on(EVENTS.message, (msg) => {
@@ -316,7 +316,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should provide single item', (done) => {
-    app.rogueServer.cave.addItem({x:1,y:1,z:0}, rock);
+    app.entityServer.cave.addItem({x:1,y:1,z:0}, rock);
     socket.emit(EVENTS.getItems);
     socket.on(EVENTS.items, (items) => {
       let key = "(1,1,0)";
@@ -332,8 +332,8 @@ describe('basic socket.io API', () => {
   });
 
   it('should provide multiple items', (done) => {
-    app.rogueServer.cave.addItem({x:1,y:1,z:0}, rock);
-    app.rogueServer.cave.addItem({x:1,y:1,z:0}, apple);
+    app.entityServer.cave.addItem({x:1,y:1,z:0}, rock);
+    app.entityServer.cave.addItem({x:1,y:1,z:0}, apple);
     socket.emit(EVENTS.getItems);
     socket.on(EVENTS.items, (items) => {
       let key = "(1,1,0)";
@@ -356,7 +356,7 @@ describe('basic socket.io API', () => {
 
   it('should disappear when picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.addItem(pos, rock);
     socket.emit(EVENTS.take, 'rock');
     socket.on(EVENTS.items, (msg) => {
       expect(msg).toEqual({});
@@ -365,9 +365,9 @@ describe('basic socket.io API', () => {
   });
 
   it('should appear when dropped', (done) => {
-    app.rogueServer.cave.items = {};
+    app.entityServer.cave.items = {};
     let rock = new Rock();
-    let dropper = app.rogueServer.entities.getEntity(socket.id);
+    let dropper = app.entityServer.entities.getEntity(socket.id);
     dropper.inventory.push(rock);
     let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
     socket.emit(EVENTS.drop, 'rock');
@@ -381,7 +381,7 @@ describe('basic socket.io API', () => {
 
   it('should not drop non-existent things', (done) => {
     let dagger = new Dagger();
-    let dropper = app.rogueServer.entities.getEntity(socket.id);
+    let dropper = app.entityServer.entities.getEntity(socket.id);
     dropper.inventory.push(dagger);
     let pos = `(${dropper.pos.x},${dropper.pos.y},${dropper.pos.z})`
     socket.emit(EVENTS.drop, 'rock');
@@ -395,8 +395,8 @@ describe('basic socket.io API', () => {
 
   it('should not disappear when not picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
-    app.rogueServer.cave.items = {}
-    app.rogueServer.cave.addItem(pos, rock);
+    app.entityServer.cave.items = {}
+    app.entityServer.cave.addItem(pos, rock);
     socket.emit(EVENTS.take, 'dagger');
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["You cannot take that item."]);
@@ -406,12 +406,12 @@ describe('basic socket.io API', () => {
 
   it('should be in entities inventory when picked up', (done) => {
     let pos = {x:defaultPos.x, y:defaultPos.y, z:defaultPos.z};
-    app.rogueServer.cave.addItem(pos, rock);
-    let taker = app.rogueServer.entities.getEntity(socket.id);
+    app.entityServer.cave.addItem(pos, rock);
+    let taker = app.entityServer.entities.getEntity(socket.id);
     expect(taker.getInventory().length).toBe(0);
     socket.emit(EVENTS.take, 'rock');
     socket.on(EVENTS.message, (msg) => {
-      let taker = app.rogueServer.entities.getEntityAt(pos);
+      let taker = app.entityServer.entities.getEntityAt(pos);
       expect(taker.getInventory().length).toBe(1);
       expect(msg).toEqual(["You take the rock."]);
       done();
@@ -420,7 +420,7 @@ describe('basic socket.io API', () => {
 
   it('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
-    let eater = app.rogueServer.entities.getEntity(socket.id);
+    let eater = app.entityServer.entities.getEntity(socket.id);
     eater.inventory.push(apple);
     socket.emit(EVENTS.eat, 'apple');
     socket.on(EVENTS.message, (msg) => {
@@ -432,7 +432,7 @@ describe('basic socket.io API', () => {
 
   it('should disappear from inventory when eaten', (done) => {
     let apple = new Apple();
-    let eater = app.rogueServer.entities.getEntity(socket.id);
+    let eater = app.entityServer.entities.getEntity(socket.id);
     eater.inventory.push(apple);
     socket.emit(EVENTS.eat, 'rock');
     socket.on(EVENTS.message, (msg) => {
@@ -444,7 +444,7 @@ describe('basic socket.io API', () => {
 
   it('should wield a dagger', (done) => {
     let dagger = new Dagger();
-    let wielder = app.rogueServer.entities.getEntity(socket.id);
+    let wielder = app.entityServer.entities.getEntity(socket.id);
     wielder.inventory.push(dagger);
     socket.emit(EVENTS.wield, 'dagger');
     socket.on(EVENTS.message, (msg) => {
@@ -456,7 +456,7 @@ describe('basic socket.io API', () => {
 
   it("should not wield a dagger if you don't have one", (done) => {
     let rock = new Rock();
-    let wielder = app.rogueServer.entities.getEntity(socket.id);
+    let wielder = app.entityServer.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
     socket.emit(EVENTS.wield, 'dagger');
     socket.on(EVENTS.message, (msg) => {
@@ -467,7 +467,7 @@ describe('basic socket.io API', () => {
 
   it('should not wield a dagger if wield nothing', (done) => {
     let rock = new Rock();
-    let wielder = app.rogueServer.entities.getEntity(socket.id);
+    let wielder = app.entityServer.entities.getEntity(socket.id);
     wielder.inventory.push(rock);
     wielder.currentWeapon = rock;
     expect(wielder.isWielding()).toEqual(rock);
@@ -481,7 +481,7 @@ describe('basic socket.io API', () => {
 
   it('should wear chainmail', (done) => {
     let armour = new Chainmail();
-    let wearer = app.rogueServer.entities.getEntity(socket.id);
+    let wearer = app.entityServer.entities.getEntity(socket.id);
     wearer.inventory.push(armour);
     socket.emit(EVENTS.wear, 'chainmail');
     socket.on(EVENTS.message, (msg) => {
@@ -492,7 +492,7 @@ describe('basic socket.io API', () => {
   });
 
   it('should not wear chainmail if not in inventory', (done) => {
-    let wearer = app.rogueServer.entities.getEntity(socket.id);
+    let wearer = app.entityServer.entities.getEntity(socket.id);
     socket.emit(EVENTS.wear, 'chainmail');
     socket.on(EVENTS.message, (msg) => {
       expect(msg).toEqual(["You don't have any chainmail to wear."]);
