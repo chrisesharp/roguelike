@@ -9,10 +9,9 @@ export default class ConnectionServer {
     constructor(http, template) {
         this.template = template;
         this.open = true;
-        const thisServer = this;
-        let callback = (socket) => {
-            thisServer.connection(socket);
-        }
+        let callback = ((socket) => {
+            this.connection(socket);
+        });
         this.messaging = new Messaging(http, callback);
         this.entityServer = new EntityServer(this.messaging, template);
     }
