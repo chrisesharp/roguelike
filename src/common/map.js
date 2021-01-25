@@ -13,6 +13,10 @@ export default class Map {
         this.fov = template.fov;
     }
 
+    getEntrance() {
+        return this.entrance;
+    }
+
     getWidth() {
         return this.width;
     }
@@ -30,10 +34,6 @@ export default class Map {
             return (this.tiles[z][y][x] instanceof Tile) ? (this.tiles[z][y][x]) : new Tile((this.tiles[z][y][x]));
         }
         return nullTile;
-    }
-
-    getEntrance() {
-        return this.entrance;
     }
 
     withinBounds(x, y, z) {
