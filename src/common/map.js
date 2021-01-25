@@ -28,4 +28,8 @@ export default class Map {
             return new Tile(this.tiles[z][y][x]);
         }
     }
+
+    getEntrance() {
+        return this.entrance;
+    }
 }

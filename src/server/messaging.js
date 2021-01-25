@@ -13,6 +13,7 @@ export default class Messaging{
 
     stop() {
         clearInterval(this.pinger);
+        this.backend.close();
     }
 
     sendToRoom(room, cmd, data) {

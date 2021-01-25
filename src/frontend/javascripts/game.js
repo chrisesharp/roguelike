@@ -70,7 +70,6 @@ class Game {
     mapAvailable(map) {
         this.map = new ExplorerMap(map);
         this.map.setupFov();
-        this.entrance = this.map.entrance;
         this.switchScreen(playScreen);
     }
 
@@ -79,7 +78,7 @@ class Game {
     }
 
     getEntrance() {
-        return this.entrance;
+        return this.map.getEntrance();
     }
 
     move(direction) {

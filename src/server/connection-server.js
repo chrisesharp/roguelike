@@ -32,7 +32,6 @@ export default class ConnectionServer {
         this.registerEventHandlers(socket, entity, server);
         this.messaging.sendToAll(EVENTS.entities, server.getEntities());
         this.enterRoom(socket, entity, server.getRoom(entity.pos));
-        return entity;
     }
 
     stop() {
