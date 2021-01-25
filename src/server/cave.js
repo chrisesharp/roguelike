@@ -24,14 +24,14 @@ export default class Cave {
     }
 
     static builder(template) {
-        let width = template.width || DEFAULT_SIZE.width;
-        let height = template.height || DEFAULT_SIZE.height;
-        let depth = template.depth || DEFAULT_SIZE.depth;
-        let generator = template.generator || DEFAULT_SIZE.generator;
-        let randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
-        let regionSize = template.regionSize || DEFAULT_SIZE.regionSize;
-        return new MapBuilder(generator, width, height, depth, randomiser, regionSize, template);
-    }
+        template.width = template.width || DEFAULT_SIZE.width;
+        template.height = template.height || DEFAULT_SIZE.height;
+        template.depth = template.depth || DEFAULT_SIZE.depth;
+        template.generator = template.generator || DEFAULT_SIZE.generator;
+        template.randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
+        template.regionSize = template.regionSize || DEFAULT_SIZE.regionSize;
+        return new MapBuilder(template);
+   }
 
     createRepos(template) {
         let depth = this.map.getDepth();
