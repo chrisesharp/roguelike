@@ -1,9 +1,12 @@
 "use strict";
 
+import { Server } from "socket.io";
+
 const pingFreqInMs = 250;
 export default class Messaging{
-    constructor(backend) {
-        this.backend = backend;
+    constructor(http, callback) {
+        this.backend = new Server(http);
+        this.backend.on("connection", (socket) => { callback(socket); });
         const messaging = this;
         this.pinger = setInterval(() => messaging.backend.emit('ping'), pingFreqInMs);
     }
