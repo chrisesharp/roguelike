@@ -12,7 +12,7 @@ export default class MapBuilder extends Map {
     constructor(template) {
         super(template);
         this.regionSize = template.regionSize;
-        this.randomized = template.randomiser;
+        this.randomiser = template.randomiser;
         this.tiles = new Array(this.depth);
         this.regions = new Array(this.depth);
         this.generator = MapBuilder.createGenerator(template.generator, this.width, this.height, template);
@@ -45,10 +45,6 @@ export default class MapBuilder extends Map {
         this.tiles[z][y][x] = tile;
     }
 
-    getTiles () {
-        return this.tiles;
-    }
-
     setupRegions(z) {
         let region = 1;
         for (let x = 0; x < this.width; x++) {
@@ -68,10 +64,6 @@ export default class MapBuilder extends Map {
         return (this.withinBounds(x, y, z) && 
                 (!this.regions[z][y][x]) && 
                 this.tiles[z][y][x].isWalkable());
-    }
-
-    withinBounds(x, y, z) {
-        return !(x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.depth);
     }
 
     fillRegion(region, x, y, z) {
@@ -147,7 +139,7 @@ export default class MapBuilder extends Map {
     connectRegions(z, r1, r2) {
         let overlap = this.findRegionOverlaps(z, r1, r2);
         if (overlap.length) {
-            let point = this.randomized(overlap);
+            let point = this.randomiser(overlap);
             this.tiles[z][point.y][point.x] = Tiles.stairsDownTile;
             this.tiles[z+1][point.y][point.x] = Tiles.stairsUpTile;
             return true;

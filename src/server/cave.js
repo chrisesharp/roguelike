@@ -45,7 +45,7 @@ export default class Cave {
     }
 
     distributeItems(map) {
-        for (let z=0; z < map.depth; z++) {
+        for (let z=0; z < map.getDepth(); z++) {
             while (this.itemRepos[z].moreItems()) {
                 let pos = map.getRandomFloorPosition(z)
                 let item = this.itemRepos[z].createRandom()

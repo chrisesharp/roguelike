@@ -40,10 +40,7 @@ describe('cave creation', () => {
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
     expect(map.getHeight()).toBe(DEFAULT_SIZE.height);
     expect(map.getDepth()).toBe(DEFAULT_SIZE.depth);
-    expect(map.getTiles().length).toBe(map.getDepth());
-    expect(map.getTiles()[0].length).toBe(map.getHeight());
-    expect(map.getTiles()[0][0].length).toBe(map.getWidth());
-    expect(map.getTiles()[0][0][0].char).toBe('#');
+    expect(map.getTile(0,0,0).char).toBe('#');
     done();
   });
 
@@ -53,10 +50,7 @@ describe('cave creation', () => {
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
     expect(map.getHeight()).toBe(DEFAULT_SIZE.height);
     expect(map.getDepth()).toBe(3);
-    expect(map.getTiles().length).toBe(map.getDepth());
-    expect(map.getTiles()[0].length).toBe(map.getHeight());
-    expect(map.getTiles()[0][0].length).toBe(map.getWidth());
-    expect(map.getTiles()[0][0][0].char).toBe('#');
+    expect(map.getTile(0,0,0).char).toBe('#');
     done();
   });
 
@@ -87,10 +81,7 @@ describe('cave creation', () => {
     expect(map.getWidth()).toBe(defaultTemplate.width);
     expect(map.getHeight()).toBe(defaultTemplate.height);
     expect(map.getDepth()).toBe(defaultTemplate.depth);
-    expect(map.getTiles().length).toBe(map.getDepth());
-    expect(map.getTiles()[0].length).toBe(map.getHeight());
-    expect(map.getTiles()[0][0].length).toBe(map.getWidth());
-    let tile = map.getTiles()[0][0][0];
+    let tile = map.getTile(0,0,0);
     expect(tile.getChar()).toBe('#');
     expect(tile.getForeground()).toBe('goldenrod');
     expect(tile.getBackground()).toBe('black');
@@ -107,8 +98,8 @@ describe('cave creation', () => {
     let rand = (arr)=>{return arr[0];}
     let cave = new Cave({width:25, height:10, depth:3, randFunc: rand});
     let map = cave.getMap();
-    let tileLvl0 = map.getTiles()[0][1][0];
-    let tileLvl1 = map.getTiles()[1][1][0];
+    let tileLvl0 = map.getTile(0,1,0);
+    let tileLvl1 = map.getTile(0,1,1);
     expect(tileLvl0).toBe(Tiles.stairsDownTile);
     expect(tileLvl1).toBe(Tiles.stairsUpTile);
     done();
@@ -117,7 +108,7 @@ describe('cave creation', () => {
   it('should regions too small', (done) => {
     let cave = new Cave();
     let map = cave.getMap();
-    let wasSpace = map.getTiles()[0][2][22];
+    let wasSpace = map.getTile(22,2,0);
     expect(wasSpace).toBe(Tiles.wallTile);
     done();
   });
