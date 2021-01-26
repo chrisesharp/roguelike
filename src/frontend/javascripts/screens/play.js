@@ -91,7 +91,7 @@ class PlayScreen {
                 glyph = items.slice(-1)[0];
             }
             if (game.getEntityAt(x, y, z)) {
-                glyph = game.getEntityAt(x, y, z).getGlyph();
+                glyph = game.getEntityAt(x, y, z);
             }
 
             let itemColour = Color.fromString(glyph.getForeground());

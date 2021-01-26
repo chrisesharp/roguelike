@@ -54,10 +54,6 @@ export default class Item extends Glyph {
         this.background = properties['background'] || this.background;
     }
 
-    getGlyph() {
-        return new Glyph({char:this.char, foreground:this.foreground, background:this.background});
-    }
-
     assume(extraProperties) {
         if (extraProperties) {
             for (let key in extraProperties) {

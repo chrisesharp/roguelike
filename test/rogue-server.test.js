@@ -307,7 +307,7 @@ describe('basic socket.io API', () => {
       expect(entity.pos.x).toBe(defaultPos.x);
       expect(entity.pos.y).toBe(defaultPos.y);
       expect(entity.pos.z).toBe(defaultPos.z);
-      expect(entity.getGlyph().getChar()).toBe('?');
+      expect(entity.getChar()).toBe('?');
       expect(entity.getDescription()).toBe('testcode');
       expect(entity.isAlive()).toBe(true);
       expect(entity.getHitPoints()).toBe(1);
@@ -325,7 +325,7 @@ describe('basic socket.io API', () => {
       expect(item.pos.x).toBe(1);
       expect(item.pos.y).toBe(1);
       expect(item.pos.z).toBe(0);
-      expect(item.getGlyph().getChar()).toBe('*');
+      expect(item.getChar()).toBe('*');
       expect(item.getDescription()).toBe('rock');
       done();
     });
@@ -342,13 +342,13 @@ describe('basic socket.io API', () => {
       expect(rock.pos.x).toBe(1);
       expect(rock.pos.y).toBe(1);
       expect(rock.pos.z).toBe(0);
-      expect(rock.getGlyph().getChar()).toBe('*');
+      expect(rock.getChar()).toBe('*');
       expect(rock.getDescription()).toBe('rock');
       let dagger = new Item(items[key][1]);
       expect(dagger.pos.x).toBe(1);
       expect(dagger.pos.y).toBe(1);
       expect(dagger.pos.z).toBe(0);
-      expect(dagger.getGlyph().getChar()).toBe('o');
+      expect(dagger.getChar()).toBe('o');
       expect(dagger.getDescription()).toBe('apple');
       done();
     });

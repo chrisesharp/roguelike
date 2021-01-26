@@ -8,8 +8,8 @@ const mockServer = {
 describe('orc creation', () => {
     it('should be red', (done) => {
       let orc = new Orc({server:mockServer});
-      expect(orc.getGlyph().getForeground()).toBe('red');
-      expect(orc.getGlyph().getChar()).toBe('&');
+      expect(orc.getForeground()).toBe('red');
+      expect(orc.getChar()).toBe('&');
       done();
     });
 

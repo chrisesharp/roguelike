@@ -9,10 +9,9 @@ describe('entity creation', () => {
       expect(entity.pos.x).toBe(defaultPos.x);
       expect(entity.pos.y).toBe(defaultPos.y);
       expect(entity.pos.z).toBe(defaultPos.z);
-      let glyph = entity.getGlyph();
-      expect(glyph.getChar()).toBe('?');
-      expect(glyph.getForeground()).toBe('white');
-      expect(glyph.getBackground()).toBe('black');
+      expect(entity.getChar()).toBe('?');
+      expect(entity.getForeground()).toBe('white');
+      expect(entity.getBackground()).toBe('black');
       expect(entity.getDescription()).toBe('unknown');
       expect(entity.getName()).toBe('anonymous');
       expect(entity.isAlive()).toBe(true);
@@ -30,9 +29,9 @@ describe('entity creation', () => {
 
     it('should change glyph properties', (done) => {
       let entity = new Entity({pos:defaultPos});
-      expect(entity.getGlyph().getForeground()).toBe('white');
+      expect(entity.getForeground()).toBe('white');
       entity.setGlyph({foreground:'red'});
-      expect(entity.getGlyph().getForeground()).toBe('red');
+      expect(entity.getForeground()).toBe('red');
       done();
     });
 

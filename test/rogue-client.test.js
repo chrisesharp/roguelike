@@ -194,7 +194,7 @@ describe('monster connects to server', () => {
         let goblin = bot1.client.getEntity();
         let pos = goblin.pos;
         let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
-        expect(entity.getGlyph().getChar()).toEqual("&");
+        expect(entity.getChar()).toEqual("&");
         bot1.stop();
         bot2.stop();
         done();
@@ -218,7 +218,7 @@ describe('monster connects to server', () => {
       }
       if (count == 1  && event === EVENTS.entities) {
         let entity = bot2.client.getEntityAt(pos.x, pos.y, pos.z);
-        expect(entity.getGlyph().getChar()).toEqual("&");
+        expect(entity.getChar()).toEqual("&");
         bot1.stop();
         bot2.stop();
         done();

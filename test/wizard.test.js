@@ -8,8 +8,8 @@ const mockServer = {
 describe('wizards creation', () => {
     it('should be blue', (done) => {
       let wizard = new Wizard({server:mockServer});
-      expect(wizard.getGlyph().getForeground()).toBe('blue');
-      expect(wizard.getGlyph().getChar()).toBe('@');
+      expect(wizard.getForeground()).toBe('blue');
+      expect(wizard.getChar()).toBe('@');
       done();
     });
 
