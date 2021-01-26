@@ -40,7 +40,7 @@ describe('cave creation', () => {
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
     expect(map.getHeight()).toBe(DEFAULT_SIZE.height);
     expect(map.getDepth()).toBe(DEFAULT_SIZE.depth);
-    expect(map.getTile(0,0,0).char).toBe('#');
+    expect(map.getTile(0,0,0).getChar()).toBe('#');
     done();
   });
 
@@ -50,7 +50,7 @@ describe('cave creation', () => {
     expect(map.getWidth()).toBe(DEFAULT_SIZE.width);
     expect(map.getHeight()).toBe(DEFAULT_SIZE.height);
     expect(map.getDepth()).toBe(3);
-    expect(map.getTile(0,0,0).char).toBe('#');
+    expect(map.getTile(0,0,0).getChar()).toBe('#');
     done();
   });
 

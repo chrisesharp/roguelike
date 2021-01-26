@@ -6,6 +6,7 @@ import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
 import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
+import Glyph from '../../../common/glyph.js';
 
 
 class PlayScreen {
@@ -74,7 +75,7 @@ class PlayScreen {
                     let glyph = this.getColouredGlyph(map, visibleCells, x, y, z);
                     display.draw(x - topLeft.x,
                                  y - topLeft.y, 
-                                 glyph.char, glyph.foreground, glyph.background);
+                                 glyph.getChar(), glyph.getForeground(), glyph.getBackground());
                 }
             }
         }
@@ -96,7 +97,7 @@ class PlayScreen {
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);
         }
-        return {"char": glyph.getChar(), "foreground":Color.toRGB(foreground),"background":glyph.getBackground()};
+        return new Glyph({"char": glyph.getChar(), "foreground":Color.toRGB(foreground),"background":glyph.getBackground()});
     }
 
     renderMessages() {
