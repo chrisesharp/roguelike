@@ -5,7 +5,7 @@ import http from "http";
 import ConnectionServer from "./server/connection-server.js";
 import fs from "fs";
 
-const port = normalizePort(process.env.npm_package_config_port || '3000');
+const port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
 const host = '0.0.0.0';
 
 const template = getConfig();
@@ -31,6 +31,11 @@ function createAppServer(port) {
   app.set('port', port);
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
   return app;
 }
 

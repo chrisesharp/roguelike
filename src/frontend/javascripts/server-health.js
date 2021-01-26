@@ -2,13 +2,18 @@
 import axios from 'axios';
 
 export default class ServerHealth {
-    constructor(url) {
+    constructor(name, url) {
+        this.name = name;
         this.url = url;
     }
 
     initServerHealth(field) {
         this.health = field;
         this.getServerHealth();
+    }
+
+    setServerURL(url) {
+        this.url = url;
     }
 
     getServerHealth() {
@@ -27,7 +32,7 @@ export default class ServerHealth {
     }
 
     updateServerHealth(state) {
-        this.health.innerHTML = "Status:"+ state;
+        this.health.innerHTML = `${this.name}:${state}`;
         switch (state) {
             case "UP":
                 this.health.style.color = "green";
