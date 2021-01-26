@@ -16,6 +16,7 @@ export default class EntityClient {
     connectToServer(properties, callback) {
         this.properties = properties;
         let url = properties.url || this.serverAddr;
+        console.log("Connecting to cave at ",url);
         this.socket = io(url, {
             reconnectionDelay: 0,
             transports: ['websocket'],
