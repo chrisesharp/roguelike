@@ -3,5 +3,5 @@
     "height":10,
     "depth":3,
     "generator" : "FileGenerator",
-    "maps":"./src/config/maps/entrance"
+    "maps":"./src/server/config/maps/entrance"
 }

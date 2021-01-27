@@ -108,6 +108,6 @@ export default class ConnectionServer {
 
     reset(properties) {
         this.entityServer.reset(properties);
-        console.log("Server reset");
+        // console.log("Server reset");
     }
 }

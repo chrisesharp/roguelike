@@ -77,6 +77,7 @@ describe('cave creation', () => {
 
   it('should generate tiles from map file', (done) => {
     let cave = new Cave(defaultTemplate);
+    cave.addGateway({pos:{x:1,y:4,z:0},url:"http://foo.com/"})
     let map = cave.getMap();
     expect(map.getWidth()).toBe(defaultTemplate.width);
     expect(map.getHeight()).toBe(defaultTemplate.height);
@@ -91,6 +92,14 @@ describe('cave creation', () => {
     expect(tile.isBlockingLight()).toBe(true);
     expect(tile.getDescription()).toBe('A cave wall');
     expect(cave.getEntrance()).toEqual({'x':0,'y':0,'z':0});
+    let gate = map.getTile(1,4,0);
+    expect(gate.getChar()).toBe('*');
+    expect(gate.getForeground()).toBe('black');
+    expect(gate.getBackground()).toBe('white');
+    expect(gate.isWalkable()).toBe(true);
+    expect(gate.isDiggable()).toBe(false);
+    expect(gate.isBlockingLight()).toBe(true);
+    expect(cave.getGateway({x:1,y:4,z:0}).url).toBe("http://foo.com/");
     done();
   });
 
@@ -105,7 +114,7 @@ describe('cave creation', () => {
     done();
   });
 
-  it('should regions too small', (done) => {
+  it('should fill regions too small', (done) => {
     let cave = new Cave();
     let map = cave.getMap();
     let wasSpace = map.getTile(22,2,0);

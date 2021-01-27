@@ -113,6 +113,9 @@ export default class EntityServer {
         }
         
         if (tile.isWalkable()) {
+            if (tile.isGateway()) {
+                return this.passGateway(entity, newPos);
+            }
             if (z !== entity.pos.z) {
                 return this.levelChange(entity, newPos, tile);
             }
@@ -125,6 +128,15 @@ export default class EntityServer {
         }
         this.sendMessage(entity, MSGTYPE.INF, Messages.NO_WALK(entity));
         return null;
+    }
+
+    passGateway(entity, pos) {
+        console.log("In passGateway with ",pos)
+        let gw = this.cave.getGateway(pos);
+        if (gw) {
+            this.sendMessage(entity, MSGTYPE.UPD, Messages.TELEPORT());
+            this.messaging.sendMessageToEntity(entity, EVENTS.reconnect, {url:gw.url});
+        }
     }
 
     levelChange(entity, newPos, tile) {

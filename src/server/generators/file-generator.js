@@ -1,6 +1,12 @@
 "use strict";
 import fs from "fs";
-import { floorTile, wallTile } from  '../server-tiles.js';
+import { floorTile, wallTile, gateTile } from  '../server-tiles.js';
+
+const tileMap = {
+    "*" : gateTile,
+    "." : floorTile,
+    "#" : wallTile
+}
 
 const mapsDir = process.env.maps || process.env.npm_package_config_maps;
 
@@ -31,7 +37,7 @@ export default class FileGenerator {
             map[y] = new Array(this.width);
             for (let x = 0; x < this.width; x++) {
                 let tile = contents[y%contents.length][x%contents[0].length];
-                map[y][x] = (tile===".") ? floorTile : wallTile;
+                map[y][x] = tileMap[tile] || wallTile;
             }
         }
         return map;

@@ -9,6 +9,7 @@ export default class Tile extends Glyph {
         this.diggable = properties['diggable'] || false;
         this.blocksLight = (properties['blocksLight'] !== undefined) ?
             properties['blocksLight'] : true;
+        this.gateway = properties['gateway'] || false;
         this.description = properties['description'] || '(unknown)';
     }
     
@@ -22,6 +23,10 @@ export default class Tile extends Glyph {
 
     isBlockingLight() {
         return this.blocksLight;
+    }
+
+    isGateway() {
+        return this.gateway;
     }
 
     getDescription() {
