@@ -6,7 +6,7 @@ import roles from './roles.js';
 import reset from './reset.js'
 
 const bundlerOpts = {
-    hmrPort: 8080,
+    //hmrPort: 8080,
 };
 
 const bundler = new Bundler('./src/frontend/index.html', bundlerOpts);

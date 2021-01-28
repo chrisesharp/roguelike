@@ -31,7 +31,10 @@ export default class EntityClient {
         this.socket.emit(EVENTS.getMap);
     }
 
-    disconnectFromServer() {
+    disconnectFromServer(event) {
+        if (event) {
+            this.socket.emit(event)
+        }
         this.socket.disconnect();
     }
 
@@ -80,6 +83,11 @@ export default class EntityClient {
             callback(EVENTS.position, event);
         });
 
+        socket.on(EVENTS.reconnect, (properties) => {
+            this.reconnect(properties);
+            callback(EVENTS.reconnect);
+        });
+        
         socket.on(EVENTS.reset, (properties) => {
             this.reconnect(properties);
             callback(EVENTS.reset);

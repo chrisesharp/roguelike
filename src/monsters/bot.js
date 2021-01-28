@@ -24,7 +24,7 @@ export default class Bot {
     }
 
     stop() {
-        this.client.disconnectFromServer();
+        this.client.disconnectFromServer(EVENTS.dead);
     }
  
     mapAvailable(data) {

@@ -15,6 +15,7 @@ export default class MapBuilder extends Map {
         this.randomiser = template.randomiser;
         this.tiles = new Array(this.depth);
         this.regions = new Array(this.depth);
+        this.gateways = {};
         this.generator = MapBuilder.createGenerator(template.generator, this.width, this.height, template);
         this.fov = [];
     }
@@ -27,6 +28,10 @@ export default class MapBuilder extends Map {
     getEntrance(level) {
         level = level || 0;
         return this.getRandomFloorPosition(level);
+    }
+
+    getGateways() {
+        return this.gateways;
     }
     
     generate() {
@@ -55,6 +60,10 @@ export default class MapBuilder extends Map {
                     } else {
                         region++;
                     }
+                }
+                if (this.isGateway(x, y, z)) {
+                    this.gateways[z] = this.gateways[z] || [];
+                    this.gateways[z].push({x:x, y:y, z:z});
                 }
             }
         }
@@ -173,6 +182,10 @@ export default class MapBuilder extends Map {
 
     isEmptyFloor(x, y, z) {
         return this.getTile(x, y, z) === Tiles.floorTile;
+    }
+
+    isGateway(x, y, z) {
+        return this.getTile(x, y, z) === Tiles.gateTile;
     }
 }
 

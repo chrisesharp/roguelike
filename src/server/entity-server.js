@@ -14,9 +14,24 @@ export default class EntityServer {
         this.template = template;
         this.messaging = backend;
         this.cave = new Cave(template);
-        this.repo = new EntityFactory();
-        this.repo.setMessengerForEntities(this);
+        this.repo = new EntityFactory(this);
         this.entities = new State(this.repo);
+        this.connectGateways(template.gateways);
+    }
+
+    connectGateways(urls) {
+        urls = urls || [];
+        let index = 0;
+        if (urls.length > 0) {
+            let gatesByLevel = this.cave.getGatewayPositions();
+            Object.keys(gatesByLevel).forEach((key) => {
+                gatesByLevel[key].forEach((pos) => {
+                    let url = urls[index];
+                    this.cave.addGateway({pos:pos, url:url})
+                    index = (index + 1) % urls.length;
+                });
+            });
+        }
     }
 
     createEntity(id, prototype) {
@@ -37,7 +52,7 @@ export default class EntityServer {
             gear.forEach((item) => {
                 this.dropItem(entity, item.name);
             });
-            this.dropItem(entity, entity.corpse);
+            if (!entity.isAlive()) { this.dropItem(entity, entity.corpse); }
             this.messaging.sendToAll(EVENTS.delete, entity.pos);
             this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
             this.entities.removeEntity(entity);
@@ -131,11 +146,11 @@ export default class EntityServer {
     }
 
     passGateway(entity, pos) {
-        console.log("In passGateway with ",pos)
         let gw = this.cave.getGateway(pos);
         if (gw) {
             this.sendMessage(entity, MSGTYPE.UPD, Messages.TELEPORT());
             this.messaging.sendMessageToEntity(entity, EVENTS.reconnect, {url:gw.url});
+            this.deleteEntity(entity);
         }
     }
 

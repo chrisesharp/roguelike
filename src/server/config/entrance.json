@@ -3,5 +3,6 @@
     "height":10,
     "depth":3,
     "generator" : "FileGenerator",
-    "maps":"./src/server/config/maps/entrance"
+    "maps":"./src/server/config/maps/entrance",
+    "gateways": [ "http://localhost:3000" ]
 }

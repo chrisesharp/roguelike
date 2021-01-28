@@ -157,6 +157,7 @@ class Game {
             properties = this.updateName();
             properties.type = "player";
         }
+        backendMonitor.setServerURL(`${properties.url}/health`);
         this.client.connectToServer(properties);
     }
 

@@ -18,8 +18,9 @@ constructors.push({role : "default", ctor : ServerEntity});
 
 
 export default class EntityFactory {
-    constructor() {
+    constructor(server) {
         this.messenger = null;
+        this.setMessengerForEntities(server);
     }
 
     setMessengerForEntities(server) {

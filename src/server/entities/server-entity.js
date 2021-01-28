@@ -166,10 +166,6 @@ export default class ServerEntity extends Entity {
         return this.currentWeapon;
     }
 
-    getInventory() {
-        return this.inventory;
-    }
-
     setAC(armour) {
         this.currentArmour = armour;
         let ac = this.base_ac;
@@ -177,10 +173,6 @@ export default class ServerEntity extends Entity {
             ac += this.currentArmour.ac;
         }
         this.ac = ac;
-    }
-
-    getAC() {
-        return this.ac;
     }
 
     getPos() {

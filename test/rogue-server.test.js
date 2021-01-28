@@ -103,7 +103,7 @@ describe('basic socket.io API', () => {
 
   it('should not move if dead', (done) => {
     let entity = app.entityServer.entities.getEntity(socket.id);
-    entity.alive = false;
+    entity.kill();
     socket.emit(EVENTS.move, DIRS.EAST);
     socket.emit(EVENTS.getPosition);
     socket.on(EVENTS.position, (payload) => {

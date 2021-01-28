@@ -60,7 +60,7 @@ export default class Entity extends Item {
 
     isAlive() {
         if (this.hitPoints <=0) {
-            this.alive = false;
+            this.kill();
         }
         return this.alive;
     }
@@ -75,5 +75,9 @@ export default class Entity extends Item {
 
     getWeapon() {
         return (this.currentWeapon) ? this.currentWeapon.name : "";
+    }
+
+    kill() {
+        this.alive = false;
     }
 }

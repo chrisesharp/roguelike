@@ -32,7 +32,7 @@ export default class Cave {
         template.randomiser = template.randFunc || DEFAULT_SIZE.randFunc;
         template.regionSize = template.regionSize || DEFAULT_SIZE.regionSize;
         return new MapBuilder(template);
-   }
+    }
 
     createRepos(template) {
         let depth = this.map.getDepth();
@@ -57,6 +57,10 @@ export default class Cave {
 
     getEntrance(level) {
         return (this.entrance) ? this.entrance : this.map.getEntrance(level);
+    } 
+
+    getGatewayPositions() {
+        return this.map.getGateways();
     }
 
     addGateway(properties) {
