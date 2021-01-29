@@ -16,9 +16,9 @@ export const DEFAULT_SIZE = {
 
 export default class Cave {
     constructor(template=DEFAULT_SIZE) {
+        this.gateways = {};
         this.map = Cave.builder(template).generate();
         this.entrance = template.entrance;
-        this.gateways = {};
         this.items = {};
         this.itemRepos = this.createRepos(template);
         this.distributeItems(this.map);

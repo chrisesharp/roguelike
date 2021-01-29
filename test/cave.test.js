@@ -77,7 +77,9 @@ describe('cave creation', () => {
 
   it('should generate tiles from map file', (done) => {
     let cave = new Cave(defaultTemplate);
-    cave.addGateway({pos:{x:1,y:4,z:0},url:"http://foo.com/"})
+    let gateways = cave.getGatewayPositions();
+    let gwPos = gateways[0][0];
+    cave.addGateway({pos:gwPos,url:"http://foo.com/"});
     let map = cave.getMap();
     expect(map.getWidth()).toBe(defaultTemplate.width);
     expect(map.getHeight()).toBe(defaultTemplate.height);
@@ -99,7 +101,7 @@ describe('cave creation', () => {
     expect(gate.isWalkable()).toBe(true);
     expect(gate.isDiggable()).toBe(false);
     expect(gate.isBlockingLight()).toBe(true);
-    expect(cave.getGateway({x:1,y:4,z:0}).url).toBe("http://foo.com/");
+    expect(cave.getGateway(gwPos).url).toBe("http://foo.com/");
     done();
   });
 

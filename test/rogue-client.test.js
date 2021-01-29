@@ -26,7 +26,8 @@ const defaultPos = {"x":2,"y":2,"z":0};
 const defaultMap = {
   "width":4,
   "height":5,
-  "depth":3
+  "depth":3,
+  "gateways": ["http://foo.com/"]
 };
 
 
@@ -201,6 +202,28 @@ describe('monster connects to server', () => {
     bot.start(defaultPos);
   });
 
+  it('should teleport when passing gateway ', async (done) => {
+    let mockBrain = {setMap: (map)=>{bot.brain.map = map;}, ready: (event) => {
+      if (event === EVENTS.map) {
+        bot.move(DIRS.NORTH);
+        moved = true
+      }
+
+      if (moved && event === EVENTS.message) {
+        expect(bot.messages.pop()).toBe("Your world spins as you are teleported to somewhere else!");
+      }
+
+      if (moved && event === EVENTS.reconnect) {
+        bot.stop();
+        done();
+      }
+    }};
+    let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
+    let moved = false;
+    let pos = app.entityServer.cave.getGatewayPositions()[0][0];
+    bot.start({x:pos.x,y:pos.y+1,z:pos.z});
+  });
+
   it('should see other entities', async (done) => {
     let mockBrain1 = {ready: ()=>{ },setMap: ()=> {}};
     let mockBrain2 = {ready: (event) => {
@@ -336,12 +359,13 @@ describe('monster connects to server', () => {
   it('should see other entities die', async (done) => {
     let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let mockBrain1 = {ready: (event) => {
+      console.log("Event:",event);
       if (!bot2started) {
         bot2started = true;
         bot2.start(pos1);
       }
       
-      if (event === EVENTS.delete) {
+      if (bot2started && event === EVENTS.delete) {
         let other = bot1.client.getItemsAt(pos1.x, pos1.y, pos1.z)[0];
         expect(other.getDescription()).toEqual("goblin corpse");
         bot1.stop();

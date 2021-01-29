@@ -25,6 +25,7 @@ const apple = new Apple();
 const defaultMap = {
   "width":4,
   "height":5,
+  "gateways":["http://foo.com/"]
 };
 
 
