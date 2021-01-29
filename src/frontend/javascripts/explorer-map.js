@@ -11,10 +11,6 @@ export default class ExplorerMap extends Map {
         this.explored = this.setupExploredArray();
     }
 
-    getEntrance() {
-        return this.entrance;
-    }
-
     setupExploredArray() {
         let explored = new Array(this.depth);
         for (let z = 0; z < this.depth; z++) {

@@ -125,6 +125,7 @@ describe('monster connects to server', () => {
       if (event === EVENTS.map) {
         expect(bot.brain.map.getWidth()).toBe(defaultMap.width);
         expect(bot.brain.map.getHeight()).toBe(defaultMap.height);
+        expect(bot.brain.map.getEntrance()).toEqual(defaultPos);
         expect(bot.brain.map.getTile(defaultPos.x, defaultPos.y, defaultPos.z)).toEqual(Tiles.stairsUpTile);
         expect(bot.brain.map.getTile(-1,-1,-1)).toEqual(Tiles.nullTile);
         bot.stop();
