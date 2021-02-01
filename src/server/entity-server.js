@@ -8,18 +8,41 @@ import Item from '../common/item.js';
 import { MSGTYPE, Messages } from "./messages.js";
 import { EVENTS } from "../common/events.js";
 import State from "./state.js";
+import axios from 'axios';
 
 export default class EntityServer {
     constructor(backend, template) {
         this.template = template;
         this.messaging = backend;
+        this.cave_id = template.cave_id || 0;
         this.cave = new Cave(template);
         this.repo = new EntityFactory(this);
         this.entities = new State(this.repo);
         this.connectGateways(template.gateways);
     }
 
-    connectGateways(urls) {
+    connectGateways(endpoint) {
+        const server = this;
+        if (endpoint && endpoint != "test_url") {
+            axios.get(`${endpoint}`,{
+                timeout: 2500
+            }).then( (result) => {
+                let urls = [];
+                result.data.forEach( (cave) => {
+                    if (cave.id !== this.cave_id) {
+                        urls.push(cave.url);
+                    }
+                });
+                server.connectGatewayEndpoints(urls);
+            }).catch( (reason) => {
+                console.log("failed to get other cave urls from ", endpoint, reason);
+            });
+        } else {
+            server.connectGatewayEndpoints(endpoint);
+        }
+    }
+
+    connectGatewayEndpoints(urls) {
         urls = urls || [];
         let index = 0;
         if (urls.length > 0) {
@@ -38,7 +61,7 @@ export default class EntityServer {
         if (prototype.pos) {
             prototype.pos = JSON.parse(prototype.pos);
             if (prototype.pos.x == undefined || prototype.pos.y == undefined)  {
-                prototype.pos = this.cave.getEntrance(prototype.pos.z);
+                prototype.pos = this.cave.map.getRandomFloorPosition(prototype.pos.z);
             }
         } else {
             prototype.pos = this.cave.getEntrance();

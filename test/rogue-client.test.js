@@ -27,7 +27,7 @@ const defaultMap = {
   "width":4,
   "height":5,
   "depth":3,
-  "gateways": ["http://foo.com/"]
+  "gateways": "test_url"
 };
 
 
@@ -359,7 +359,6 @@ describe('monster connects to server', () => {
   it('should see other entities die', async (done) => {
     let pos1 = {x:defaultPos.x+1, y:defaultPos.y, z:defaultPos.z};
     let mockBrain1 = {ready: (event) => {
-      console.log("Event:",event);
       if (!bot2started) {
         bot2started = true;
         bot2.start(pos1);

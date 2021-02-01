@@ -1,10 +1,12 @@
 [
     {
-    "type": "Starting Cave",
-    "url": "http://localhost:2000"
+        "id": 0,
+        "name": "Starting Cave",
+        "url": "http://localhost:2000"
     },
     {
-    "type": "Kreepy Kavern",
-    "url": "http://localhost:3000"
+        "id": 1,
+        "name": "Kreepy Kavern",
+        "url": "http://localhost:3000"
     }
 ]

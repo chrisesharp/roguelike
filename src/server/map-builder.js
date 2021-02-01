@@ -25,11 +25,6 @@ export default class MapBuilder extends Map {
         return new genClass(width, height, template);
     }
 
-    getEntrance(level) {
-        level = level || 0;
-        return this.getRandomFloorPosition(level);
-    }
-
     getGateways() {
         return this.gateways;
     }

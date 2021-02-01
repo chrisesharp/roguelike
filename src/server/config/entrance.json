@@ -1,8 +1,9 @@
 {
+    "cave_id": 0,
+    "gateways": "http://localhost:2000/caves",
     "width":15,
     "height":10,
     "depth":3,
     "generator" : "FileGenerator",
-    "maps":"./src/server/config/maps/entrance",
-    "gateways": [ "http://localhost:3000" ]
+    "maps":"./src/server/config/maps/entrance"
 }

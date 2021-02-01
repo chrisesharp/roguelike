@@ -11,13 +11,10 @@ const host = '0.0.0.0';
 const template = getConfig();
 const app = createAppServer(port);
 const httpServer = createHttpServer(host, port, app);
-const server = new ConnectionServer(httpServer, template);
-
 (async () => {
     const routes = await import('./routes/index.js');
-    routes.use(app, server);
+    routes.use(app, new ConnectionServer(httpServer, template));
 })();
-
 
 function getConfig() {
   const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';

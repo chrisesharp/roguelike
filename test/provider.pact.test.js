@@ -12,7 +12,7 @@ const rock = new Rock();
 const defaultMapTemplate = {
   "width":4,
   "height":5,
-  "gateways": ["http://foo.com/"]
+  "gateways": "test_url"
 };
 
 const server = new EntityServer(null, defaultMapTemplate);

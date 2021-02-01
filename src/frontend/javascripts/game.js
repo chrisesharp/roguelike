@@ -17,7 +17,7 @@ const DEFAULT_ROLES = [
     {type:"warrior",name:"Warrior"}
 ];
 const DEFAULT_CAVE = [
-    {type:"Starting Cave",url:BASE_URL}
+    {id:0, name:"Starting Cave",url:BASE_URL}
 ];
 
 class Game {
@@ -87,7 +87,8 @@ class Game {
         caves.forEach((cave) => {
             let newCave = this.caveURL.cloneNode(false);
             newCave.value = cave.url;
-            newCave.innerHTML = cave.type;
+            newCave.id = cave.id;
+            newCave.innerHTML = cave.name;
             this.caveField.appendChild(newCave);
         });
     }

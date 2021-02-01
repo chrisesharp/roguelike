@@ -79,7 +79,7 @@ describe('cave creation', () => {
     let cave = new Cave(defaultTemplate);
     let gateways = cave.getGatewayPositions();
     let gwPos = gateways[0][0];
-    cave.addGateway({pos:gwPos,url:"http://foo.com/"});
+    cave.addGateway({pos:gwPos,url:"test_url"});
     let map = cave.getMap();
     expect(map.getWidth()).toBe(defaultTemplate.width);
     expect(map.getHeight()).toBe(defaultTemplate.height);
@@ -101,7 +101,7 @@ describe('cave creation', () => {
     expect(gate.isWalkable()).toBe(true);
     expect(gate.isDiggable()).toBe(false);
     expect(gate.isBlockingLight()).toBe(true);
-    expect(cave.getGateway(gwPos).url).toBe("http://foo.com/");
+    expect(cave.getGateway(gwPos).url).toBe("test_url");
     done();
   });
 
