@@ -63,14 +63,13 @@ class Game {
     initCaves(caveField, caveURL) {
         this.caveField = caveField;
         this.caveURL = caveURL;
-        game.updateCaveOptions(DEFAULT_CAVE);
-        // axios.get(`${BASE_URL}/roles`,{
-        //         timeout: 2500
-        //     }).then( (result) => {
-        //         game.updateCaveOptions(result.data);
-        //     }).catch( () => {
-        //         game.updateCaveOptions(DEFAULT_CAVE);
-        //     });
+        axios.get(`${BASE_URL}/caves`,{
+                timeout: 2500
+            }).then( (result) => {
+                game.updateCaveOptions(result.data);
+            }).catch( () => {
+                game.updateCaveOptions(DEFAULT_CAVE);
+            });
     }
 
     updateRolesOptions(roles) {
