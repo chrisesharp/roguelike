@@ -55,7 +55,7 @@ export const gateTile = new Tile({
     foreground: 'black',
     background: 'white',
     walkable: true,
-    blocksLight: true,
+    blocksLight: false,
     gateway: true,
     description: 'A gateway to another realm'
 });

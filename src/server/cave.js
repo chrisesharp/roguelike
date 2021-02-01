@@ -18,7 +18,8 @@ export default class Cave {
     constructor(template=DEFAULT_SIZE) {
         this.gateways = {};
         this.map = Cave.builder(template).generate();
-        this.entrance = template.entrance || this.map.getRandomFloorPosition(0);
+        // this.entrance = template.entrance || this.map.getRandomFloorPosition(0);
+        this.setEntrance(template.entrance);
         this.items = {};
         this.itemRepos = this.createRepos(template);
         this.distributeItems(this.map);
@@ -53,6 +54,11 @@ export default class Cave {
                 this.addItem(pos, item);
             }
         }
+    }
+
+    setEntrance(pos) {
+        this.entrance = pos || this.map.getRandomFloorPosition(0);
+        this.map.addGateway(this.entrance.x, this.entrance.y, this.entrance.z);
     }
 
     getEntrance() {

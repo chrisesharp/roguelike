@@ -27,6 +27,7 @@ const defaultMap = {
   "width":4,
   "height":5,
   "depth":3,
+  "entrance": {"x":0,"y":0,"z":0},
   "gateways": "test_url"
 };
 

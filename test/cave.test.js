@@ -11,7 +11,7 @@ const defaultTemplate = {
   "height": 5,
   "depth": 3,
   "generator": "MockGenerator",
-  "entrance": {'x':0,'y':0,'z':0}
+  "entrance": {'x':1,'y':1,'z':0}
 };
 
 beforeAll((done) => {
@@ -93,14 +93,14 @@ describe('cave creation', () => {
     expect(tile.isWalkable()).toBe(false);
     expect(tile.isBlockingLight()).toBe(true);
     expect(tile.getDescription()).toBe('A cave wall');
-    expect(cave.getEntrance()).toEqual({'x':0,'y':0,'z':0});
+    expect(cave.getEntrance()).toEqual(defaultTemplate.entrance);
     let gate = map.getTile(1,4,0);
     expect(gate.getChar()).toBe('*');
     expect(gate.getForeground()).toBe('black');
     expect(gate.getBackground()).toBe('white');
     expect(gate.isWalkable()).toBe(true);
     expect(gate.isDiggable()).toBe(false);
-    expect(gate.isBlockingLight()).toBe(true);
+    expect(gate.isBlockingLight()).toBe(false);
     expect(cave.getGateway(gwPos).url).toBe("test_url");
     done();
   });

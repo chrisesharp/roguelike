@@ -45,6 +45,10 @@ export default class MapBuilder extends Map {
         this.tiles[z][y][x] = tile;
     }
 
+    addGateway(x, y, z) {
+        this.tiles[z][y][x] = Tiles.gateTile;
+    }
+
     setupRegions(z) {
         let region = 1;
         for (let x = 0; x < this.width; x++) {
