@@ -7,7 +7,7 @@ import caves from './caves.js';
 import reset from './reset.js'
 
 const bundlerOpts = {
-    //hmrPort: 8080,
+    hmrPort: process.env.HMR || 8080,
 };
 
 const bundler = new Bundler('./src/frontend/index.html', bundlerOpts);
