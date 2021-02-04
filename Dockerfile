@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:12
 WORKDIR /usr/src/app
 RUN chown node:node /usr/src/app
 COPY --chown=node:node package*.json ./
