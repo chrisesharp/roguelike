@@ -7,11 +7,21 @@ This is the prototype for a distributed multiplayer dungeon crawl game, with a d
 - Illustrate architecture and design patterns for building microservice-based solutions hosted in kubernetes
 - Be a fun and challenging game!
 
-## Running
+## Setup
+
+`npm install` to get all the code dependencies.
+
+## Running the server
 
 The main server is started with `npm start` and this will fire up a server that you can then point a browser to and start playing.
 
+(You may have to let "node" accept incoming network connections)
+
 However, all monsters in the game are run as separate microservices. You need to set the `ENV` variable `export ROLE="MONSTERS"` before running `npm start` in another shell.
+
+## Connect to the server from a browser
+
+If running the server locally, point your browser here: http://127.0.0.1:3000
 
 ## Coding
 
