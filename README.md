@@ -23,6 +23,19 @@ However, all monsters in the game are run as separate microservices. You need to
 
 If running the server locally, point your browser here: http://127.0.0.1:3000
 
+## Keys anad what they do
+- Cursor left, right, up and down : obvious movement around the current map level.
+- i : show Inventory
+- d : drop an item
+- e : eat something from your inventory
+- x : examine an item from your inventory
+- w : wield or wear an item from your inventory
+- , : pick up an item
+- \> : move down stairs
+- < : move up stairs
+- ? : help 
+- ; : look
+
 ## Coding
 
 The architecture aims to enable easy extensibility of the game with new features.
