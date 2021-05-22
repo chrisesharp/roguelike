@@ -55,3 +55,9 @@ src/
 │   └── items/        # Code for each type of item - weapons, armour, food, etc.
 └── start.sh          # Entry point for microservice
 ```
+
+## Server API resources
+- GET http://localhost:3000/caves - lists the caves available
+- GET http://localhost:3000/health - gets the current state of the server
+- GET http://localhost:3000/reset - reset the server
+- GET http://localhost:3000/roles - lists the roles
