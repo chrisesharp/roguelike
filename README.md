@@ -34,7 +34,7 @@ If running the server locally, point your browser here: http://127.0.0.1:3000
 - \> : move down stairs
 - < : move up stairs
 - ? : help 
-- ; : look
+- ; : look around (using cursor keys)
 
 ## Coding
 
