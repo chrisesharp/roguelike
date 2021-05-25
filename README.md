@@ -56,7 +56,8 @@ src/
 └── start.sh          # Entry point for microservice
 ```
 
-When coding, use these npm commands too:
+## Running unit tests
+When coding, use these npm commands to run unit tests against the source code:
 - `npm test:watch` - to continuously watch for source file changes, and re-test when they do change
 - `npm test:coverage` - see what your code coverage is
 - `npm test` - a one-off run through the unit tests
