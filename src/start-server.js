@@ -27,6 +27,7 @@ function createAppServer(port) {
   const app = express();
   app.set('port', port);
   app.use(express.json());
+  app.set('json spaces', 4)
   app.use(express.urlencoded({ extended: false }));
   app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
