@@ -56,6 +56,21 @@ src/
 └── start.sh          # Entry point for microservice
 ```
 
+When coding, use this to make sure all the unit tests work:
+```
+npm test:watch
+```
+
+Or this to see what your code coverage is:
+```
+npm test:coverage
+```
+
+or a one-off run through the unit tests:
+```
+npm test
+```
+
 ## Server API resources
 - GET http://localhost:3000/caves - lists the caves available
 - GET http://localhost:3000/health - gets the current state of the server
