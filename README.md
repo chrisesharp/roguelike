@@ -23,7 +23,7 @@ However, all monsters in the game are run as separate microservices. You need to
 
 If running the server locally, point your browser here: http://127.0.0.1:3000
 
-## Keys anad what they do
+## Keys and what they do
 - Cursor left, right, up and down : obvious movement around the current map level.
 - i : show Inventory
 - d : drop an item
