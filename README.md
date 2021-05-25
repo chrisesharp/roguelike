@@ -1,18 +1,18 @@
 # Caverns & Kubernetes
 
 ## A Roguelike microservices ecosystem
-
 This is the prototype for a distributed multiplayer dungeon crawl game, with a dual purpose:
 
 - Illustrate architecture and design patterns for building microservice-based solutions hosted in kubernetes
 - Be a fun and challenging game!
 
-## Setup
+## To understand what RogueLike is about
+- https://en.wikipedia.org/wiki/Roguelike : Wikipedia
 
+## Setup
 `npm install` to get all the code dependencies.
 
 ## Running the server
-
 The main server is started with `npm start` and this will fire up a server that you can then point a browser to and start playing.
 
 (You may have to let "node" accept incoming network connections)
@@ -20,7 +20,6 @@ The main server is started with `npm start` and this will fire up a server that 
 However, all monsters in the game are run as separate microservices. You need to set the `ENV` variable `export ROLE="MONSTERS"` before running `npm start` in another shell.
 
 ## Connect to the server from a browser
-
 If running the server locally, point your browser here: http://127.0.0.1:3000
 
 ## Keys and what they do
@@ -37,7 +36,6 @@ If running the server locally, point your browser here: http://127.0.0.1:3000
 - ; : look around (using cursor keys)
 
 ## Coding
-
 The architecture aims to enable easy extensibility of the game with new features.
 
 ```bash
