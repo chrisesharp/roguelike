@@ -67,4 +67,4 @@ When coding, use these npm commands to run unit tests against the source code:
 - GET http://localhost:3000/roles - lists the roles
 
 ## Overall Architecture
-[!Component Diagram](./docs/components.jpg)
+![Component Diagram](./docs/components.jpg)
