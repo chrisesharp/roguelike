@@ -65,3 +65,6 @@ When coding, use these npm commands to run unit tests against the source code:
 - GET http://localhost:3000/health - gets the current state of the server
 - GET http://localhost:3000/reset - reset the server
 - GET http://localhost:3000/roles - lists the roles
+
+## Overall Architecture
+[!Component Diagram](./docs/components.jpg)
