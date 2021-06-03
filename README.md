@@ -66,5 +66,8 @@ When coding, use these npm commands to run unit tests against the source code:
 - GET http://localhost:3000/reset - reset the server
 - GET http://localhost:3000/roles - lists the roles
 
-## Overall Architecture
+## Overall Component Architecture
 ![Component Diagram](./docs/components.jpg)
+
+## Class diagrams
+![Class Diagram](./docs/classes/Slide1.jpg)
