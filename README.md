@@ -70,4 +70,4 @@ When coding, use these npm commands to run unit tests against the source code:
 ![Component Diagram](./docs/components.jpg)
 
 ## Class diagrams
-![Class Diagram](./docs/classes/Slide1.jpg)
+![Class Diagram](./docs/classes/Slide1.jpeg)
