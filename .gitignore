@@ -5,3 +5,4 @@ dist/
 pact/
 pacts/
 **/~$*.pptx
+**/package-lock.json
