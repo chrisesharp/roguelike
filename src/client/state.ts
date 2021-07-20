@@ -1,5 +1,5 @@
 import { Entity, EntityState } from '../common/entity';
-import { Item, Location } from '../common/item';
+import { Item, ItemState, Location } from '../common/item';
 import _ from 'underscore';
 
 export class State {
@@ -50,11 +50,11 @@ export class State {
         this.addEntity(this.entity);
     }
 
-    updateItems(itemsByLocation: { [location: string]: Item[] }): void {
+    updateItems(itemsByLocation: { [location: string]: ItemState[] }): void {
         this.items.clear();
         Object.values(itemsByLocation)
             .flat()
-            .map(item => new Item(item.serialize()))
+            .map(item => new Item(item))
             .forEach(newItem => this.addItem(newItem));
     }
 

@@ -24,7 +24,7 @@ class PlayScreen {
         this.screenHeight = game.getScreenHeight();
         this.map = game.getMap();
         this.player = game.getEntity();
-        this.player.pos = game.getEntrance();
+        this.player.setPos(game.getEntrance());
     }
 
     exit() { 
@@ -42,9 +42,9 @@ class PlayScreen {
     }
 
     getScreenOffsets() {
-        let topLeftX = Math.max(0, this.player.pos.x - (this.screenWidth / 2));
+        let topLeftX = Math.max(0, this.player.getPos().x - (this.screenWidth / 2));
         topLeftX = Math.min(topLeftX, Math.max(0, this.map.getWidth() - this.screenWidth));
-        let topLeftY = Math.max(0, this.player.pos.y - (this.screenHeight / 2));
+        let topLeftY = Math.max(0, this.player.getPos().y - (this.screenHeight / 2));
         topLeftY = Math.min(topLeftY, Math.max(0, this.map.getHeight() - this.screenHeight));
         return {
             x: topLeftX,
@@ -54,11 +54,11 @@ class PlayScreen {
 
     renderTiles(display) {
         let visibleCells = {};
-        let level = this.player.pos.z;
+        let level = this.player.getPos().z;
         let viewDist = this.player.getSightRadius();
         let map = this.map;
         map.getFov(level).compute(
-            this.player.pos.x, this.player.pos.y, viewDist, 
+            this.player.getPos().x, this.player.getPos().y, viewDist, 
             function(x, y, radius, visibility) {
                 let dist = (viewDist - radius)/viewDist;
                 visibleCells[x + "," + y] = visibility * dist;
@@ -159,7 +159,7 @@ class PlayScreen {
     }
 
     showPickupSubScreen() {
-        let items = game.getItemsAt(this.player.pos.x, this.player.pos.y, this.player.pos.z);
+        let items = game.getItemsAt(this.player.getPos().x, this.player.getPos().y, this.player.getPos().z);
         if (items && items.length === 1) {
             let item = items[0];
             game.takeItem(item);

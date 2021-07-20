@@ -9,6 +9,7 @@ export default class ExplorerMap extends GameMap {
     constructor(template={}) {
         super(template);
         this.explored = this.setupExploredArray();
+        this.fov = [];
     }
 
     setupExploredArray() {
