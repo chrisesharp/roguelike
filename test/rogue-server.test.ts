@@ -85,6 +85,7 @@ describe('basic socket.io API', () => {
 
     it('should return default map', (done) => {
         socket.emit(EVENTS.getMap);
+        // socket.on(EVENTS.map, (message: { width: number; height: number; }) => {
         socket.on(EVENTS.map, (message: { width: number; height: number; }) => {
             expect(message.width).toBe(defaultMap.width);
             expect(message.height).toBe(defaultMap.height);

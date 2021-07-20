@@ -8,6 +8,15 @@ export interface MapTemplate {
     height: number;
     depth: number;
     tiles?: Array<Array<Array<Tile | TileProperties>>>;
+    entrance?: Location;
+}
+
+export interface MapState {
+    width: number;
+    height: number;
+    depth: number;
+    tiles: TileProperties[][][];
+    entrance: Location;
 }
 
 function nullTiles(width: number, height: number, depth: number): Tile[][][] {
@@ -30,6 +39,7 @@ export class GameMap {
         this.height = template.height;
         this.depth = template.depth;
         this.tiles = template.tiles || nullTiles(template.width, template.height, template.depth);
+        this.entrance = template.entrance;
     }
 
     getEntrance(): Location | undefined {
@@ -58,5 +68,15 @@ export class GameMap {
 
     withinBounds(x: number, y: number, z: number): boolean {
         return x >= 0 && y >= 0 && z >= 0 && x < this.width && y < this.height && z < this.depth;
+    }
+
+    serialize(): MapState {
+        return {
+            depth: this.depth,
+            width: this.width,
+            entrance: this.entrance,
+            height: this.height,
+            tiles: this.tiles,
+        };
     }
 }
