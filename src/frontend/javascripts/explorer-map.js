@@ -1,11 +1,11 @@
 "use strict";
 
-import Tile from "../../common/tile";
-import Map from "../../common/map";
+import { Tile } from "../../common/tile";
+import { GameMap } from "../../common/map";
 import { FOV } from "./display";
 const nullTile = new Tile();
 
-export default class ExplorerMap extends Map {
+export default class ExplorerMap extends GameMap {
     constructor(template={}) {
         super(template);
         this.explored = this.setupExploredArray();

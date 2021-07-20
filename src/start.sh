@@ -2,7 +2,7 @@
 
 if [ "$ROLE" == "MONSTERS" ]
 then
-    node ./src/start-monsters.js
+    node ./dist/start-monsters.js
 else
-    node ./src/start-server.js
+    node ./dist/start-server.js
 fi

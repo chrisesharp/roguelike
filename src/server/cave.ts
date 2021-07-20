@@ -13,6 +13,7 @@ const DEFAULT_TEMPLATE: MapBuilderTemplate = Object.assign({
     generator: 'FileGenerator',
     randomiser: (arr: Position[]) => arr[0],
     regionSize: 10,
+    fov: [],
 }, DEFAULT_SIZE);
 
 export interface CaveTemplate {

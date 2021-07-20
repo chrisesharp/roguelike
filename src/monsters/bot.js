@@ -1,8 +1,8 @@
 "use strict";
 
-import EntityClient from '../client/entity-client.js';
-import Map from '../common/map.js';
-import { EVENTS } from '../common/events.js';
+import { EntityClient } from '../client/entity-client.js';
+import { GameMap } from '../common/map';
+import { EVENTS } from '../common/events';
 
 export default class Bot {
     constructor(URL, brain) {
@@ -28,7 +28,7 @@ export default class Bot {
     }
  
     mapAvailable(data) {
-        this.brain.setMap(new Map(data));
+        this.brain.setMap(new GameMap(data));
     }
 
     refresh(event, data) {

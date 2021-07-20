@@ -3,7 +3,7 @@
 import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, isZeroKey, isLetterKey, letterIndex } from '../keys.js';
-import Item from '../../../common/item.js';
+import { Item } from '../../../common/item';
 
 export default class ItemListScreen extends Screen {
     constructor(template) {

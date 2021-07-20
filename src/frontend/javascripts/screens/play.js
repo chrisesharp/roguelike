@@ -6,7 +6,7 @@ import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
 import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
-import Glyph from '../../../common/glyph.js';
+import { Glyph } from '../../../common/glyph';
 
 
 class PlayScreen {

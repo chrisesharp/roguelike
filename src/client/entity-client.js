@@ -1,7 +1,7 @@
 "use strict";
 
-import State from './state.js';
-import { EVENTS } from '../common/events.js';
+import { State } from './state';
+import { EVENTS } from '../common/events';
 import { io } from 'socket.io-client';
 
 export default class EntityClient {
