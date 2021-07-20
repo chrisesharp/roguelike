@@ -19,7 +19,7 @@ const wizard = new Wizard({pos:{x:5,y:5,z:0}});
 const goblin = new Goblin({pos:{x:2,y:2,z:0}});
 
 describe('goblin brain responses', () => {
-    it('should identify targets', (done) => {
+    it('should identify targets', () => {
         let map = mockMap;
         let client = {
             getEntity: () => { return goblin;},
@@ -31,10 +31,9 @@ describe('goblin brain responses', () => {
         brain.speed = 0;
         brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(warrior);
-        done();
     });
 
-    it('should ignore other goblins', (done) => {
+    it('should ignore other goblins', () => {
         let otherGoblin = new Goblin({pos:{x:4,y:4,z:0}});
         let map = mockMap;
         let client = {
@@ -46,10 +45,9 @@ describe('goblin brain responses', () => {
         brain.speed = 0;
         brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(undefined);
-        done();
     });
 
-    it('should identify closest target', (done) => {
+    it('should identify closest target', () => {
         let map = mockMap;
         let client = {
             getEntity: () => { return goblin;},
@@ -60,10 +58,9 @@ describe('goblin brain responses', () => {
         brain.speed = 0;
         brain.ready(EVENTS.entities);
         expect(brain.getCurrentTarget()).toEqual(warrior);
-        done();
     });
 
-    it('should move south towards target', (done) => {
+    it('should move south towards target', () => {
         const warrior = new Warrior({pos:{x:2,y:4,z:0}});
         let map = mockMap;
         let movement;
@@ -79,10 +76,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.SOUTH);
-        done();
     });
 
-    it('should move east towards target', (done) => {
+    it('should move east towards target', () => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:4,y:2,z:0}});
         let movement;
@@ -98,10 +94,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.EAST);
-        done();
     });
 
-    it('should move north towards target', (done) => {
+    it('should move north towards target', () => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:2,y:0,z:0}});
         let movement;
@@ -117,10 +112,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.NORTH);
-        done();
     });
 
-    it('should move west towards target', (done) => {
+    it('should move west towards target', () => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:0,y:2,z:0}});
         let movement;
@@ -136,10 +130,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.WEST);
-        done();
     });
 
-    it('should move try alternative direction if cant get to target', (done) => {
+    it('should move try alternative direction if cant get to target', () => {
         let map = {
             "width":10,
             "height":10,
@@ -159,10 +152,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.SOUTH);
-        done();
     });
 
-    it('should move try opposite direction if cant get to target', (done) => {
+    it('should move try opposite direction if cant get to target', () => {
         let map = {
             "width":10,
             "height":10,
@@ -182,10 +174,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(DIRS.EAST);
-        done();
     });
 
-    it('should not move if boxed in', (done) => {
+    it('should not move if boxed in', () => {
         let map = {
             "width":10,
             "height":10,
@@ -205,10 +196,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
-        done();
     });
 
-    it('should not move without a target', (done) => {
+    it('should not move without a target', () => {
         let map = mockMap;
         let movement;
         let client = {
@@ -223,10 +213,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position, "1");
         brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
-        done();
     });
 
-    it('should not move when target below or above', (done) => {
+    it('should not move when target below or above', () => {
         let map = mockMap;
         const warrior = new Warrior({pos:{x:0,y:0,z:1}});
         let movement;
@@ -242,10 +231,9 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position);
         brain.ready(EVENTS.ping);
         expect(movement).toBe(undefined);
-        done();
     });
 
-    it('should disconnect if dead', (done) => {
+    it('should disconnect if dead', () => {
         let disconnected = false;
         let client = {
             getEntity: () => { return goblin;},
@@ -257,10 +245,9 @@ describe('goblin brain responses', () => {
         brain.speed = 0;
         brain.ready(EVENTS.dead);
         expect(disconnected).toBe(true);
-        done();
     });
 
-    it('should sync if delete received', (done) => {
+    it('should sync if delete received', () => {
         let synched = false;
         let client = {
             getEntity: () => { return goblin;},
@@ -272,10 +259,9 @@ describe('goblin brain responses', () => {
         brain.speed = 0;
         brain.ready(EVENTS.delete);
         expect(synched).toBe(true);
-        done();
     });
 
-    it('should sync if no target for 10 turns', (done) => {
+    it('should sync if no target for 10 turns', () => {
         let synched = false;
         let client = {
             getEntity: () => { return goblin;},
@@ -289,6 +275,5 @@ describe('goblin brain responses', () => {
         brain.ready(EVENTS.position,"1");
         brain.ready(EVENTS.ping);
         expect(synched).toBe(true);
-        done();
     });
 });
