@@ -2,7 +2,7 @@
 
 import { io } from 'socket.io-client';
 import { Bots } from './monsters/index.js';
-import { EVENTS } from './common/events.js';
+import { EVENTS } from './common/events';
 
 const botConstructors =  {};
 const serverAddr = process.env.server || "http://0.0.0.0:3000";

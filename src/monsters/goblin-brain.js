@@ -3,7 +3,7 @@
 import _ from "underscore";
 import Brain from './brain.js';
 import { DIRS, getMovement, opposite, left, right } from "../common/movement.js";
-import { EVENTS } from "../common/events.js";
+import { EVENTS } from "../common/events";
 
 function distance(pos1, pos2) {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);

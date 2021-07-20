@@ -77,6 +77,7 @@ export class Cave {
 
     setEntrance(pos?: Location): void {
         this.entrance = pos || this.map.getRandomFloorPosition(0);
+        console.log("Entrance set:",this.entrance)
         this.map.addGateway(this.entrance.x, this.entrance.y, this.entrance.z);
     }
 
