@@ -3,7 +3,7 @@ import { emptyMap, GameMap, MapTemplate } from "../common/map";
 import { Tile } from "../common/tile";
 import { GeneratorOptions, generators, MapGenerator } from "./generators";
 import * as Tiles from "./server-tiles";
-import * as ROT from "rot-js";
+import FOV from 'rot-js/lib/fov/fov'
 
 function createGenerator(generatorName: string, width: number, height: number, template: GeneratorOptions): MapGenerator {
     const newGenerator = generators[generatorName];
@@ -22,7 +22,7 @@ export interface MapBuilderTemplate extends MapTemplate, GeneratorOptions {
     regionSize: number;
     randomiser: (positions: Position[]) => Position;
     generator: string;
-    fov: FOV.PreciseShadowCasting[];
+    fov: FOV[];
 }
 
 // function printTiles(tiles: Array<Array<Array<Tile | unknown>>>): void {
@@ -35,7 +35,7 @@ export class MapBuilder extends GameMap {
     private regions: number[][][] = [];
     private readonly generator: MapGenerator;
     private readonly gateways: Location[][];
-    protected fov: ROT.FOV.PreciseShadowCasting[] = [];
+    protected fov: FOV[] = [];
 
     constructor(template: MapBuilderTemplate) {
         super(Object.assign({}, template, {
