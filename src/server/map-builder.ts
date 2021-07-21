@@ -29,6 +29,19 @@ export interface MapBuilderTemplate extends MapTemplate, GeneratorOptions {
 //     console.log(tiles.map(z => z.map(x => x.map(t => t instanceof Tile ? t.getChar() : t))));
 // }
 
+function shuffle<T>(input: T[]): void {
+    for (let i = 0; i < input.length - 1; i++) {
+        const j = i + Math.floor(Math.random() * input.length - i);
+        [input[j], input[i]] = [input[i], input[j]];
+    }
+}
+
+function randomIndexes(limit: number): number[] {
+    const result = Array.from({ length: limit }, (_, i) => i);
+    shuffle(result);
+    return result;
+}
+
 export class MapBuilder extends GameMap {
     private readonly regionSize: number;
     private readonly randomiser: (positions: Position[]) => Position;
@@ -208,13 +221,18 @@ export class MapBuilder extends GameMap {
     }
 
     getRandomFloorPosition(z: number): Location {
-        let x, y: number;
-        // Beware this can become an infinite loop depending on map content
-        do {
-            x = Math.floor(Math.random() * this.getWidth());
-            y = Math.floor(Math.random() * this.getHeight());
-        } while(!this.isEmptyFloor(x, y, z));
-        return { x, y, z };
+        const xs = randomIndexes(this.getWidth());
+        const ys = randomIndexes(this.getHeight());
+
+        for (const x of xs) {
+            for (const y of ys) {
+                if (this.isEmptyFloor(x, y, z)) {
+                    return { x, y, z };
+                }
+            }
+        }
+
+        throw new Error('No empty floor tiles');
     }
 
     isEmptyFloor(x: number, y: number, z: number): boolean {
