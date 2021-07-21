@@ -53,7 +53,7 @@ export class ConnectionServer {
         });
 
         socket.on(EVENTS.getMap, () => {
-            socket.emit(EVENTS.map, server.getMap(entity));
+            socket.emit(EVENTS.map, server.getMapState(entity));
         });
 
         socket.on(EVENTS.getPosition, () => {

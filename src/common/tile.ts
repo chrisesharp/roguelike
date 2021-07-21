@@ -1,12 +1,14 @@
 import { Glyph, GlyphState } from './glyph';
 
-export interface TileProperties extends Partial<GlyphState> {
-    walkable?: boolean;
-    diggable?: boolean;
-    blocksLight?: boolean;
-    gateway?: boolean;
-    description?: string;
+export interface TileState extends GlyphState {
+    walkable: boolean;
+    diggable: boolean;
+    blocksLight: boolean;
+    gateway: boolean;
+    description: string;
 }
+
+export type TileProperties = Partial<TileState>;
 
 export class Tile extends Glyph {
     private readonly walkable: boolean;
@@ -43,5 +45,15 @@ export class Tile extends Glyph {
 
     getDescription(): string {
         return this.description;
+    }
+
+    serialize(): TileState {
+        return Object.assign({
+            walkable: this.walkable,
+            diggable: this.diggable,
+            gateway: this.gateway,
+            blocksLight: this.blocksLight,
+            description: this.description,
+        }, super.serialize());
     }
 }

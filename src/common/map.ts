@@ -1,5 +1,5 @@
 import { Location } from './item';
-import { Tile, TileProperties } from './tile';
+import { Tile, TileProperties, TileState } from './tile';
 
 const nullTile = new Tile();
 
@@ -27,18 +27,23 @@ export function emptyMap<T>(cell: T, width: number, height: number): T[][] {
     return Array.from({ length: height }, () => new Array(width).fill(cell));
 }
 
+function asTiles(input: Array<Array<Array<Tile | TileProperties>>>): Tile[][][] {
+    return input.map(z => z.map(y => y.map(t => t instanceof Tile ? t : new Tile(t))));
+}
+
 export class GameMap {
     entrance?: Location;
     private readonly width: number;
     private readonly height: number;
     private readonly depth: number;
-    protected tiles: Array<Array<Array<Tile | TileProperties>>>;
+    protected tiles: Tile[][][];
 
     constructor(template: MapTemplate) {
         this.width = template.width;
         this.height = template.height;
         this.depth = template.depth;
-        this.tiles = template.tiles || nullTiles(template.width, template.height, template.depth);
+        const tiles = template.tiles || nullTiles(template.width, template.height, template.depth);
+        this.tiles = asTiles(tiles);
         this.entrance = template.entrance;
     }
 
@@ -60,23 +65,16 @@ export class GameMap {
 
     getTile(x: number, y: number, z: number): Tile {
         if (this.withinBounds(x, y, z)) {
-            const tile = this.tiles[z][y][x];
-            return tile instanceof Tile ? tile : new Tile(tile);
+            return this.tiles[z][y][x];
         }
         return nullTile;
     }
 
-    withinBounds(x: number, y: number, z: number): boolean {
-        return x >= 0 && y >= 0 && z >= 0 && x < this.width && y < this.height && z < this.depth;
+    getTilesState(): TileState[][][] {
+        return this.tiles.map(z => z.map(y => y.map(t => t.serialize())));
     }
 
-    serialize(): MapState {
-        return {
-            depth: this.depth,
-            width: this.width,
-            entrance: this.entrance,
-            height: this.height,
-            tiles: this.tiles,
-        };
+    withinBounds(x: number, y: number, z: number): boolean {
+        return x >= 0 && y >= 0 && z >= 0 && x < this.width && y < this.height && z < this.depth;
     }
 }

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import { Tile } from 'src/common/tile';
+import { MapState } from '../common/map';
+import { Tile } from '../common/tile';
 import { EVENTS } from '../common/events';
 import { Item, Location } from '../common/item';
 import { DIRS, getMovement, Movement } from '../common/movement';
 import { Cave, CaveItems, CaveTemplate } from './cave';
 import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
 import { EntityFactory } from './entity-factory';
-import { MapBuilder } from './map-builder';
 import { Messages, MSGTYPE } from './messages';
 import { Messaging } from './messaging';
 import * as Tiles from './server-tiles';
@@ -204,12 +204,15 @@ export class EntityServer {
         return;
     }
 
-    getMap(entity?: ServerEntity): MapBuilder {
+    getMapState(entity?: ServerEntity): MapState {
         const map = this.cave.getMap();
-        if (entity) {
-            map.entrance = entity.entrance;
-        }
-        return map;
+        return {
+            depth: map.getDepth(),
+            width: map.getWidth(),
+            entrance: entity?.entrance || map.entrance || map.getRandomFloorPosition(0),
+            height: map.getHeight(),
+            tiles: map.getTilesState(),
+        };
     }
 
     reset(properties: EntityServerTemplate): void {
