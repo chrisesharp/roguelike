@@ -92,6 +92,7 @@ class PlayScreen {
             }
             if (game.getEntityAt(x, y, z)) {
                 glyph = game.getEntityAt(x, y, z);
+                // TODO remove
                 console.log("glyph:",glyph)
                 console.log("glyph.getChar():",glyph.getChar())
             }
