@@ -92,8 +92,9 @@ class PlayScreen {
             }
             if (game.getEntityAt(x, y, z)) {
                 glyph = game.getEntityAt(x, y, z);
+                console.log("glyph:",glyph)
+                console.log("glyph.getChar():",glyph.getChar())
             }
-
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);
         }
