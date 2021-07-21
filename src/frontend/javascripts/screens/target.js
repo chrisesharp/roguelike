@@ -59,7 +59,7 @@ export default class TargetBasedScreen extends Screen {
             tile = this.map.getTile(x, y, z);
             if (this.visibleCells[x + ',' + y]) {
                 let items = game.getItemsAt(x, y, z);
-                if (items) {
+                if (items.length > 0) {
                     item = items[items.length - 1];
                 }
                 if (game.getEntityAt(x, y, z)) {

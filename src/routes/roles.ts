@@ -7,11 +7,10 @@ interface Role {
 }
 
 const ROLES: Role[] = [];
-
+console.log("Players:",Players)
 for (const key in Players) {
-  const ctor = Players[key];
-  const Role = ctor.toString().split(' ')[1];
-  const role = Role.charAt(0).toLowerCase() + Role.substring(1);
+  const role = key.toString()
+  const Role = role.charAt(0).toUpperCase() + role.substring(1);
   ROLES.push({type:role, name:Role})
 }
 

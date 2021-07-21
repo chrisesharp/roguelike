@@ -13,7 +13,10 @@ export class State {
     }
 
     updateEntityPosition(ourId: string, event: { id: string, pos: Location }): boolean {
+        //TODO remove the console.logs
+        console.log("this entity:",this.entity)
         const entity = (event.id === ourId) ? this.entity : this.others.get(event.id);
+        console.log("entity to move:",entity)
         if (!entity) {
             return false;
         }

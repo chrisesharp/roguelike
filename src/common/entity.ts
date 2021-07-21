@@ -106,10 +106,6 @@ export class Entity extends Item {
         this.alive = false;
     }
 
-    // assume(extraProperties?: EntityProperties): void {
-    //     Object.assign(this, extraProperties);
-    // }
-
     serialize(): EntityState {
         const state: EntitySpecificState = {
             alive: this.alive,

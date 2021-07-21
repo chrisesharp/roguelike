@@ -56,6 +56,6 @@ export default class LoginScreen extends Screen {
             }
         }
     }
-};
+}
 
 export const loginScreen = new LoginScreen();

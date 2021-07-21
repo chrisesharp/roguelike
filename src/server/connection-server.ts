@@ -31,7 +31,8 @@ export class ConnectionServer {
     enter(server: EntityServer, socket: Socket, prototype: ServerEntityProperties & { pos: string | Location }): void {
         const entity = server.createEntity(socket.id, prototype);
         this.registerEventHandlers(socket, entity, server);
-        this.messaging.sendToAll(EVENTS.entities, server.getEntities());
+        // this.messaging.sendToAll(EVENTS.entities, server.getEntities());
+        this.messaging.sendToAll(EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
         this.enterRoom(socket, entity, String(server.getRoom(entity.getPos())));
     }
 

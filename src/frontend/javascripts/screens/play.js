@@ -87,7 +87,7 @@ class PlayScreen {
         let visibility = visibleCells[x + ',' + y];
         if (visibility) {
             let items = game.getItemsAt(x, y, z);
-            if (items) {
+            if (items.length > 0) {
                 glyph = items.slice(-1)[0];
             }
             if (game.getEntityAt(x, y, z)) {
@@ -173,6 +173,6 @@ class PlayScreen {
         lookScreen.setup(this.player, offsets.x, offsets.y);
         this.setSubScreen(lookScreen);
     }
-};
+}
 
 export const playScreen = new PlayScreen();
