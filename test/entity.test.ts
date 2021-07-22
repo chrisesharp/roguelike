@@ -11,28 +11,6 @@ const mockServer: Messenger = () => {
 
 describe('entity', () => {
     describe('creation', () => {
-        // it('should assume properties', () => {
-        //     const entity = new Entity({ pos: defaultPos });
-        //     expect(entity.getPos().x).toBe(defaultPos.x);
-        //     expect(entity.getPos().y).toBe(defaultPos.y);
-        //     expect(entity.getPos().z).toBe(defaultPos.z);
-        //     expect(entity.getChar()).toBe('?');
-        //     expect(entity.getForeground()).toBe('white');
-        //     expect(entity.getBackground()).toBe('black');
-        //     expect(entity.getDescription()).toBe('unknown');
-        //     expect(entity.getName()).toBe('anonymous');
-        //     expect(entity.isAlive()).toBe(true);
-        //     entity.assume({ pos: { x: 1, y: 1, z: 1 } });
-        //     entity.assume();
-        //     entity.assume({ speed: 500 });
-        //     entity.assume({ alive: false });
-        //     expect(entity.isAlive()).toBe(false);
-        //     expect(entity.getPos().x).toBe(1);
-        //     expect(entity.getPos().y).toBe(1);
-        //     expect(entity.getPos().z).toBe(1);
-        //     expect(entity.speed).toBe(500);
-        // });
-
         it('should change glyph properties', () => {
             const entity = new Entity({ pos: defaultPos });
             expect(entity.getForeground()).toBe('white');

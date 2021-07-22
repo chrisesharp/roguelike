@@ -31,7 +31,7 @@ export class Entity extends Item {
     private sight = 10;
     protected currentArmour?: Item;
     currentWeapon?: Item;
-    protected inventory: Item[] = [];
+    inventory: Item[] = [];
 
     constructor(properties: Partial<EntityState> = {}) {
         super(Object.assign({
