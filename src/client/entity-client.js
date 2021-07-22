@@ -122,24 +122,24 @@ export default class EntityClient {
     }
 
     takeItem(item) {
-        this.socket.emit(EVENTS.take, item.name);
+        this.socket.emit(EVENTS.take, item.getName());
     }
 
     dropItem(item) {
-        this.socket.emit(EVENTS.drop, item.name);
+        this.socket.emit(EVENTS.drop, item.getName());
     }
 
     eat(item) {
-        this.socket.emit(EVENTS.eat, item.name);
+        this.socket.emit(EVENTS.eat, item.getName());
     }
 
     wieldItem(item) {
-        let weapon = (item) ? item.name : null;
+        let weapon = (item) ? item.getName() : null;
         this.socket.emit(EVENTS.wield, weapon);
     }
 
     wearItem(item) {
-        let armour = (item) ? item.name : null;
+        let armour = (item) ? item.getName() : null;
         this.socket.emit(EVENTS.wear, armour);
     }
 

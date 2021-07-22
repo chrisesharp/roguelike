@@ -12,6 +12,7 @@ interface EntitySpecificState {
     hunger: number;
     currentArmour?: ItemState; // Could be an explicit interface with wearable: true?
     currentWeapon?: ItemState; // Could be an explicit interface with wieldable: true?
+    inventory: ItemState[];
 }
 
 export interface EntityState extends EntitySpecificState, ItemState { }
@@ -30,7 +31,7 @@ export class Entity extends Item {
     private sight = 10;
     protected currentArmour?: Item;
     currentWeapon?: Item;
-    readonly inventory: Item[] = [];
+    protected inventory: Item[] = [];
 
     constructor(properties: Partial<EntityState> = {}) {
         super(Object.assign({
@@ -117,6 +118,7 @@ export class Entity extends Item {
         this.hungerLevel = state.hunger ?? this.hungerLevel;
         this.currentArmour = state.currentArmour ? new Item(state.currentArmour) : this.currentArmour;
         this.currentWeapon = state.currentWeapon ? new Item(state.currentWeapon) : this.currentWeapon;
+        this.inventory = state.inventory?.map(i => new Item(i)) || [];
     }
 
     serialize(): EntityState {
@@ -131,6 +133,7 @@ export class Entity extends Item {
             role: this.role,
             speed: this.speed,
             type: this.type,
+            inventory: this.inventory.map(i => i.serialize()),
         };
         return Object.assign({}, super.serialize(), state);
     }

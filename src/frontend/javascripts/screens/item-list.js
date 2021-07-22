@@ -38,15 +38,16 @@ export default class ItemListScreen extends Screen {
 
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i]) {
+                console.log("inventory:",this.items[i].serialize())
                 let option = this.getOption(i);
 
                 let selectionState = (this.canSelectItem && this.canSelectMultipleItems &&
                     this.selectedIndices[i]) ? '+' : '-';
 
                 let suffix = '';
-                if (this.items[i].name === this.player.getArmour()) {
+                if (this.items[i].getName() === this.player.getArmour()) {
                     suffix = ' (wearing)';
-                } else if (this.items[i].name === this.player.getWeapon()) {
+                } else if (this.items[i].getName() === this.player.getWeapon()) {
                     suffix = ' (wielding)';
                 }
                 display.drawText(0, row++,  option + ' ' + selectionState + ' ' +

@@ -41,6 +41,7 @@ describe('item', () => {
             const newRock = new Item(rock.serialize());
             expect(newApple.isEdible()).toBe(true);
             expect(newRock.isEdible()).toBe(false);
+            expect(newRock.getName()).toBe("rock");
         });
     });
 });

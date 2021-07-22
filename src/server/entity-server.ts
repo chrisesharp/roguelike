@@ -123,7 +123,6 @@ export class EntityServer {
     }
 
     takeItem(entity: ServerEntity, itemName: string): void {
-        console.log("itemName:",itemName)
         const { x, y, z } = entity.getPos();
         const items = this.cave.getItemsAt(x, y, z);
         const item = items.find(o => o.getName() === itemName);

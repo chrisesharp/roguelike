@@ -59,11 +59,11 @@ export class State {
     }
 
     addItem(item: Item): void {
-        console.log("addItem:",item)
         const key = this.posToKey(item.getPos());
         const items = this.items.get(key) || [];
         items.push(item);
         this.items.set(key, items);
+        console.log("inventory set:",this.items.get(key)?.map(o => o.serialize()))
     }
 
     key(x: number, y: number, z: number): string {
