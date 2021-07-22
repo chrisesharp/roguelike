@@ -29,7 +29,7 @@ const directions: { [key in DIRS]: Direction } = {
 } 
 
 export function getMovement(direction?: DIRS): Movement {
-    if (direction != undefined) {
+    if (direction && Object.values(DIRS).includes(direction)) {
         return directions[direction];
     }
     return {x:0, y:0, z:0};
