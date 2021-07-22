@@ -53,7 +53,7 @@ export default class GoblinBrain extends Brain {
             if (entity.role === this.goblin.role) {
                 return;
             }
-            let dist = distance(this.goblin.pos, entity.pos);
+            let dist = distance(this.goblin.getPos(), entity.getPos());
             if (dist <= closest) {
                 closest = dist;
                 target = entity;
@@ -64,14 +64,14 @@ export default class GoblinBrain extends Brain {
 
     findDirections(target) {
         let directions = [];
-        if (this.goblin.pos.x < target.pos.x) {
+        if (this.goblin.getPos().x < target.getPos().x) {
             directions.push(DIRS.EAST);
-        } else if (this.goblin.pos.x > target.pos.x) {
+        } else if (this.goblin.getPos().x > target.getPos().x) {
             directions.push(DIRS.WEST);
         } 
-        if (this.goblin.pos.y < target.pos.y) {
+        if (this.goblin.getPos().y < target.getPos().y) {
             directions.push(DIRS.SOUTH);
-        } else if (this.goblin.pos.y > target.pos.y) {
+        } else if (this.goblin.getPos().y > target.getPos().y) {
             directions.push(DIRS.NORTH);
         }
         return directions;
@@ -83,7 +83,7 @@ export default class GoblinBrain extends Brain {
         directions.forEach(dir => {
             let pos = this.nextPos(dir);
             let tile = this.map.getTile(pos.x, pos.y, pos.z);
-            if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.pos)) {
+            if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.getPos())) {
                 options.push(dir);
             } else {
                 alternatives.push(left(dir));
@@ -113,14 +113,14 @@ export default class GoblinBrain extends Brain {
 
     nextPos(dir) {
         let delta = getMovement(dir);
-        let x = this.goblin.pos.x + delta.x;
-        let y = this.goblin.pos.y + delta.y;
-        let z = this.goblin.pos.z + delta.z;
+        let x = this.goblin.getPos().x + delta.x;
+        let y = this.goblin.getPos().y + delta.y;
+        let z = this.goblin.getPos().z + delta.z;
         return {x:x, y:y, z:z};
     }
 
     isSameLevel(entity) {
-        return (entity.pos.z === this.goblin.pos.z);
+        return (entity.getPos().z === this.goblin.getPos().z);
     }
 
     randomOption(options) {

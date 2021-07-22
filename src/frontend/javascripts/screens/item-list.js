@@ -18,7 +18,6 @@ export default class ItemListScreen extends Screen {
         this.player = player;
         let count = 0;
         this.items = items.map( (item) => {
-            item = new Item(item);
             if (this.isAcceptableFunction(item)) {
                 count++;
                 return item;
@@ -38,7 +37,6 @@ export default class ItemListScreen extends Screen {
 
         for (let i = 0; i < this.items.length; i++) {
             if (this.items[i]) {
-                console.log("inventory:",this.items[i].serialize())
                 let option = this.getOption(i);
 
                 let selectionState = (this.canSelectItem && this.canSelectMultipleItems &&
