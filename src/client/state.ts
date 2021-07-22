@@ -59,6 +59,7 @@ export class State {
     }
 
     addItem(item: Item): void {
+        console.log("addItem:",item)
         const key = this.posToKey(item.getPos());
         const items = this.items.get(key) || [];
         items.push(item);

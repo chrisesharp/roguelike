@@ -7,7 +7,6 @@ interface Role {
 }
 
 const ROLES: Role[] = [];
-console.log("Players:",Players)
 for (const key in Players) {
   const role = key.toString()
   const Role = role.charAt(0).toUpperCase() + role.substring(1);
