@@ -3,7 +3,7 @@ import { Item, ItemState, Location } from '../common/item';
 import _ from 'underscore';
 
 export class State {
-    private readonly entity = new Entity();
+    private entity = new Entity();
     private readonly entities = new Map<string, Entity>();
     private readonly others = new Map<string, Entity>();
     private readonly items = new Map<string, Item[]>();
@@ -13,10 +13,7 @@ export class State {
     }
 
     updateEntityPosition(ourId: string, event: { id: string, pos: Location }): boolean {
-        //TODO remove the console.logs
-        console.log("this entity:",this.entity)
         const entity = (event.id === ourId) ? this.entity : this.others.get(event.id);
-        console.log("entity to move:",entity)
         if (!entity) {
             return false;
         }
@@ -25,8 +22,8 @@ export class State {
         return true;
     }
 
-    updateEntities(ourId: string, entities: EntityState[]): void {
-        entities.forEach(entity => {
+    updateEntities(ourId: string, states: EntityState[]): void {
+        states.forEach(entity => {
             if (entity.id === ourId) {
                 this.updateOurself(entity);
             } else {
@@ -35,21 +32,21 @@ export class State {
         });
     }
 
-    updateOthers(entity: EntityState): void {
-        let npc = this.others.get(entity.id);
+    updateOthers(state: EntityState): void {
+        let npc = this.others.get(state.id);
         if (npc) {
-            npc.assume(entity);
-            this.moveEntity(npc, entity.pos);
+            npc.updateState(state);
+            this.moveEntity(npc, state.pos);
         } else {
-            npc = new Entity(entity);
+            npc = new Entity(state);
             this.others.set(npc.id, npc);
             this.addEntity(npc);
         }
     }
 
-    updateOurself(entity: EntityState): void {
+    updateOurself(state: EntityState): void {
         this.removeEntity(this.entity);
-        this.entity.assume(entity);
+        this.entity.updateState(state);
         this.addEntity(this.entity);
     }
 

@@ -89,12 +89,10 @@ class PlayScreen {
             let items = game.getItemsAt(x, y, z);
             if (items.length > 0) {
                 glyph = items.slice(-1)[0];
+                console.log("item:",glyph)
             }
             if (game.getEntityAt(x, y, z)) {
                 glyph = game.getEntityAt(x, y, z);
-                // TODO remove
-                console.log("glyph:",glyph)
-                console.log("glyph.getChar():",glyph.getChar())
             }
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);

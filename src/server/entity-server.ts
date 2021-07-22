@@ -2,7 +2,7 @@ import axios from 'axios';
 import { MapState } from '../common/map';
 import { Tile } from '../common/tile';
 import { EVENTS } from '../common/events';
-import { Item, Location } from '../common/item';
+import { Item, ItemState, Location } from '../common/item';
 import { DIRS, getMovement, Movement } from '../common/movement';
 import { Cave, CaveItems, CaveTemplate } from './cave';
 import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
@@ -20,6 +20,12 @@ interface ConnectResponse {
 export interface EntityServerTemplate extends CaveTemplate {
     cave_id?: number;
     gateway?: string;
+}
+
+export function serializeCaveItems(itemsByLocation: CaveItems): { [pos: string]: ItemState[] } {
+    const entries = Object.entries(itemsByLocation)
+            .map(([location, items]) => [location, items.map(item => item.serialize())]);
+    return Object.fromEntries(entries);
 }
 
 export class EntityServer {
@@ -123,7 +129,8 @@ export class EntityServer {
         if (item && entity.tryTake(item)) {
             const room = this.cave.getRegion(entity.getPos());
             this.cave.removeItem(item);
-            this.messaging.sendToRoom(room, EVENTS.items, this.cave.getItems(room));
+            const items = this.cave.getItems(room);
+            this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
         } else {
             entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
         }
@@ -134,7 +141,8 @@ export class EntityServer {
         if (item) {
             const room = this.cave.getRegion(entity.getPos());
             this.cave.addItem(entity.getPos(), item);
-            this.messaging.sendToRoom(room, EVENTS.items, this.cave.getItems(room));
+            const items = this.cave.getItems(room);
+            this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
         }
     }
 

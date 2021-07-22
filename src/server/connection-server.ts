@@ -1,9 +1,9 @@
 import http from 'http';
 import { Socket } from 'socket.io';
-import { Location } from 'src/common/item';
+import { ItemState, Location } from 'src/common/item';
 import { EVENTS } from '../common/events';
 import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
-import { EntityServer, EntityServerTemplate } from './entity-server';
+import { EntityServer, EntityServerTemplate, serializeCaveItems } from './entity-server';
 import { Messages } from './messages';
 import { Messaging } from './messaging';
 
@@ -47,10 +47,7 @@ export class ConnectionServer {
         });
 
         socket.on(EVENTS.getItems, () => {
-            const itemsByLocation = server.getItemsForRoom(entity.getPos());
-            const entries = Object.entries(itemsByLocation)
-                .map(([location, items]) => [location, items.map(item => item.serialize())]);
-            socket.emit(EVENTS.items, Object.fromEntries(entries));
+            socket.emit(EVENTS.items, this.getItemStatesForRoom(entity.getPos()));
         });
 
         socket.on(EVENTS.getMap, () => {
@@ -106,7 +103,7 @@ export class ConnectionServer {
     enterRoom(socket: Socket, entity: ServerEntity, room: string): void {
         socket.join(room);
         socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
-        socket.emit(EVENTS.items, this.entityServer.getItemsForRoom(entity.getPos()));
+        socket.emit(EVENTS.items, this.getItemStatesForRoom(entity.getPos()));
     }
 
     leaveRoom(socket: Socket, entity: ServerEntity, room: string): void {
@@ -120,5 +117,10 @@ export class ConnectionServer {
     reset(properties: EntityServerTemplate = {}): void {
         this.entityServer.reset(properties);
         // console.log('Server reset');
+    }
+
+    private getItemStatesForRoom(position: Location): { [pos: string]: ItemState[] } {
+        const itemsByLocation = this.entityServer.getItemsForRoom(position);
+        return serializeCaveItems(itemsByLocation);
     }
 }

@@ -33,7 +33,11 @@ export class Glyph {
     }
 
     updateState(state: Partial<GlyphState>): void {
-        this.#state = Object.assign(this.#state, state);
+        this.#state = {
+            char: state.char ?? this.#state.char,
+            foreground: state.foreground ?? this.#state.foreground,
+            background: state.background ?? this.#state.background,
+        };
     }
 
     serialize(): GlyphState {

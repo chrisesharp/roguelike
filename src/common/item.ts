@@ -89,9 +89,9 @@ export class Item extends Glyph { // Should an item have a glyph rather than be 
         super.updateState(properties);
     }
 
-    assume(extraProperties?: Partial<ItemState>): void {
-        Object.assign(this, extraProperties);
-    }
+    // assume(extraProperties?: Partial<ItemState>): void {
+    //     Object.assign(this, extraProperties);
+    // }
 
     getDamage(): number {
         return this.#state.damage;
@@ -111,6 +111,24 @@ export class Item extends Glyph { // Should an item have a glyph rather than be 
 
     serialize(): ItemState {
         return Object.assign({}, super.serialize(), this.#state);
+    }
+
+    updateState(state: Partial<ItemState>): void {
+        super.updateState(state);
+        // TODO understand why this doesn't work!
+        // for(const [k,v] of Object.entries(this.#state)) {
+        //     this.#state[k] = state[k] ?? v;
+        // }
+        this.#state = {
+            pos: state.pos ?? this.#state.pos,
+            name: state.name ?? this.#state.name,
+            details: state.details ?? this.#state.details,
+            edible: state.edible ?? this.#state.edible,
+            wieldable: state.wieldable ?? this.#state.wieldable,
+            wearable: state.wearable ?? this.#state.wearable,
+            damage: state.damage ?? this.#state.damage,
+            ac: state.ac ?? this.#state.ac,
+        };
     }
 
     protected setAC(ac: number): void {

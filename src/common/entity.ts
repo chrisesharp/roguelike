@@ -44,8 +44,8 @@ export class Entity extends Item {
         this.type = properties.type;
         this.level = properties.level ?? 0;
         this.speed = properties.speed ?? 1000;
-        this.maxHitPoints = properties.hp ?? 1;
-        this.hitPoints = this.maxHitPoints;
+        this.hitPoints = properties.hp ?? 1;
+        this.maxHitPoints = this.hitPoints;
         this.hungerLevel = properties.hunger ?? 0;
         this.currentArmour = properties.currentArmour ? new Item(properties.currentArmour) : undefined;
         this.currentWeapon = properties.currentWeapon ? new Item(properties.currentWeapon) : undefined;
@@ -104,6 +104,19 @@ export class Entity extends Item {
 
     kill(): void {
         this.alive = false;
+    }
+
+    updateState(state: Partial<EntityState>): void {
+        super.updateState(state);
+        this.alive = state.alive ?? this.alive;
+        this.role = state.role ?? this.role;
+        this.type = state.type ?? this.type;
+        this.level = state.level ?? this.level;
+        this.speed = state.speed ?? this.speed;
+        this.hitPoints = state.hp ?? this.hitPoints;
+        this.hungerLevel = state.hunger ?? this.hungerLevel;
+        this.currentArmour = state.currentArmour ? new Item(state.currentArmour) : this.currentArmour;
+        this.currentWeapon = state.currentWeapon ? new Item(state.currentWeapon) : this.currentWeapon;
     }
 
     serialize(): EntityState {
