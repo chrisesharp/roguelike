@@ -1,10 +1,10 @@
 export enum DIRS {
-    NORTH = "north",
-    EAST = "east",
-    SOUTH = "south",
-    WEST = "west",
-    UP = "up",
-    DOWN = "down",
+    NORTH = "NORTH",
+    EAST = "EAST",
+    SOUTH = "SOUTH",
+    WEST = "WEST",
+    UP = "UP",
+    DOWN = "DOWN",
 }
 
 export interface Movement {
