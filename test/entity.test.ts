@@ -1,5 +1,5 @@
 import { Entity } from '../src/common/entity';
-import { Location } from '../src/common/item';
+import { Location } from '../src/common/location';
 import { Messenger } from '../src/server/entities/server-entity';
 import { Warrior } from '../src/server/entities/warrior';
 import { Rock } from '../src/server/items/rock';

@@ -1,4 +1,5 @@
-import { Location, Item } from "../src/common/item";
+import { Item } from "../src/common/item";
+import { Location } from "../src/common/location";
 import { Apple } from "../src/server/items/apple";
 import { Rock } from "../src/server/items/rock";
 
