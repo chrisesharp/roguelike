@@ -1,4 +1,5 @@
-import { Item, Location } from 'src/common/item';
+import { Item } from 'src/common/item';
+import { Location } from "src/common/location";
 import _ from 'underscore';
 import { ItemFactory, ItemTypeFrequency } from './item-factory';
 import { MapBuilder, MapBuilderTemplate, Position } from './map-builder';

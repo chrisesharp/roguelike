@@ -1,5 +1,6 @@
 import { Entity, EntityState } from '../common/entity';
-import { Item, ItemState, Location } from '../common/item';
+import { Item, ItemState } from '../common/item';
+import { Location } from "../common/location";
 import _ from 'underscore';
 
 export class State {

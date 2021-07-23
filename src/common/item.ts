@@ -1,10 +1,5 @@
 import { Glyph, GlyphState } from './glyph';
-
-export interface Location {
-    x: number;
-    y: number;
-    z: number;
-}
+import { Location } from './location';
 
 export type ItemProperties = Partial<ItemState>
 
