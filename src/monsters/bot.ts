@@ -5,12 +5,19 @@ import { EVENTS } from '../common/events';
 import { Brain } from './brain';
 import { DIRS } from '../common/movement';
 
+export type BotProperties = {
+    startPos?: Location,
+    callback?: (() => void),
+}
+
 export class Bot {
     private serverAddr: string;
     private brain?: Brain;
     protected client: EntityClient;
     protected messages: string[] = [];
     protected startPos?: Partial<Location>;
+    role = "";
+    level = 0;
 
     constructor(URL: string, brain?: Brain) {
         this.serverAddr = URL;
@@ -22,12 +29,12 @@ export class Bot {
         this.brain = brain;
     }
 
-    startBot(startPos: Location, callback: (() => void)): this {
-        this.start({}, callback);
+    startBot(config: BotProperties): this {
+        this.start({}, config.callback);
         return this;
     }
 
-    protected start(props: ConnectionProps, callback: (() => void)): this {
+    protected start(props: ConnectionProps, callback?: (() => void)): this {
         props.type = 'monster';
         this.client.connectToServer(props, callback)
         return this;

@@ -14,7 +14,7 @@
     "clean": "rimraf dist",
     "compile": "tsc",
     "lint": "eslint ./src --ext .ts",
-    "start": "bash ./src/start.sh",
+    "start": "node ./dist/start.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"

@@ -1,11 +1,12 @@
-import { Bot }  from './bot';
+import { Bot, BotProperties }  from './bot';
 import { GoblinBrain } from './goblin-brain';
 import { Brain } from './brain';
-import { Location } from '../common/location';
 
-const level = 2;
+
 export class OrcBot extends Bot {
     role = 'orc';
+    level = 2;
+    name = "Orc";
 
     constructor(URL: string, brain?: Brain) {
         super(URL, brain);
@@ -14,14 +15,14 @@ export class OrcBot extends Bot {
         } 
     }
 
-    startBot(startPos: Location, callback: (() => void)): this {
-          this.startPos =  (startPos) ? startPos : {z:level - 1};
+    startBot(config: BotProperties): this {
+          this.startPos =  (config.startPos) ? config.startPos : {z:this.level - 1};
           const props =  {
-              name: OrcBot.name,
+              name: this.name,
               role: this.role,
               pos: JSON.stringify(this.startPos),
           };props.pos = JSON.stringify(this.startPos)
-        super.start(props, callback);
+        super.start(props, config.callback);
         return this;
     }
 }

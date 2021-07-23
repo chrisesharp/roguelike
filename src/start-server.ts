@@ -8,12 +8,12 @@ import * as process from 'process';
 const port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
 const host = '0.0.0.0';
 
-const template = getConfig();
-const app = createAppServer(port);
-const httpServer = createHttpServer(host, port, app);
-(async () => {
+export function startServer(): void {
+    const template = getConfig();
+    const app = createAppServer(port);
+    const httpServer = createHttpServer(host, port, app);
     routes.use(app, new ConnectionServer(httpServer, template));
-})();
+}
 
 function getConfig() {
     const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
@@ -39,7 +39,7 @@ function createAppServer(port: number): express.Express {
 function createHttpServer(host: string, port: number, app: express.Express): http.Server {
     const httpServer = http.createServer(app);
     httpServer.listen(port, host);
-    httpServer.on('listening', onListen);
+    httpServer.on('listening', () => onListen(httpServer));
     httpServer.on('error', onError);
     return httpServer;
 }
@@ -53,7 +53,7 @@ function normalizePort(val: string): number {
     return port;
 }
 
-function onListen(): void {
+function onListen(httpServer: http.Server): void {
     const addr = httpServer.address() ?? '';
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     console.log('Listening on ', bind);
