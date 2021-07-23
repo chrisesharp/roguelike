@@ -7,6 +7,7 @@ export class Goblin extends ServerEntity {
             level: 1,
         }, properties, {
             hp: 2,
+            maxHP: 2,
             details: 'a creeping goblin',
             role: 'goblin',
             type: 'monster',

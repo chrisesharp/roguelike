@@ -11,6 +11,7 @@ export class Orc extends ServerEntity {
             // Fixed values, overriding supplied properties
             hitBonus: 1,
             hp: 3,
+            maxHP: 3,
             details: 'a vicious orc',
             role: 'orc',
             type: 'monster',
