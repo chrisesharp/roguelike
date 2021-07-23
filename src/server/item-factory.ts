@@ -1,4 +1,4 @@
-import { Item, ItemProperties } from 'src/common/item';
+import { Item, ItemProperties } from '../common/item';
 import { Items } from './items/index';
 
 export interface ItemFactoryProperties extends ItemProperties {

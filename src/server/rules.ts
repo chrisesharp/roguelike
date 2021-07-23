@@ -1,4 +1,4 @@
-import { Entity } from 'src/common/entity';
+import { Entity } from '../common/entity';
 import { ServerEntity } from './entities/server-entity';
 
 export interface RulesProperties {

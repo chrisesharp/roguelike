@@ -4,7 +4,7 @@ import roles from './roles';
 import caves from './caves';
 import reset from './reset';
 import { Application } from 'express';
-import { ConnectionServer } from 'src/server/connection-server';
+import { ConnectionServer } from '../server/connection-server';
 import * as process from 'process';
 
 const bundlerOpts = {

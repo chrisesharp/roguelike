@@ -2,7 +2,7 @@
 import { Rock } from './rock';
 import { Dagger } from './dagger';
 import { Apple } from './apple';
-import { Item, ItemProperties } from 'src/common/item';
+import { Item, ItemProperties } from '../../common/item';
 
 export interface ItemTypes {
     [key: string]: (properties: ItemProperties) => Item

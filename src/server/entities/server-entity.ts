@@ -1,5 +1,5 @@
-import { Item } from 'src/common/item';
-import { Location } from "src/common/location";
+import { Item } from '../../common/item';
+import { Location } from "../../common/location";
 import { Entity, EntityProperties } from '../../common/entity';
 import { MSGTYPE, Messages } from '../messages';
 import { Rules, RulesProperties } from '../rules';

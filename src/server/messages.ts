@@ -1,5 +1,5 @@
-import { Entity } from "src/common/entity";
-import { Item } from "src/common/item";
+import { Entity } from "../common/entity";
+import { Item } from "../common/item";
 
 export enum MSGTYPE {
     INF = 1, 

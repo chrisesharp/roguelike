@@ -13,6 +13,10 @@ export class State {
         this.addEntity(this.entity);
     }
 
+    getEntity(): Entity {
+        return this.entity;
+    }
+
     updateEntityPosition(ourId: string, event: { id: string, pos: Location }): boolean {
         const entity = (event.id === ourId) ? this.entity : this.others.get(event.id);
         if (!entity) {

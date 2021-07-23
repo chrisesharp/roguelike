@@ -1,6 +1,6 @@
 import http from 'http';
 import { Server, Socket } from 'socket.io';
-import { Entity } from 'src/common/entity';
+import { Entity } from '../common/entity';
 
 const pingFreqInMs = 250;
 export class Messaging {

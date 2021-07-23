@@ -1,4 +1,4 @@
-import { Tile } from 'src/common/tile';
+import { Tile } from '../../common/tile';
 import { CellGenerator } from './cell-generator';
 import { FileGenerator } from './file-generator';
 
