@@ -11,6 +11,7 @@ export class Warrior extends ServerEntity {
                 background: 'black',
             }),
             hp: 10,
+            maxHP: 10,
             hitBonus: 1,
             details: 'a brawny warrior',
         }));

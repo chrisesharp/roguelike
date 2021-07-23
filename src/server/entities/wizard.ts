@@ -11,6 +11,7 @@ export class Wizard extends ServerEntity {
                 background: 'black',
             }),
             hp: 4,
+            maxHP: 4,
             details: 'an elderly wizard',
         }));
 

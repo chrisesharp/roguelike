@@ -9,6 +9,7 @@ interface EntitySpecificState {
     level: number;
     speed: number;
     hp: number;
+    maxHP: number;
     hunger: number;
     currentArmour?: ItemState; // Could be an explicit interface with wearable: true?
     currentWeapon?: ItemState; // Could be an explicit interface with wieldable: true?
@@ -25,7 +26,7 @@ export class Entity extends Item {
     type?: string;
     protected level: number;
     speed: number;
-    protected maxHitPoints: number;
+    maxHitPoints: number;
     hitPoints: number;
     private hungerLevel: number;
     private sight = 10;
@@ -45,8 +46,8 @@ export class Entity extends Item {
         this.type = properties.type;
         this.level = properties.level ?? 0;
         this.speed = properties.speed ?? 1000;
+        this.maxHitPoints = properties.maxHP ?? 1;
         this.hitPoints = properties.hp ?? 1;
-        this.maxHitPoints = this.hitPoints;
         this.hungerLevel = properties.hunger ?? 0;
         this.currentArmour = properties.currentArmour ? new Item(properties.currentArmour) : undefined;
         this.currentWeapon = properties.currentWeapon ? new Item(properties.currentWeapon) : undefined;
@@ -115,6 +116,7 @@ export class Entity extends Item {
         this.level = state.level ?? this.level;
         this.speed = state.speed ?? this.speed;
         this.hitPoints = state.hp ?? this.hitPoints;
+        this.maxHitPoints = state.maxHP ?? this.maxHitPoints;
         this.hungerLevel = state.hunger ?? this.hungerLevel;
         this.currentArmour = state.currentArmour ? new Item(state.currentArmour) : this.currentArmour;
         this.currentWeapon = state.currentWeapon ? new Item(state.currentWeapon) : this.currentWeapon;
@@ -127,6 +129,7 @@ export class Entity extends Item {
             currentArmour: this.currentArmour?.serialize(),
             currentWeapon: this.currentWeapon?.serialize(),
             hp: this.hitPoints,
+            maxHP: this.maxHitPoints,
             hunger: this.hungerLevel,
             id: this.id,
             level: this.level,
