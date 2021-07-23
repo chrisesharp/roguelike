@@ -1,24 +1,30 @@
-"use strict";
-
 import _ from "underscore";
-import Brain from './brain.js';
-import { DIRS, getMovement, opposite, left, right } from "../common/movement.js";
+import { Brain } from './brain';
+import { DIRS, getMovement, opposite, left, right } from "../common/movement";
+import { Location } from "../common/location";
 import { EVENTS } from "../common/events";
+import { EntityClient } from "../client/entity-client";
+import { Entity } from "../common/entity";
+import { GameMap } from "../common/map";
 
-function distance(pos1, pos2) {
+function distance(pos1:Location, pos2:Location) {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
 }
 
-export default class GoblinBrain extends Brain {
-    constructor(map, client, messages) {
+export class GoblinBrain extends Brain {
+    private syncCount = 0;
+    private goblin: Entity;
+    speed = 3;
+    private nextMove: DIRS | undefined;
+
+    constructor(map: GameMap|undefined, client: EntityClient, messages: string | string[]) {
         super(map, client, messages);
-        this.syncCount = 0;
         this.goblin = this.client.getEntity();
         this.speed = 3;
-        this.nextMove = null;
     }
 
-    ready(event) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ready(event: string, data?: unknown): void {
         switch(event) {
             case EVENTS.dead:
                 this.client.disconnectFromServer();
@@ -28,7 +34,7 @@ export default class GoblinBrain extends Brain {
                 break;
             case EVENTS.ping:
                 if (this.currentTarget && this.isSameLevel(this.currentTarget)) {
-                    let directions = this.findDirections(this.currentTarget);
+                    const directions = this.findDirections(this.currentTarget);
                     this.nextMove = this.chooseDirection(directions);
                     this.client.move(this.nextMove);
                 } else {
@@ -46,14 +52,14 @@ export default class GoblinBrain extends Brain {
         }
     }
 
-    findTarget() {
+    findTarget(): Entity | undefined {
         let target;
         let closest = this.goblin.getSightRadius();
         this.client.getOtherEntities().forEach( entity => {
             if (entity.role === this.goblin.role) {
                 return;
             }
-            let dist = distance(this.goblin.getPos(), entity.getPos());
+            const dist = distance(this.goblin.getPos(), entity.getPos());
             if (dist <= closest) {
                 closest = dist;
                 target = entity;
@@ -62,8 +68,8 @@ export default class GoblinBrain extends Brain {
         return target;
     }
 
-    findDirections(target) {
-        let directions = [];
+    findDirections(target: Entity): DIRS[] {
+        const directions = [];
         if (this.goblin.getPos().x < target.getPos().x) {
             directions.push(DIRS.EAST);
         } else if (this.goblin.getPos().x > target.getPos().x) {
@@ -77,23 +83,26 @@ export default class GoblinBrain extends Brain {
         return directions;
     }
 
-    chooseDirection(directions) {
-        let options = [];
-        let alternatives = [];
+    chooseDirection(directions: DIRS[]): DIRS {
+        const options: DIRS[] = [];
+        const alternatives: DIRS[] = [];
         directions.forEach(dir => {
-            let pos = this.nextPos(dir);
-            let tile = this.map.getTile(pos.x, pos.y, pos.z);
-            if (tile.isWalkable() || _.isEqual(pos, this.currentTarget.getPos())) {
+            const pos = this.nextPos(dir);
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const tile = this.map.getTile(pos.x, pos.y, pos.z);
+            if (tile.isWalkable() || _.isEqual(pos, this.currentTarget?.getPos())) {
                 options.push(dir);
             } else {
-                alternatives.push(left(dir));
-                alternatives.push(right(dir));
+                const leftOption = left(dir);
+                const rightOption = right(dir)
+                if (leftOption) alternatives.push(leftOption);
+                if (rightOption) alternatives.push(rightOption);
             }
         });
         if (!options.length) {
             alternatives.forEach(dir => {
-                let pos = this.nextPos(dir);
-                let tile = this.map.getTile(pos.x, pos.y, pos.z);
+                const pos = this.nextPos(dir);
+                const tile = this.map.getTile(pos.x, pos.y, pos.z);
                 if (tile.isWalkable()) {
                     options.push(dir);
                 }
@@ -101,8 +110,8 @@ export default class GoblinBrain extends Brain {
         }
         if (!options.length) {
             directions.forEach(dir => {
-                let pos = this.nextPos(opposite(dir));
-                let tile = this.map.getTile(pos.x, pos.y, pos.z);
+                const pos = this.nextPos(opposite(dir));
+                const tile = this.map.getTile(pos.x, pos.y, pos.z);
                 if (tile.isWalkable()) {
                     options.push(opposite(dir));
                 }
@@ -111,19 +120,19 @@ export default class GoblinBrain extends Brain {
         return this.randomOption(options);
     }
 
-    nextPos(dir) {
-        let delta = getMovement(dir);
-        let x = this.goblin.getPos().x + delta.x;
-        let y = this.goblin.getPos().y + delta.y;
-        let z = this.goblin.getPos().z + delta.z;
+    nextPos(dir: DIRS): Location {
+        const delta = getMovement(dir);
+        const x = this.goblin.getPos().x + delta.x;
+        const y = this.goblin.getPos().y + delta.y;
+        const z = this.goblin.getPos().z + delta.z;
         return {x:x, y:y, z:z};
     }
 
-    isSameLevel(entity) {
+    isSameLevel(entity: Entity): boolean {
         return (entity.getPos().z === this.goblin.getPos().z);
     }
 
-    randomOption(options) {
+    randomOption(options: DIRS[]): DIRS {
         return options[Math.floor(Math.random() * options.length)];
     }
 }

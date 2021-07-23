@@ -1,23 +1,22 @@
 "use strict";
 
 import { io } from 'socket.io-client';
-import { Bots } from './monsters/index.js';
+import { Bots } from './monsters/index';
 import { EVENTS } from './common/events';
 
-const botConstructors =  {};
+// const botConstructors =  {};
 const serverAddr = process.env.server || "http://0.0.0.0:3000";
 const monsters = process.env.monsters || [];
 
-Object.keys(Bots).forEach(key => {
-    let ctor = Bots[key];
-    let type = ctor.toString().split(' ')[1];
-    botConstructors[type] = ctor;
-});
+// Object.keys(Bots).forEach(key => {
+//     let ctor = Bots[key];
+//     let type = ctor.toString().split(' ')[1];
+//     botConstructors[type] = ctor;
+// });
 
 if (monsters.length == 0) {
-    Object.keys(botConstructors).forEach(type => {
-        let ctor = botConstructors[type];
-        let freq = Math.max(1, Math.round(Math.random() * ctor.numberOccuring));
+    Object.entries(Bots).forEach(([type, info]) => {
+        let freq = Math.max(1, Math.round(Math.random() * info.numberOccuring));
         monsters.push(`{"type":"${type}", "frequency": "${freq}"}`);
     });
 }
@@ -41,10 +40,10 @@ socket.once(EVENTS.missingRole, (error) => {
 function addMonsters(URL) {
     monsters.forEach(entry => {
         entry = JSON.parse(entry);
-        let freq = entry.frequency;
+        const freq = entry.frequency;
         for (let i=1; i <= freq; i++) {
-            let monster = new botConstructors[entry.type](URL);
-            live.push(monster.start(null, ()=> {
+            const monster = Bots[entry.type].newInstance(URL);
+            live.push(monster.startBot(null, ()=> {
             // live.push(monster.start({z:0}, ()=> {
                 console.log(`Started ${monster.role} (${i}/${freq})`);
             }));

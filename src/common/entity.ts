@@ -21,7 +21,7 @@ export type EntityProperties = Partial<EntityState>
 
 export class Entity extends Item {
     readonly id: string;
-    protected role: string;
+    role: string;
     type?: string;
     protected level: number;
     speed: number;

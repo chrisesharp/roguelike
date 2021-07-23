@@ -61,7 +61,7 @@ describe('monster connects to server', () => {
   it('should use supplied brain', async (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ bot.stop(); done();}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start();
+    bot.startBot();
   });
 
   it('should reconnect if reset', async (done) => {
@@ -74,7 +74,7 @@ describe('monster connects to server', () => {
       if (event == EVENTS.map && resetReceived) { expect(app.entityServer.getEntities().length).toBe(0); expect(app2.entityServer.getEntities().length).toBe(1); app2.stop(); httpServer2.close(); done();}
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(null, ()=> {
+    bot.startBot(null, ()=> {
       expect(app.entityServer.getEntities().length).toBe(1); 
       app.reset({url:`http://[${httpServerAddr2.address}]:${httpServerAddr2.port}`});
     });
@@ -90,7 +90,7 @@ describe('monster connects to server', () => {
       if (event == EVENTS.map && resetReceived) { expect(app.entityServer.getEntities().length).toBe(0); expect(app2.entityServer.getEntities().length).toBe(1); app2.stop(); httpServer2.close(); done();}
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(null, ()=> {
+    bot.startBot(null, ()=> {
       expect(app.entityServer.getEntities().length).toBe(1); 
       app.reset({url:`http://[${httpServerAddr2.address}]:${httpServerAddr2.port}`});
     });
@@ -99,7 +99,7 @@ describe('monster connects to server', () => {
   it('should use supplied brain as orc', async (done) => {
     let mockBrain = {ready: (event)=>{ bot.stop(); done();}};
     let bot = new OrcBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start();
+    bot.startBot();
   });
 
   it('should get an entrance on specified level for type', async (done) => {
@@ -109,7 +109,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new OrcBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(null, () => {
+    bot.startBot(null, () => {
       bot.move(DIRS.SOUTH);
       bot.move(DIRS.NORTH);
     });
@@ -118,7 +118,7 @@ describe('monster connects to server', () => {
   it('should get pings', async (done) => {
     let mockBrain = {setMap: ()=>{}, ready: (event)=>{ if (event === EVENTS.ping) {expect(event).toBe(EVENTS.ping); bot.stop(); done();}}};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start();
+    bot.startBot();
   });
 
   it('should return default map', async (done) => {
@@ -135,7 +135,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);    
+    bot.startBot(defaultPos);    
   });
 
   it('should move', async (done) => {
@@ -151,7 +151,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);    
+    bot.startBot(defaultPos);    
   });
 
   it('should see items ', async (done) => {
@@ -170,7 +170,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should see new items changing rooms ', async (done) => {
@@ -200,7 +200,7 @@ describe('monster connects to server', () => {
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let descended = false;
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should teleport when passing gateway ', async (done) => {
@@ -222,7 +222,7 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let moved = false;
     let pos = app.entityServer.cave.getGatewayPositions()[0][0];
-    bot.start({x:pos.x,y:pos.y+1,z:pos.z});
+    bot.startBot({x:pos.x,y:pos.y+1,z:pos.z});
   });
 
   it('should see other entities', async (done) => {
@@ -296,7 +296,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos); 
+    bot.startBot(defaultPos); 
   });
 
   it('should die', async (done) => {
@@ -313,7 +313,7 @@ describe('monster connects to server', () => {
       }
     }};
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`,mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should see other entities move', async (done) => {
@@ -426,7 +426,7 @@ describe('monster connects to server', () => {
     }, setMap: (map)=> {bot.brain.map = map;}};
 
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should unwield an item', async (done) => {
@@ -445,7 +445,7 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let goblin = bot.client.getEntity();
     goblin.inventory = ["dagger"];
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should take and eat item', (done) => {
@@ -480,7 +480,7 @@ describe('monster connects to server', () => {
     }, setMap: ()=> {}};
 
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should take and wear item', async (done) => {
@@ -526,7 +526,7 @@ describe('monster connects to server', () => {
     }, setMap: ()=> {}};
 
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should unwear an item', async (done) => {
@@ -545,7 +545,7 @@ describe('monster connects to server', () => {
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
     let goblin = bot.client.getEntity();
     goblin.inventory = ["chainmail"];
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 
   it('should take and drop an item', async (done) => {
@@ -579,6 +579,6 @@ describe('monster connects to server', () => {
     }, setMap: ()=> {}};
 
     let bot = new GoblinBot(`http://[${httpServerAddr.address}]:${httpServerAddr.port}`, mockBrain);
-    bot.start(defaultPos);
+    bot.startBot(defaultPos);
   });
 });

@@ -8,7 +8,7 @@ import { Item, ItemState } from '../common/item';
 import { Entity, EntityState } from '../common/entity';
 
 export type ClientCallback = (eventName: string, arg?: unknown) => void;
-type ConnectionProps = { url?: string };
+export type ConnectionProps = { url?: string, type?: string, role?: string, pos?: string };
 
 export class EntityClient {
     private state = new State();
