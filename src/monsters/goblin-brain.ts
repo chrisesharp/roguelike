@@ -12,9 +12,9 @@ function distance(pos1:Location, pos2:Location) {
 }
 
 export class GoblinBrain extends Brain {
-    private syncCount = 0;
+    protected syncCount = 0;
+    protected speed = 3;
     private goblin: Entity;
-    speed = 3;
     private nextMove: DIRS | undefined;
 
     constructor(map: GameMap|undefined, client: EntityClient, messages: string | string[]) {

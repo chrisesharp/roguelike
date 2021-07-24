@@ -61,9 +61,7 @@ describe('server entity behaviour', () => {
         attacker.tryTake(rock);
         attacker.wield(rock.getName());
         attacker.handleCollision(defender);
-        console.log("Attacker:",attacker.getHitPoints(),attacker.getMaxHitPoints());
         expect(attacker.getHitPoints()).toBe(attacker.getMaxHitPoints());
-        console.log("Defender:",defender.getHitPoints(),defender.getMaxHitPoints());
         expect(defender.getHitPoints()).toBe(defender.getMaxHitPoints());
     });
 
