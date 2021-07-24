@@ -55,13 +55,15 @@ describe('server entity behaviour', () => {
     it('should miss if roll low', () => {
         const pos1 = {"x":1,"y":2,"z":0};
         const pos2 = {"x":2,"y":2,"z":0};
-        const defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3});
+        const defender = new ServerEntity({pos:pos1, messenger:mockServer, hp:3, maxHP:3});
         const attacker = new ServerEntity({pos:pos2, messenger:mockServer, random:(()=>{return 0;})});
         const rock = new Rock();
         attacker.tryTake(rock);
         attacker.wield(rock.getName());
         attacker.handleCollision(defender);
+        console.log("Attacker:",attacker.getHitPoints(),attacker.getMaxHitPoints());
         expect(attacker.getHitPoints()).toBe(attacker.getMaxHitPoints());
+        console.log("Defender:",defender.getHitPoints(),defender.getMaxHitPoints());
         expect(defender.getHitPoints()).toBe(defender.getMaxHitPoints());
     });
 
