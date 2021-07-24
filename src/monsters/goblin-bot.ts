@@ -14,7 +14,7 @@ export class GoblinBot extends Bot {
         } 
     }
 
-    startBot(config: BotProperties): this {
+    startBot(config: BotProperties = {}): this {
         this.startPos =  (config.startPos) ? config.startPos : {z:this.level - 1};
         const props =  {
             name: this.name,

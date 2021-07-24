@@ -1,5 +1,3 @@
-"use strict";
-
 import { Messenger, ServerEntity } from '../src/server/entities/server-entity';
 import { Rock } from '../src/server/items/rock';
 import { Chainmail } from '../src/server/items/chainmail';

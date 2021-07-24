@@ -8,6 +8,7 @@ interface EntitySpecificState {
     type?: string;
     level: number;
     speed: number;
+    sight: number;
     hp: number;
     maxHP: number;
     hunger: number;
@@ -26,10 +27,10 @@ export class Entity extends Item {
     type?: string;
     protected level: number;
     speed: number;
+    sight: number;
     maxHitPoints: number;
     hitPoints: number;
     private hungerLevel: number;
-    private sight = 10;
     protected currentArmour?: Item;
     currentWeapon?: Item;
     inventory: Item[] = [];
@@ -46,6 +47,7 @@ export class Entity extends Item {
         this.type = properties.type;
         this.level = properties.level ?? 0;
         this.speed = properties.speed ?? 1000;
+        this.sight = properties.sight ?? 10;
         this.maxHitPoints = properties.maxHP ?? 1;
         this.hitPoints = properties.hp ?? 1;
         this.hungerLevel = properties.hunger ?? 0;
@@ -115,6 +117,7 @@ export class Entity extends Item {
         this.type = state.type ?? this.type;
         this.level = state.level ?? this.level;
         this.speed = state.speed ?? this.speed;
+        this.sight = state.sight ?? this.sight;
         this.hitPoints = state.hp ?? this.hitPoints;
         this.maxHitPoints = state.maxHP ?? this.maxHitPoints;
         this.hungerLevel = state.hunger ?? this.hungerLevel;
@@ -135,6 +138,7 @@ export class Entity extends Item {
             level: this.level,
             role: this.role,
             speed: this.speed,
+            sight: this.sight,
             type: this.type,
             inventory: this.inventory.map(i => i.serialize()),
         };

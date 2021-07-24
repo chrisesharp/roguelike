@@ -1,4 +1,5 @@
-import { EntityClient, ConnectionProps} from '../client/entity-client.js';
+import { EntityClient} from '../client/entity-client.js';
+import { ConnectionProps } from "../common/connection-props";
 import { GameMap, MapTemplate } from '../common/map';
 import { Location } from '../common/location';
 import { EVENTS } from '../common/events';
@@ -27,6 +28,10 @@ export class Bot {
 
     setBrain(brain: Brain ):void {
         this.brain = brain;
+    }
+
+    getBrain(): Brain|undefined {
+        return this.brain;
     }
 
     startBot(config: BotProperties): this {
@@ -75,5 +80,13 @@ export class Bot {
 
     move(direction: DIRS): void {
         this.client.move(direction);
+    }
+
+    getClient(): EntityClient {
+        return this.client;
+    }
+
+    getMessages(): string[] {
+        return this.messages;
     }
 }

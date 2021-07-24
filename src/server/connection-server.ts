@@ -7,6 +7,7 @@ import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
 import { EntityServer, EntityServerTemplate, serializeCaveItems } from './entity-server';
 import { Messages } from './messages';
 import { Messaging } from './messaging';
+import { ConnectionProps } from "../common/connection-props";
 
 export class ConnectionServer {
     private open = true;
@@ -115,7 +116,7 @@ export class ConnectionServer {
 
     }
 
-    reset(properties: EntityServerTemplate = {}): void {
+    reset(properties: ConnectionProps = {}): void {
         this.entityServer.reset(properties);
         // console.log('Server reset');
     }

@@ -12,6 +12,7 @@ import { Messages, MSGTYPE } from './messages';
 import { Messaging } from './messaging';
 import * as Tiles from './server-tiles';
 import { State } from './state';
+import { ConnectionProps } from "../common/connection-props";
 
 interface ConnectResponse {
     id: number;
@@ -224,10 +225,22 @@ export class EntityServer {
         };
     }
 
-    reset(properties: EntityServerTemplate): void {
+    reset(properties: ConnectionProps): void {
         this.messaging.sendMessageToAll(Messages.TELEPORT());
         this.messaging.sendToAll(EVENTS.reset, properties);
-        this.cave = new Cave(this.template);
+        this.resetCave();
+        this.resetState();
+    }
+
+    resetState(): void {
         this.entities = new State(this.repo);
+    }
+
+    resetCave(): void {
+        this.cave = new Cave(this.template);
+    }
+
+    getMessaging(): Messaging {
+        return this.messaging;
     }
 }

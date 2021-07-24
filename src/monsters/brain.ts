@@ -24,4 +24,8 @@ export abstract class Brain {
     setMap(map: GameMap): void {
         this.map = map;
     }
+
+    getMap(): GameMap {
+        return this.map;
+    }
 }

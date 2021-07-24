@@ -15,13 +15,13 @@ export class OrcBot extends Bot {
         } 
     }
 
-    startBot(config: BotProperties): this {
-          this.startPos =  (config.startPos) ? config.startPos : {z:this.level - 1};
-          const props =  {
-              name: this.name,
-              role: this.role,
-              pos: JSON.stringify(this.startPos),
-          };props.pos = JSON.stringify(this.startPos)
+    startBot(config: BotProperties = {}): this {
+        this.startPos =  (config.startPos) ? config.startPos : {z:this.level - 1};
+        const props =  {
+            name: this.name,
+            role: this.role,
+            pos: JSON.stringify(this.startPos),
+        };
         super.start(props, config.callback);
         return this;
     }

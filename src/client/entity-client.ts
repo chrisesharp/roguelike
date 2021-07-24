@@ -6,10 +6,9 @@ import { MapState } from '../common/map';
 import { DIRS } from '../common/movement';
 import { Item, ItemState } from '../common/item';
 import { Entity, EntityState } from '../common/entity';
+import { ConnectionProps } from '../common/connection-props';
 
 export type ClientCallback = (eventName: string, arg?: unknown) => void;
-export type ConnectionProps = { url?: string, type?: string, role?: string, pos?: string };
-
 export class EntityClient {
     private state = new State();
     private socket?: Socket;
