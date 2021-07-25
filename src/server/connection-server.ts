@@ -61,30 +61,32 @@ export class ConnectionServer {
         });
 
         socket.on(EVENTS.take, (itemName) => {
-            server.takeItem(entity, itemName);
+            if (entity.isAlive()) server.takeItem(entity, itemName);
         });
 
         socket.on(EVENTS.drop, (itemName) => {
-            server.dropItem(entity, itemName);
+            if (entity.isAlive()) server.dropItem(entity, itemName);
         });
 
         socket.on(EVENTS.eat, (food) => {
-            entity.eat(food);
+            if (entity.isAlive()) entity.eat(food);
         });
 
         socket.on(EVENTS.wield, (weapon) => {
-            entity.wield(weapon);
+            if (entity.isAlive()) entity.wield(weapon);
         });
 
         socket.on(EVENTS.wear, (armour) => {
-            entity.wear(armour);
+            if (entity.isAlive()) entity.wear(armour);
         });
 
         socket.on(EVENTS.move, (direction) => {
-            const startRoom = server.getRoom(entity.getPos());
-            const newPos = server.moveEntity(entity, direction);
-            if (newPos && startRoom !== server.getRoom(newPos)) {
-                this.moveRooms(socket, entity, String(startRoom));
+            if (entity.isAlive()) {
+                const startRoom = server.getRoom(entity.getPos());
+                const newPos = server.moveEntity(entity, direction);
+                if (newPos && startRoom !== server.getRoom(newPos)) {
+                    this.moveRooms(socket, entity, String(startRoom));
+                }
             }
         });
 
