@@ -1,22 +1,27 @@
 import { io } from 'socket.io-client';
 import { Bots } from './monsters/index';
 import { EVENTS } from './common/events';
+import { Bot } from './monsters/bot';
 
-const serverAddr = process.env.server || "ws://0.0.0.0:3000";
-const monsters = process.env.monsters;
-let deployable: string[] = [];
-const live = [];
+const serverAddr = process.env.server || "http://0.0.0.0:3000";
 
-export function startMonsters(): void {
-    if (monsters) {
-        deployable = JSON.parse(monsters);
+let deployable: MonsterRoster[] = [];
+const live:Bot[] = [];
+
+export type MonsterRoster = {type:string, frequency:number};
+export type StartMonsterOpts = {monsters?:MonsterRoster[]}; 
+
+export function startMonsters(options:StartMonsterOpts = {}): void {
+    if (options?.monsters) {
+        deployable = options?.monsters;
     }
     if (deployable.length == 0) {
         Object.entries(Bots).forEach(([type, info]) => {
             const freq = Math.max(1, Math.round(Math.random() * info.numberOccurring));
-            deployable.push(`{"type":"${type}", "frequency": "${freq}"}`);
+            deployable.push({type:type, frequency: freq});
         });
     }
+    console.log(deployable)
 
     const socket = io(serverAddr, {
         reconnectionDelay: 0,
@@ -34,9 +39,15 @@ export function startMonsters(): void {
     });
 }
 
+export function stopMonsters(): void {
+    live.forEach(monster => {
+        monster.stop();
+    });
+}
+
 function addMonsters(URL: string) {
-    deployable.forEach(entry => {
-        const definition = JSON.parse(entry);
+    deployable.forEach((entry:MonsterRoster) => {
+        const definition = entry;
         const freq = definition.frequency;
         for (let i=1; i <= freq; i++) {
             const monster = Bots[definition.type].newInstance(URL);
