@@ -7,13 +7,6 @@ import { startServer, stopServer } from '../dist/start-server';
 
 const addr = 'http://0.0.0.0:3000'
 
-// const defaultMap = {
-//     width: 4,
-//     height: 5,
-//     entrance: { x: 0, y: 0, z: 0 },
-//     gateways: 'test_url',
-// };
-
 beforeAll(() => {
     startServer({test:true});
 });
@@ -21,15 +14,6 @@ beforeAll(() => {
 afterAll(() => {
     stopServer();
 });
-
-beforeEach(() => {
-    // square brackets are used for IPv6
-});
-
-afterEach(() => {
-    // noop
-});
-
 
 describe('basic REST API', () => {
     it('should be healthy', (done) => {
