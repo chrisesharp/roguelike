@@ -7,12 +7,24 @@ import * as process from 'process';
 
 const port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
 const host = '0.0.0.0';
+let app: express.Express;
+let cs: ConnectionServer;
+let hs: http.Server;
 
-export function startServer(): void {
+export type StartOpts = {test?:boolean}; 
+
+export function startServer(options:StartOpts = {}): void {
     const template = getConfig();
-    const app = createAppServer(port);
-    const httpServer = createHttpServer(host, port, app);
-    routes.use(app, new ConnectionServer(httpServer, template));
+    app = createAppServer(port);
+    hs = createHttpServer(host, port, app);
+    cs = new ConnectionServer(hs, template);
+    routes.use(app, cs, options);
+}
+
+export function stopServer(): void {
+    // TODO
+    cs.stop();
+    hs.close();
 }
 
 function getConfig() {
