@@ -1,6 +1,7 @@
 # Caverns & Kubernetes
 
 ## A Roguelike microservices ecosystem
+
 This is the prototype for a distributed multiplayer dungeon crawl game, with a dual purpose:
 
 - Illustrate architecture and design patterns for building microservice-based solutions hosted in kubernetes
@@ -73,8 +74,8 @@ When coding, use these npm commands to run unit tests against the source code:
 
 - GET http://localhost:3000/caves - lists the caves available
 - GET http://localhost:3000/health - gets the current state of the server
-- GET http://localhost:3000/reset - reset the server
 - GET http://localhost:3000/roles - lists the roles
+- PUT http://localhost:3000/reset - reset the server
 
 ## Overall Component Architecture
 
