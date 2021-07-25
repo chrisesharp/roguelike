@@ -75,7 +75,7 @@ describe('basic REST API', () => {
     it('should reset', (done) => {
         const expected = {"reset": "OK"};
 
-        axios.get(`${addr}/reset`,{
+        axios.put(`${addr}/reset`,{
             timeout: 2500
         }).then( (result) => {
             expect(result.data).toStrictEqual(expected);
