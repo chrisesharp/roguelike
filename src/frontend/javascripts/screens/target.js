@@ -3,17 +3,17 @@
 import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, getHandler } from '../keys.js';
-import  Tile  from '../../../common/tile.js';
+import { Tile }  from '../../../common/tile';
 import Geometry from '../geometry.js';
-import { getMovement } from '../../../common/movement.js';
+import { getMovement } from '../../../common/movement';
 
 export default class TargetBasedScreen extends Screen {    
     setup(player, offsetX, offsetY) {
         this.player = player;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
-        this.startX = player.pos.x - offsetX;
-        this.startY = player.pos.y - offsetY;
+        this.startX = player.getPos().x - offsetX;
+        this.startY = player.getPos().y - offsetY;
         this.cursorX = this.startX;
         this.cursorY = this.startY;
         this.map = game.getMap();
@@ -21,8 +21,8 @@ export default class TargetBasedScreen extends Screen {
         this.height = game.getScreenHeight();
 
         let visibleCells = {};
-        this.map.getFov(this.player.pos.z).compute(
-            this.player.pos.x, this.player.pos.y, 
+        this.map.getFov(this.player.getPos().z).compute(
+            this.player.getPos().x, this.player.getPos().y, 
             this.player.getSightRadius(), 
             function(x, y, radius, visibility) {
                 visibleCells[x + "," + y] = visibility;
@@ -51,7 +51,7 @@ export default class TargetBasedScreen extends Screen {
     getTargets() {
         let x = this.cursorX + this.offsetX;
         let y = this.cursorY + this.offsetY;
-        let z = this.player.pos.z;
+        let z = this.player.getPos().z;
         let tile = new Tile();
         let item = false;
         let entity = false;
@@ -59,7 +59,7 @@ export default class TargetBasedScreen extends Screen {
             tile = this.map.getTile(x, y, z);
             if (this.visibleCells[x + ',' + y]) {
                 let items = game.getItemsAt(x, y, z);
-                if (items) {
+                if (items.length > 0) {
                     item = items[items.length - 1];
                 }
                 if (game.getEntityAt(x, y, z)) {

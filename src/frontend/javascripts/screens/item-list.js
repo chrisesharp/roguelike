@@ -3,7 +3,7 @@
 import Screen from './screen.js';
 import { game } from '../game.js';
 import { isReturnKey, isEscKey, isZeroKey, isLetterKey, letterIndex } from '../keys.js';
-import Item from '../../../common/item.js';
+import { Item } from '../../../common/item';
 
 export default class ItemListScreen extends Screen {
     constructor(template) {
@@ -18,7 +18,6 @@ export default class ItemListScreen extends Screen {
         this.player = player;
         let count = 0;
         this.items = items.map( (item) => {
-            item = new Item(item);
             if (this.isAcceptableFunction(item)) {
                 count++;
                 return item;
@@ -44,9 +43,9 @@ export default class ItemListScreen extends Screen {
                     this.selectedIndices[i]) ? '+' : '-';
 
                 let suffix = '';
-                if (this.items[i].name === this.player.getArmour()) {
+                if (this.items[i].getName() === this.player.getArmour()) {
                     suffix = ' (wearing)';
-                } else if (this.items[i].name === this.player.getWeapon()) {
+                } else if (this.items[i].getName() === this.player.getWeapon()) {
                     suffix = ' (wielding)';
                 }
                 display.drawText(0, row++,  option + ' ' + selectionState + ' ' +

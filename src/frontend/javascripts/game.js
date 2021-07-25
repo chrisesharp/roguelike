@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime.js'
 import axios from 'axios';
 import ServerHealth from './server-health';
 import ExplorerMap from './explorer-map';
-import EntityClient from '../../client/entity-client';
+import { EntityClient } from '../../client/entity-client';
 import { EVENTS } from '../../common/events';
 
 import { Display, dispOpts } from './display';

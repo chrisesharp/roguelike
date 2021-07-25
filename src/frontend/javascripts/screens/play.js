@@ -6,7 +6,7 @@ import { getHandler, isReturnKey } from '../keys.js';
 import  LoseScreen  from './lose.js';
 import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
-import Glyph from '../../../common/glyph.js';
+import { Glyph } from '../../../common/glyph';
 
 
 class PlayScreen {
@@ -24,7 +24,7 @@ class PlayScreen {
         this.screenHeight = game.getScreenHeight();
         this.map = game.getMap();
         this.player = game.getEntity();
-        this.player.pos = game.getEntrance();
+        this.player.setPos(game.getEntrance());
     }
 
     exit() { 
@@ -42,9 +42,9 @@ class PlayScreen {
     }
 
     getScreenOffsets() {
-        let topLeftX = Math.max(0, this.player.pos.x - (this.screenWidth / 2));
+        let topLeftX = Math.max(0, this.player.getPos().x - (this.screenWidth / 2));
         topLeftX = Math.min(topLeftX, Math.max(0, this.map.getWidth() - this.screenWidth));
-        let topLeftY = Math.max(0, this.player.pos.y - (this.screenHeight / 2));
+        let topLeftY = Math.max(0, this.player.getPos().y - (this.screenHeight / 2));
         topLeftY = Math.min(topLeftY, Math.max(0, this.map.getHeight() - this.screenHeight));
         return {
             x: topLeftX,
@@ -54,11 +54,11 @@ class PlayScreen {
 
     renderTiles(display) {
         let visibleCells = {};
-        let level = this.player.pos.z;
+        let level = this.player.getPos().z;
         let viewDist = this.player.getSightRadius();
         let map = this.map;
         map.getFov(level).compute(
-            this.player.pos.x, this.player.pos.y, viewDist, 
+            this.player.getPos().x, this.player.getPos().y, viewDist, 
             function(x, y, radius, visibility) {
                 let dist = (viewDist - radius)/viewDist;
                 visibleCells[x + "," + y] = visibility * dist;
@@ -87,13 +87,12 @@ class PlayScreen {
         let visibility = visibleCells[x + ',' + y];
         if (visibility) {
             let items = game.getItemsAt(x, y, z);
-            if (items) {
+            if (items.length > 0) {
                 glyph = items.slice(-1)[0];
             }
             if (game.getEntityAt(x, y, z)) {
                 glyph = game.getEntityAt(x, y, z);
             }
-
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);
         }
@@ -109,12 +108,12 @@ class PlayScreen {
     }
 
     renderStats() {
-        let hp = this.player.getHitPoints();
-        let ac = this.player.getAC();
-        let max = this.player.getMaxHitPoints();
-        let lvl = 1;
-        let gp = 0;
-        let hunger = this.player.getHunger();
+        const hp = this.player.getHitPoints();
+        const ac = this.player.getAC();
+        const max = this.player.getMaxHitPoints();
+        const lvl = this.player.getLevel();
+        const gp = 0;
+        const hunger = this.player.getHunger().getDescription();
         let statsHTML = `<hr>HP: ${hp}/${max}<hr>AC: ${ac}<hr>Lvl: ${lvl}<hr>GP: ${gp}<hr>${hunger}`; 
         game.updateStats(statsHTML);
     }
@@ -159,7 +158,7 @@ class PlayScreen {
     }
 
     showPickupSubScreen() {
-        let items = game.getItemsAt(this.player.pos.x, this.player.pos.y, this.player.pos.z);
+        let items = game.getItemsAt(this.player.getPos().x, this.player.getPos().y, this.player.getPos().z);
         if (items && items.length === 1) {
             let item = items[0];
             game.takeItem(item);
@@ -173,6 +172,6 @@ class PlayScreen {
         lookScreen.setup(this.player, offsets.x, offsets.y);
         this.setSubScreen(lookScreen);
     }
-};
+}
 
 export const playScreen = new PlayScreen();
