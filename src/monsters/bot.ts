@@ -5,8 +5,9 @@ import { EVENTS } from '../common/events';
 import { Brain } from './brain';
 import { DIRS, Location } from '../common/movement';
 
-export type BotProperties = {
+export interface BotProperties extends ConnectionProps {
     startPos?: Location,
+    name?: string,
     callback?: (() => void),
 }
 
@@ -34,7 +35,7 @@ export class Bot {
     }
 
     startBot(config: BotProperties = {}): this {
-        this.start({}, config.callback);
+        this.start(config, config.callback);
         return this;
     }
 

@@ -15,13 +15,14 @@ export class GoblinBot extends Bot {
     }
 
     startBot(config: BotProperties = {}): this {
+        return super.startBot(this.augmentedConfig(config));
+    }
+
+    augmentedConfig(config:BotProperties): BotProperties {
         this.startPos =  (config.startPos) ? config.startPos : {z:this.level - 1};
-        const props =  {
-            name: this.name,
-            role: this.role,
-            pos: JSON.stringify(this.startPos),
-        };
-        this.start(props, config.callback);
-        return this;
+        config.name = this.name;
+        config.role = this.role;
+        config.pos = JSON.stringify(this.startPos);
+        return config;
     }
 }
