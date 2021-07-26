@@ -497,6 +497,8 @@ describe('monster connects to server', () => {
 
   it('should see other entities die', (done) => {
     let bot2started = false;
+    let corpseDropped = false;
+    let bot1Stopped = false;
     const pos1 = {x:defaultPos.x + 1, y:defaultPos.y, z:defaultPos.z};
     const addr = (typeof httpServerAddr === 'object') ? `http://[${httpServerAddr?.address}]:${httpServerAddr?.port}` : `${httpServerAddr}`;
     const bot1 = new GoblinBot(addr);
@@ -506,11 +508,20 @@ describe('monster connects to server', () => {
         bot2started = true;
         bot2.startBot({startPos:pos1});
       }
-      
+      if (bot2started && event === EVENTS.items) {
+        const dropped = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
+        if (dropped.length) {
+          corpseDropped = true;
+        }
+      }
       if (bot2started && event === EVENTS.delete) {
-        const others = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z);
-        expect(others.filter(i=>i.getDescription()==="goblin corpse").length).toEqual(1);
+        bot1Stopped = true;
+      }
+
+      if (bot1Stopped && corpseDropped) {
         bot1.stop();
+        const corpse = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
+        expect(corpse.length).toBe(1);
         done();
       }
     });
