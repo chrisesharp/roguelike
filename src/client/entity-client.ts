@@ -40,7 +40,7 @@ export class EntityClient {
 
     disconnectFromServer(event?: string): void {
         if (event) {
-            this.socket?.emit(event)
+            this.socket?.emit(event);
         }
         this.socket?.disconnect();
     }

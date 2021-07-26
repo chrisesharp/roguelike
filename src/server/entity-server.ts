@@ -90,10 +90,12 @@ export class EntityServer {
 
     deleteEntity(entity: ServerEntity): void {
         if (this.entities.getEntity(entity.id)) {
-            entity.getInventory().forEach(item => this.dropItem(entity, item.getName()));
-            if (!entity.isAlive() && entity.corpse) {
-                this.dropItem(entity, entity.corpse);
+            const items:(Item|string)[] = entity.getInventory().map(i => i.getName());
+            if (!entity.isAlive()) {
+                const corpse = entity.dropCorpse();
+                if (corpse) items.push(corpse);
             }
+            items.forEach(item => this.dropItem(entity, item));
             this.messaging.sendToAll(EVENTS.delete, entity.getPos());
             this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
             this.entities.removeEntity(entity);

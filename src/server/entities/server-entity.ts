@@ -119,6 +119,12 @@ export class ServerEntity extends Entity {
         return item;
     }
 
+    dropCorpse(): Item | undefined {
+        const corpse = this.corpse;
+        this.corpse = undefined;
+        return corpse;
+    }
+
     eat(foodName: string): void {
         const item = this.removeItemFromInventory(foodName);
         if (item) {
