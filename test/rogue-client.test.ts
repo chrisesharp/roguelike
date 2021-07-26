@@ -508,8 +508,8 @@ describe('monster connects to server', () => {
       }
       
       if (bot2started && event === EVENTS.delete) {
-        const other = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z)[0];
-        expect(other?.getDescription()).toEqual("goblin corpse");
+        const others = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z);
+        expect(others.filter(i=>i.getDescription()==="goblin corpse").length).toEqual(1);
         bot1.stop();
         done();
       }
