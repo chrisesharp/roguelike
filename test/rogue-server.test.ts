@@ -80,6 +80,7 @@ describe('basic socket.io API', () => {
             transports: ['websocket']
         });
         new_socket.on(EVENTS.missingRole, () => {
+            new_socket.disconnect();
             done();
         });
     });
