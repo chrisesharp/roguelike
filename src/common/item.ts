@@ -1,7 +1,7 @@
 import { Glyph, GlyphState } from './glyph';
 import { Location } from './movement';
 
-export type ItemProperties = Partial<ItemState>
+export type ItemProperties = Partial<ItemState>;
 
 interface ItemSpecificState {
     pos: Location;
@@ -84,10 +84,6 @@ export class Item extends Glyph { // Should an item have a glyph rather than be 
         super.updateState(properties);
     }
 
-    // assume(extraProperties?: Partial<ItemState>): void {
-    //     Object.assign(this, extraProperties);
-    // }
-
     getDamage(): number {
         return this.#state.damage;
     }
@@ -111,9 +107,14 @@ export class Item extends Glyph { // Should an item have a glyph rather than be 
     updateState(state: Partial<ItemState>): void {
         super.updateState(state);
         // TODO understand why this doesn't work!
-        // for(const [k,v] of Object.entries(this.#state)) {
-        //     this.#state[k] = state[k] ?? v;
+        // function getKeys<ItemSpecificState>(o: ItemSpecificState)  {
+        //     return Object.keys(o) as (keyof ItemSpecificState)[];
         // }
+        // const stateKeys:(keyof ItemSpecificState)[] = getKeys(this.#state);
+        // stateKeys.forEach(k => {
+        //     this.#state[k] = state[k] ?? this.#state[k];
+        // });
+
         this.#state = {
             pos: state.pos ?? this.#state.pos,
             name: state.name ?? this.#state.name,
