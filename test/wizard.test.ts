@@ -1,5 +1,5 @@
-import { Messenger } from '../src/server/entities/server-entity';
-import { Wizard } from '../src/server/entities/wizard';
+import { Messenger } from '../dist/server/entities/server-entity';
+import { Wizard } from '../dist/server/entities/wizard';
 
 describe('wizards creation', () => {
     const messenger: Messenger = () => {

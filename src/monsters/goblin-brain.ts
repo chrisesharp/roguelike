@@ -1,7 +1,7 @@
 import _ from "underscore";
 import { Brain } from './brain';
 import { DIRS, getMovement, opposite, left, right } from "../common/movement";
-import { Location } from "../common/location";
+import { Location } from "../common/movement";
 import { EVENTS } from "../common/events";
 import { EntityClient } from "../client/entity-client";
 import { Entity } from "../common/entity";

@@ -1,4 +1,4 @@
-import { Location } from "../common/location";
+import { Location } from "../common/movement";
 import { emptyMap, GameMap, MapTemplate } from "../common/map";
 import { Tile } from "../common/tile";
 import { GeneratorOptions, generators, MapGenerator } from "./generators";

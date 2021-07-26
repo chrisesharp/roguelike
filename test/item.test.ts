@@ -1,7 +1,7 @@
-import { Item } from "../src/common/item";
-import { Location } from "../src/common/location";
-import { Apple } from "../src/server/items/apple";
-import { Rock } from "../src/server/items/rock";
+import { Item } from "../dist/common/item";
+import { Location } from "../dist/common/movement";
+import { Apple } from "../dist/server/items/apple";
+import { Rock } from "../dist/server/items/rock";
 
 const defaultPos: Location = { x: 2, y: 2, z: 0 };
 
@@ -9,7 +9,8 @@ describe('item', () => {
     describe('creation', () => {
         it('should be describable', () => {
             const rock = new Rock({pos:defaultPos});
-            expect(rock.getPos().x).toBe(defaultPos.x);
+            const pos:Location = rock.getPos();
+            expect(pos.x).toBe(defaultPos.x);
             expect(rock.describeA(true)).toBe("A rock");
             expect(rock.describeThe(true)).toBe("The rock");
             expect(rock.describeA(false)).toBe("a rock");

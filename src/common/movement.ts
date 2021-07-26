@@ -7,13 +7,19 @@ export enum DIRS {
     DOWN = "DOWN",
 }
 
-export interface Movement {
+export type Location = {
     x: number;
     y: number;
     z: number;
 }
 
-interface Direction extends Movement {
+// export interface Movement {
+//     x: number;
+//     y: number;
+//     z: number;
+// }
+
+interface Direction extends Location {
     opposite: DIRS;
     left?: DIRS;
     right?: DIRS;
@@ -28,7 +34,7 @@ const directions: { [key in DIRS]: Direction } = {
     [DIRS.DOWN]: { x: 0, y: 0, z: 1, opposite: DIRS.UP },
 } 
 
-export function getMovement(direction?: DIRS): Movement {
+export function getMovement(direction?: DIRS): Location {
     if (direction && Object.values(DIRS).includes(direction)) {
         return directions[direction];
     }

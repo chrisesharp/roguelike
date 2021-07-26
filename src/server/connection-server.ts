@@ -1,7 +1,7 @@
 import http from 'http';
 import { Socket } from 'socket.io';
 import { ItemState } from '../common/item';
-import { Location } from "../common/location";
+import { Location } from "../common/movement";
 import { EVENTS } from '../common/events';
 import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
 import { EntityServer, EntityServerTemplate, serializeCaveItems } from './entity-server';

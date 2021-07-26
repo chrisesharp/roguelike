@@ -1,9 +1,8 @@
 import { State } from './state';
 import { EVENTS } from '../common/events';
 import { io, Socket } from 'socket.io-client';
-import { Location } from '../common/location';
 import { MapState } from '../common/map';
-import { DIRS } from '../common/movement';
+import { DIRS, Location } from '../common/movement';
 import { Item, ItemState } from '../common/item';
 import { Entity, EntityState } from '../common/entity';
 import { ConnectionProps } from '../common/connection-props';

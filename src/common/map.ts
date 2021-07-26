@@ -1,4 +1,4 @@
-import { Location } from "./location";
+import { Location } from "./movement";
 import { Tile, TileProperties, TileState } from './tile';
 
 const nullTile = new Tile();

@@ -1,6 +1,6 @@
-import { Tile } from '../src/common/tile';
-import { MapGenerator } from '../src/server/generators';
-import * as tiles from '../src/server/server-tiles';
+import { Tile } from '../dist/common/tile';
+import { MapGenerator } from '../dist/server/generators';
+import * as tiles from '../dist/server/server-tiles';
 
 const contents = [
     '####',

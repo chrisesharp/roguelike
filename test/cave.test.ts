@@ -1,10 +1,10 @@
 // import path from 'path';
-import { Cave, CaveTemplate, DEFAULT_SIZE } from '../src/server/cave';
-import { generators } from '../src/server/generators';
-import { Dagger } from '../src/server/items/dagger';
-import { Rock } from '../src/server/items/rock';
-import { Position } from '../src/server/map-builder';
-import * as Tiles from '../src/server/server-tiles';
+import { Cave, CaveTemplate, DEFAULT_SIZE } from '../dist/server/cave';
+import { generators } from '../dist/server/generators';
+import { Dagger } from '../dist/server/items/dagger';
+import { Rock } from '../dist/server/items/rock';
+import { Position } from '../dist/server/map-builder';
+import * as Tiles from '../dist/server/server-tiles';
 import { MockGenerator } from './mock-generator';
 
 describe('cave creation', () => {

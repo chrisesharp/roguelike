@@ -1,5 +1,5 @@
 import { Glyph, GlyphState } from './glyph';
-import { Location } from './location';
+import { Location } from './movement';
 
 export type ItemProperties = Partial<ItemState>
 

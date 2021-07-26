@@ -1,5 +1,5 @@
-import { Goblin } from '../src/server/entities/goblin';
-import { Messenger } from '../src/server/entities/server-entity';
+import { Goblin } from '../dist/server/entities/goblin';
+import { Messenger } from '../dist/server/entities/server-entity';
 
 const mockServer: Messenger = () => {
   // Nothing

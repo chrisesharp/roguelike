@@ -1,4 +1,4 @@
-import { DIRS, opposite, getMovement } from "../src/common/movement";
+import { DIRS, opposite, left, right, getMovement } from "../dist/common/movement";
 
 describe('move opposite', () => {
     it('should be east opposite to west', () => {
@@ -18,6 +18,14 @@ describe('move opposite', () => {
     });
     it('should be up opposite to down', () => {
         expect(opposite(DIRS.DOWN)).toBe(DIRS.UP);
+    });
+
+    it('should be west to left of north', () => {
+        expect(left(DIRS.NORTH)).toBe(DIRS.WEST);
+    });
+
+    it('should be east to right of north', () => {
+        expect(right(DIRS.NORTH)).toBe(DIRS.EAST);
     });
 
     it('should go nowhere for undefined direction', () => {

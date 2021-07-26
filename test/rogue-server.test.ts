@@ -3,23 +3,24 @@
 
 import { io, Socket } from 'socket.io-client';
 import * as http from 'http';
-import { ConnectionServer } from '../src/server/connection-server';
-import { DIRS } from '../src/common/movement';
-import * as Tiles from '../src/server/server-tiles';
-import { EVENTS } from '../src/common/events';
-import { Entity, EntityState } from '../src/common/entity';
-import { Item, ItemState } from '../src/common/item';
-import { Rock } from '../src/server/items/rock';
-import { Dagger } from '../src/server/items/dagger';
-import { Apple } from '../src/server/items/apple';
-import { Chainmail } from '../src/server/items/chainmail';
+import { ConnectionServer } from '../dist/server/connection-server';
+import { DIRS } from '../dist/common/movement';
+import * as Tiles from '../dist/server/server-tiles';
+import { EVENTS } from '../dist/common/events';
+import { Entity, EntityState } from '../dist/common/entity';
+import { Item, ItemState } from '../dist/common/item';
+import { Rock } from '../dist/server/items/rock';
+import { Dagger } from '../dist/server/items/dagger';
+import { Apple } from '../dist/server/items/apple';
+import { Chainmail } from '../dist/server/items/chainmail';
+import { Location } from '../dist/common/movement';
 import { AddressInfo } from 'net';
 
 let socket: Socket;
 let httpServer: http.Server;
 let httpServerAddr: AddressInfo;
 let app: ConnectionServer;
-const defaultPos = { x: 2, y: 2, z: 0 };
+const defaultPos:Location = { x: 2, y: 2, z: 0 };
 const rock = new Rock();
 const dagger = new Dagger();
 const apple = new Apple();

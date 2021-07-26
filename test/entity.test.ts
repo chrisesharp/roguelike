@@ -1,8 +1,8 @@
-import { Entity } from '../src/common/entity';
-import { Location } from '../src/common/location';
-import { Messenger } from '../src/server/entities/server-entity';
-import { Warrior } from '../src/server/entities/warrior';
-import { Rock } from '../src/server/items/rock';
+import { Entity } from '../dist/common/entity';
+import { Location } from '../dist/common/movement';
+import { Messenger } from '../dist/server/entities/server-entity';
+import { Warrior } from '../dist/server/entities/warrior';
+import { Rock } from '../dist/server/items/rock';
 
 const defaultPos: Location = { x: 2, y: 2, z: 0 };
 const mockServer: Messenger = () => {
@@ -26,7 +26,9 @@ describe('entity', () => {
 
         it('should not be hungry by default', () => {
             const entity = new Entity();
-            expect(entity.getHunger()).toMatchObject({ value: 0 })
+            const hunger = entity.getHunger();
+            expect(hunger.getValue()).toBe(0);
+            expect(hunger.getDescription()).toBe("not hungry");
         });
 
         it('should have 10 feet vision by default', () => {

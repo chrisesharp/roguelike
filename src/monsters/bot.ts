@@ -1,10 +1,9 @@
 import { EntityClient} from '../client/entity-client.js';
 import { ConnectionProps } from "../common/connection-props";
 import { GameMap, MapTemplate } from '../common/map';
-import { Location } from '../common/location';
 import { EVENTS } from '../common/events';
 import { Brain } from './brain';
-import { DIRS } from '../common/movement';
+import { DIRS, Location } from '../common/movement';
 
 export type BotProperties = {
     startPos?: Location,
@@ -34,7 +33,7 @@ export class Bot {
         return this.brain;
     }
 
-    startBot(config: BotProperties): this {
+    startBot(config: BotProperties = {}): this {
         this.start({}, config.callback);
         return this;
     }

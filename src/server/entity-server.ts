@@ -3,8 +3,7 @@ import { MapState } from '../common/map';
 import { Tile } from '../common/tile';
 import { EVENTS } from '../common/events';
 import { Item, ItemState } from '../common/item';
-import { Location } from "../common/location";
-import { DIRS, getMovement, Movement } from '../common/movement';
+import { DIRS, Location, getMovement } from '../common/movement';
 import { Cave, CaveItems, CaveTemplate } from './cave';
 import { ServerEntity, ServerEntityProperties } from './entities/server-entity';
 import { EntityFactory } from './entity-factory';
@@ -158,7 +157,7 @@ export class EntityServer {
         return position;
     }
 
-    tryMove(entity: ServerEntity, delta: Movement): Location | undefined {
+    tryMove(entity: ServerEntity, delta: Location): Location | undefined {
         const x = entity.getPos().x + delta.x;
         const y = entity.getPos().y + delta.y;
         const z = entity.getPos().z + delta.z;

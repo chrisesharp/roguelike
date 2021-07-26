@@ -1,4 +1,4 @@
-import { Location } from "../common/location";
+import { Location } from "../common/movement";
 import _ from "underscore";
 import { ServerEntity, ServerEntityProperties } from "./entities/server-entity";
 import { EntityFactory } from "./entity-factory";

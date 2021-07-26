@@ -1,6 +1,6 @@
-import { Messenger, ServerEntity } from '../src/server/entities/server-entity';
-import { Rock } from '../src/server/items/rock';
-import { Chainmail } from '../src/server/items/chainmail';
+import { Messenger, ServerEntity } from '../dist/server/entities/server-entity';
+import { Rock } from '../dist/server/items/rock';
+import { Chainmail } from '../dist/server/items/chainmail';
 
 const mockServer: Messenger = () => {
     // Nothing

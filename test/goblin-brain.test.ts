@@ -1,15 +1,15 @@
-import { GoblinBrain } from "../src/monsters/goblin-brain";
-import { Goblin } from "../src/server/entities/goblin";
-import { Warrior } from "../src/server/entities/warrior";
-import { Wizard } from "../src/server/entities/wizard";
-import { DIRS } from "../src/common/movement";
-import { EVENTS } from "../src/common/events";
-import * as Tiles from '../src/server/server-tiles';
-import { Messenger } from '../src/server/entities/server-entity';
-import { GameMap } from "../src/common/map";
-import { EntityClient } from "../src/client/entity-client";
-import { Entity } from '../src/common/entity';
-import { Tile } from "../src/common/tile";
+import { GoblinBrain } from "../dist/monsters/goblin-brain";
+import { Goblin } from "../dist/server/entities/goblin";
+import { Warrior } from "../dist/server/entities/warrior";
+import { Wizard } from "../dist/server/entities/wizard";
+import { DIRS } from "../dist/common/movement";
+import { EVENTS } from "../dist/common/events";
+import * as Tiles from '../dist/server/server-tiles';
+import { Messenger } from '../dist/server/entities/server-entity';
+import { GameMap } from "../dist/common/map";
+import { EntityClient } from "../dist/client/entity-client";
+import { Entity } from '../dist/common/entity';
+import { Tile } from "../dist/common/tile";
 
 class MockMap extends GameMap {
     tileFn?: (x:number,y:number,z:number)=>Tile;

@@ -5,7 +5,7 @@ import  * as Tiles from "../dist/server/server-tiles";
 import { ConnectionServer } from "../dist/server/connection-server";
 import { GoblinBot } from "../dist/monsters/goblin-bot";
 import { OrcBot } from "../dist/monsters/orc-bot";
-import { DIRS } from "../dist/common/movement";
+import { DIRS, Location } from "../dist/common/movement";
 import { EVENTS } from "../dist/common/events";
 import { Rock } from "../dist/server/items/rock";
 import { Dagger } from "../dist/server/items/dagger";
@@ -15,7 +15,6 @@ import { Item } from "../dist/common/item";
 import { Brain } from "../dist/monsters/brain";
 import { Entity } from "../dist/common/entity";
 import { GameMap } from "../dist/common/map";
-import { Location } from "../dist/common/location";
 import { AddressInfo } from "net";
 
 const rock = new Rock();
