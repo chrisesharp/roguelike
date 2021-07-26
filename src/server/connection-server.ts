@@ -111,9 +111,6 @@ export class ConnectionServer {
     }
 
     leaveRoom(socket: Socket, entity: ServerEntity, room: string): void {
-        // socket.leave(room, () => {
-        //     this.messaging.sendMessageToRoom(room, Messages.LEAVE_ROOM(entity.describeA()));
-        // });
         socket.leave(room);
 
     }

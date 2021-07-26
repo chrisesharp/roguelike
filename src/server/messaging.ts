@@ -29,9 +29,10 @@ export class Messaging {
     sendMessageToAll(...message: string[]): void {
         this.backend.emit('message', message);
     }
-    sendMessageToRoom(room: string, ...message: string[]): void {
-        this.backend.in(room).emit('message', message); 
-    }
+
+    // sendMessageToRoom(room: string, ...message: string[]): void {
+    //     this.backend.in(room).emit('message', message); 
+    // }
 
     sendMessageToId(id: string, cmd: string, data: unknown): void {
         this.backend.to(id).emit(cmd, data);
