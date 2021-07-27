@@ -1,36 +1,25 @@
 import express from 'express';
 import http from 'http';
-import { ConnectionServer } from './server/connection-server';
-import fs from 'fs';
 import * as routes from './routes';
 import * as process from 'process';
+import { StartOpts } from './start-server';
 
-const port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
-const host = '0.0.0.0';
+const PORT = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
+const HOST = '0.0.0.0';
 let app: express.Express;
-let cs: ConnectionServer;
 let hs: http.Server;
 
-export type StartOpts = {test?:boolean, frontend?: {host:string,port:number}, backend?: ConnectionServer, config?: string}; 
-
-export function startServer(options:StartOpts = {}): void {
-    const template = getConfig(options?.config);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function startFrontEnd(options:StartOpts = {}): void {
+    const port = options.frontend?.port || PORT;
+    const host = options.frontend?.host || HOST;
     app = createAppServer(port);
     hs = createHttpServer(host, port, app);
-    cs = new ConnectionServer(hs, template);
-    options.backend = cs;
     routes.use(app, options);
 }
 
 export function stopServer(): void {
-    cs.stop();
     hs.close();
-}
-
-function getConfig(config?:string) {
-    const filepath = config || process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
-    const file = fs.readFileSync(filepath, 'utf8');
-    return JSON.parse(file);
 }
 
 function createAppServer(port: number): express.Express {
@@ -51,7 +40,7 @@ function createHttpServer(host: string, port: number, app: express.Express): htt
     const httpServer = http.createServer(app);
     httpServer.listen(port, host);
     httpServer.on('listening', () => onListen(httpServer));
-    httpServer.on('error', onError);
+    httpServer.on('error', (err) => onError(err,port));
     return httpServer;
 }
 
@@ -60,7 +49,6 @@ function normalizePort(val: string): number {
     if (isNaN(port) || port < 0) {
         throw new Error(`Invalid port: ${val}`);
     }
-
     return port;
 }
 
@@ -70,7 +58,7 @@ function onListen(httpServer: http.Server): void {
     console.log('Listening on ', bind);
 }
 
-function onError(error: Error & { syscall?: string; code?: string }): void {
+function onError(error: Error & { syscall?: string; code?: string }, port:number|string): void {
     if (error.syscall !== 'listen') {
         throw error;
     }

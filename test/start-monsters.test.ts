@@ -2,7 +2,7 @@ import { startServer, stopServer } from '../dist/start-server';
 import { startMonsters, stopMonsters, MonsterRoster, StartMonsterOpts } from '../dist/start-monsters';
 
 beforeAll(() => {
-    startServer({test:true});
+    startServer({});
 });
 
 afterAll(() => {
