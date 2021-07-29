@@ -1,12 +1,14 @@
-import { startServer, stopServer } from '../dist/start-server';
+import { BackendServer} from '../dist/backend-server';
 import { startMonsters, stopMonsters, MonsterRoster, StartMonsterOpts } from '../dist/start-monsters';
 
+let backend:BackendServer;
+
 beforeAll(() => {
-    startServer({});
+    backend = new BackendServer({});
 });
 
 afterAll(() => {
-    stopServer();
+    backend.stop();
 });
 
 describe('monster bots', () => {

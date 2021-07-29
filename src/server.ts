@@ -5,11 +5,13 @@ import * as process from 'process';
 import { EntityServerTemplate } from './server/entity-server';
 
 export interface StartOpts extends EntityServerTemplate {
-    test?:boolean, 
+    test?:boolean,
+    host?: string,
+    port?: string,
     frontend?: {
         host:string,
         port:number}, 
-    backend?: unknown, 
+    backend?: unknown,
     config?: string
 }
 
@@ -21,8 +23,8 @@ export abstract class Server {
     protected hs: http.Server;
 
     constructor(options:StartOpts = {}) {
-        this.port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
-        this.host = '0.0.0.0'; 
+        this.port = normalizePort(options?.port || process.env.PORT || process.env.npm_package_config_port || '3000');
+        this.host = options?.host || '0.0.0.0'; 
         this.config = getConfig(options?.config);
         this.app = createAppServer(this.port);
         this.hs = createHttpServer(this.host, this.port, this.app);
