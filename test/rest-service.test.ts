@@ -2,17 +2,19 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable jest/no-done-callback */
 import axios from 'axios';
-
-import { startServer, stopServer } from '../dist/start-server';
+import { start } from '../dist/start';
+import { Server } from '../dist/server';
+// import { startServer, stopServer } from '../dist/start-server';
 
 const addr = 'http://0.0.0.0:3000'
+let server:Server;
 
-beforeAll(() => {
-    startServer({test:true});
+beforeAll(async () => {
+    server = await start("BACKEND") as Server;
 });
 
 afterAll(() => {
-    stopServer();
+    server.stop();
 });
 
 describe('basic REST API', () => {

@@ -1,9 +1,10 @@
-import { startServer } from './start-server';
-import { startFrontEnd } from './start-frontend';
+import { Server, StartOpts } from './server';
+import { BackendServer } from './backend-server';
+import { FrontendServer } from './frontend-server';
 import { startMonsters, StartMonsterOpts, MonsterRoster } from './start-monsters';
-import { StartOpts } from './start-server';
+import { Bot } from './monsters/bot';
 
-async function start(role?:string) {
+export async function start(role?:string):Promise<Server|Bot[][]> {
     const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json'; 
     const port = normalizePort(process.env.PORT || process.env.npm_package_config_port || '3000');
     const host = '0.0.0.0';
@@ -19,24 +20,25 @@ async function start(role?:string) {
                     console.log(`Started ${monster.role} on level ${monster.level - 1}`);
                 });
             });
+            return Promise.resolve(started);
             break;
         case "FRONTEND":
             console.log("....frontend!");
             const feOpts:StartOpts = {frontend:{port:port,host:host}};
-            startFrontEnd(feOpts);
+            return new FrontendServer(feOpts);
             break;
         case "BACKEND":
             console.log("...the kaverns!");
             console.log('Starting server using ', filepath);
             const beOpts:StartOpts = {config:filepath};
-            startServer(beOpts);
+            return new BackendServer(beOpts);
             break;
         default:
             console.log("...the frontend, kaverns and monsters!");
             console.log('Starting server using ', filepath);
             const allOpts:StartOpts = {config:filepath,frontend:{host:host, port:port}};
-            startServer(allOpts);
             startMonsters(mOpts);
+            return new BackendServer(allOpts);
     }
 }
 

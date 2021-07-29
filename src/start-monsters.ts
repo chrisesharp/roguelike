@@ -2,15 +2,20 @@ import { io } from 'socket.io-client';
 import { Bots } from './monsters/index';
 import { EVENTS } from './common/events';
 import { Bot } from './monsters/bot';
+import { StartOpts } from './server';
 
-const serverAddr = process.env.server || "http://0.0.0.0:3000";
+const defaultAddr = process.env.server || "http://0.0.0.0:3000";
 
 let deployable: MonsterRoster[] = [];
 
 export type MonsterRoster = {type:string, frequency:number};
-export type StartMonsterOpts = {monsters?:MonsterRoster[], test?:boolean}; 
+export interface StartMonsterOpts extends StartOpts {
+    monsters?:MonsterRoster[], 
+}
 
 export async function startMonsters(options:StartMonsterOpts = {}): Promise<Bot[][]> {
+    const serverAddr = (options.frontend?.host && options.frontend?.port) ? `http://${options.frontend?.host}:${options.frontend?.port}` : defaultAddr;
+
     return new Promise((resolve) => {
         if (options?.monsters) {
             deployable = options?.monsters;
