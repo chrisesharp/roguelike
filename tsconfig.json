@@ -14,5 +14,6 @@
     },
     "include": [
         "src/"
-    ]
+    ],
+    "main": "./dist/index"
 }

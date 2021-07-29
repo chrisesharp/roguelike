@@ -10,7 +10,7 @@ export interface StartOpts extends EntityServerTemplate {
     port?: string,
     frontend?: {
         host:string,
-        port:number}, 
+        port:string}, 
     backend?: unknown,
     config?: string
 }
@@ -36,6 +36,10 @@ export abstract class Server {
 
     reset(): void {
         // noop
+    }
+
+    getAddress(): string {
+        return this.hs.address() as string;
     }
 
 }

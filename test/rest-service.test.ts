@@ -4,13 +4,14 @@
 import axios from 'axios';
 import { start } from '../dist/start';
 import { Server } from '../dist/server';
-// import { startServer, stopServer } from '../dist/start-server';
 
-const addr = 'http://0.0.0.0:3000'
+let addr: string;
 let server:Server;
 
 beforeAll(async () => {
-    server = await start("BACKEND") as Server;
+    server = await start("BACKEND", "3001") as Server;
+    addr = "http://0.0.0.0:3001";
+    console.log("Addr:",addr);
 });
 
 afterAll(() => {
