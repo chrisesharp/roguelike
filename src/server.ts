@@ -7,7 +7,7 @@ import { EntityServerTemplate } from './server/entity-server';
 export interface StartOpts extends EntityServerTemplate {
     test?:boolean,
     host?: string,
-    port?: number,
+    port?: string,
     frontend?: {
         host:string,
         port:number}, 
