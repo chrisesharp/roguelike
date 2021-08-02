@@ -12,6 +12,7 @@ import { Messaging } from './messaging';
 import * as Tiles from './server-tiles';
 import { State } from './state';
 import { ConnectionProps } from "../common/connection-props";
+import {Mutex, MutexInterface} from 'async-mutex';
 
 interface ConnectResponse {
     id: number;
@@ -33,6 +34,7 @@ export class EntityServer {
     private readonly template: EntityServerTemplate;
     private readonly messaging: Messaging;
     private readonly cave_id: number;
+    private mutex: MutexInterface = new Mutex();
     cave: Cave;
     private readonly repo: EntityFactory;
     entities: State;
@@ -127,26 +129,40 @@ export class EntityServer {
 
     takeItem(entity: ServerEntity, itemName: string): void {
         const { x, y, z } = entity.getPos();
-        const items = this.cave.getItemsAt(x, y, z);
-        const item = items.find(o => o.getName() === itemName);
-        if (item && entity.tryTake(item)) {
-            const room = this.cave.getRegion(entity.getPos());
-            this.cave.removeItem(item);
-            const items = this.cave.getItems(room);
-            this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
-        } else {
-            entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
-        }
+        this.mutex.runExclusive( () => {
+            const items = this.cave.getItemsAt(x, y, z);
+            const item = items.find(o => o.getName() === itemName);
+            if (item && entity.tryTake(item)) {
+                const room = this.cave.getRegion(entity.getPos());
+                this.cave.removeItem(item);
+                const items = this.cave.getItems(room);
+                this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
+            } else {
+                entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
+            }
+        });
+        // const items = this.cave.getItemsAt(x, y, z);
+        // const item = items.find(o => o.getName() === itemName);
+        // if (item && entity.tryTake(item)) {
+        //     const room = this.cave.getRegion(entity.getPos());
+        //     this.cave.removeItem(item);
+        //     const items = this.cave.getItems(room);
+        //     this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
+        // } else {
+        //     entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
+        // }
     }
 
     dropItem(entity: ServerEntity, itemName: string | Item): void {
-        const item = (itemName instanceof Item) ? itemName : entity.dropItem(itemName);
-        if (item) {
-            const room = this.cave.getRegion(entity.getPos());
-            this.cave.addItem(entity.getPos(), item);
-            const items = this.cave.getItems(room);
-            this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
-        }
+        this.mutex.runExclusive( () => {
+            const item = (itemName instanceof Item) ? itemName : entity.dropItem(itemName);
+            if (item) {
+                const room = this.cave.getRegion(entity.getPos());
+                this.cave.addItem(entity.getPos(), item);
+                const items = this.cave.getItems(room);
+                this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
+            }
+        });
     }
 
     moveEntity(entity: ServerEntity, direction: DIRS): Location | undefined {
