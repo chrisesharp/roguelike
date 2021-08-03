@@ -13,12 +13,6 @@ export type Location = {
     z: number;
 }
 
-// export interface Movement {
-//     x: number;
-//     y: number;
-//     z: number;
-// }
-
 interface Direction extends Location {
     opposite: DIRS;
     left?: DIRS;

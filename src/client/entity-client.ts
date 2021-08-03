@@ -6,6 +6,8 @@ import { DIRS, Location } from '../common/movement';
 import { Item, ItemState } from '../common/item';
 import { Entity, EntityState } from '../common/entity';
 import { ConnectionProps } from '../common/connection-props';
+import { Logger } from '../common/logger';
+const log = new Logger();
 
 export type ClientCallback = (eventName: string, arg?: unknown) => void;
 export class EntityClient {
@@ -23,7 +25,7 @@ export class EntityClient {
     connectToServer(properties: ConnectionProps, callback?: (() => void)): void {
         this.properties = properties;
         const url = properties.url || this.serverAddr;
-        // console.log("Connecting to cave at ",url);
+        log.debug(`Connecting to cave at ${url}`);
         this.socket = io(url, {
             reconnectionDelay: 0,
             transports: ['websocket'],

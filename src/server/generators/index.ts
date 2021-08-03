@@ -6,8 +6,6 @@ export interface MapGenerator {
     generateLevel(level: number): Tile[][];
 }
 
-// import { MockGenerator } from '../../../test/mock-generator';
-
 export interface GeneratorOptions {
     maps?: string;
 }

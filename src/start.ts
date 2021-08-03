@@ -3,6 +3,8 @@ import { BackendServer } from './backend-server';
 import { FrontendServer } from './frontend-server';
 import { startMonsters, StartMonsterOpts, MonsterRoster } from './start-monsters';
 import { Bot } from './monsters/bot';
+import { Logger } from './common/logger';
+const log = new Logger();
 
 export async function start(role?:string, portNum?:string):Promise<Server|Bot[][]> {
     const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json'; 
@@ -11,32 +13,34 @@ export async function start(role?:string, portNum?:string):Promise<Server|Bot[][
     const monsters = process.env.monsters;
     const mOpts:StartMonsterOpts = (monsters) ? {monsters: JSON.parse(monsters) as MonsterRoster[], host:host, port:port} : {};
 
-    console.log(`Running start with ${role}, ${portNum}`);
+    log.info(`Running start with ${role}, ${port}`);
     switch(role) {
         case "MONSTERS":
-            console.log("...monsters!");
+            log.info("...monsters!");
             const started = await startMonsters(mOpts);
             started.forEach(type => {
                 type.forEach(monster => {
-                    console.log(`Started ${monster.role} on level ${monster.level - 1}`);
+                    log.info(`Started ${monster.role} on level ${monster.level - 1}`);
                 });
             });
             return Promise.resolve(started);
-            break;
         case "FRONTEND":
-            console.log("....frontend!");
+            log.info("....frontend!");
             const feOpts:StartOpts = {frontend:{port:port,host:host}};
             return new FrontendServer(feOpts);
-            break;
         case "BACKEND":
-            console.log("...the kaverns!");
-            console.log('Starting server using ', filepath);
+            log.info("...the kaverns!");
+            log.info(`Starting server using ${filepath}`);
             const beOpts:StartOpts = {host:host, port:port, config:filepath};
             return new BackendServer(beOpts);
-            break;
+        case "SERVER":
+            log.info("...the frontend and kaverns!");
+            log.info(`Starting server using ${filepath}`);
+            const svrOpts:StartOpts = {host:host, port:port, config:filepath,frontend:{host:host, port:port}};
+            return new BackendServer(svrOpts);
         default:
-            console.log("...the frontend, kaverns and monsters!");
-            console.log('Starting server using ', filepath);
+            log.info("...the frontend, kaverns and monsters!");
+            log.info(`Starting server using ${filepath}`);
             const allOpts:StartOpts = {host:host, port:port, config:filepath,frontend:{host:host, port:port}};
             startMonsters(mOpts);
             return new BackendServer(allOpts);

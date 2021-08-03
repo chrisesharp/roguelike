@@ -25,10 +25,6 @@ export interface MapBuilderTemplate extends MapTemplate, GeneratorOptions {
     fov: FOV[];
 }
 
-// function printTiles(tiles: Array<Array<Array<Tile | unknown>>>): void {
-//     console.log(tiles.map(z => z.map(x => x.map(t => t instanceof Tile ? t.getChar() : t))));
-// }
-
 function shuffle<T>(input: T[]): void {
     for (let i = 0; i < input.length - 1; i++) {
         const j = i + Math.floor(Math.random() * input.length - i);

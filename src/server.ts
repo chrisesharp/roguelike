@@ -3,6 +3,8 @@ import http from 'http';
 import fs from 'fs';
 import * as process from 'process';
 import { EntityServerTemplate } from './server/entity-server';
+import { Logger } from './common/logger';
+const log = new Logger();
 
 export interface StartOpts extends EntityServerTemplate {
     test?:boolean,
@@ -84,7 +86,7 @@ function normalizePort(val: string): number {
 function onListen(httpServer: http.Server): void {
     const addr = httpServer.address() ?? '';
     const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-    console.log('Listening on ', bind);
+    log.info(`Listening on ${bind}`);
 }
 
 function onError(error: Error & { syscall?: string; code?: string }, port:number|string): void {

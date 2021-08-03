@@ -13,6 +13,8 @@ import * as Tiles from './server-tiles';
 import { State } from './state';
 import { ConnectionProps } from "../common/connection-props";
 import {Mutex, MutexInterface} from 'async-mutex';
+import { Logger } from '../common/logger';
+const log = new Logger();
 
 interface ConnectResponse {
     id: number;
@@ -61,7 +63,7 @@ export class EntityServer {
                 .map(cave => cave.url);
             this.connectGatewayEndpoints(urls);
         } catch(reason) {
-            console.log('failed to get other cave urls from ', endpoint, reason);
+            log.error('failed to get other cave urls from ', endpoint, reason);
         }
     }
 
@@ -141,16 +143,6 @@ export class EntityServer {
                 entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
             }
         });
-        // const items = this.cave.getItemsAt(x, y, z);
-        // const item = items.find(o => o.getName() === itemName);
-        // if (item && entity.tryTake(item)) {
-        //     const room = this.cave.getRegion(entity.getPos());
-        //     this.cave.removeItem(item);
-        //     const items = this.cave.getItems(room);
-        //     this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
-        // } else {
-        //     entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
-        // }
     }
 
     dropItem(entity: ServerEntity, itemName: string | Item): void {

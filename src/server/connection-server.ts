@@ -8,6 +8,8 @@ import { EntityServer, EntityServerTemplate, serializeCaveItems } from './entity
 import { Messages } from './messages';
 import { Messaging } from './messaging';
 import { ConnectionProps } from "../common/connection-props";
+import { Logger } from '../common/logger';
+const log = new Logger();
 
 export class ConnectionServer {
     private open = true;
@@ -44,42 +46,52 @@ export class ConnectionServer {
 
     registerEventHandlers(socket: Socket, entity: ServerEntity, server: EntityServer): void {
         socket.on(EVENTS.getEntities, () => {
+            log.debug(socket.id, EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
             socket.emit(EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
         });
 
         socket.on(EVENTS.getItems, () => {
+            log.debug(socket.id, EVENTS.items, this.getItemStatesForRoom(entity.getPos()));
             socket.emit(EVENTS.items, this.getItemStatesForRoom(entity.getPos()));
         });
 
         socket.on(EVENTS.getMap, () => {
+            log.debug(socket.id, EVENTS.map, server.getMapState(entity));
             socket.emit(EVENTS.map, server.getMapState(entity));
         });
 
         socket.on(EVENTS.getPosition, () => {
+            log.debug(socket.id, EVENTS.position, entity.getEntityLocation());
             socket.emit(EVENTS.position, entity.getEntityLocation());
         });
 
         socket.on(EVENTS.take, (itemName) => {
+            log.debug(socket.id, EVENTS.take, itemName);
             if (entity.isAlive()) server.takeItem(entity, itemName);
         });
 
         socket.on(EVENTS.drop, (itemName) => {
+            log.debug(socket.id, EVENTS.drop, itemName);
             if (entity.isAlive()) server.dropItem(entity, itemName);
         });
 
         socket.on(EVENTS.eat, (food) => {
+            log.debug(socket.id, EVENTS.eat, food);
             if (entity.isAlive()) entity.eat(food);
         });
 
         socket.on(EVENTS.wield, (weapon) => {
+            log.debug(socket.id, EVENTS.wield, weapon);
             if (entity.isAlive()) entity.wield(weapon);
         });
 
         socket.on(EVENTS.wear, (armour) => {
+            log.debug(socket.id, EVENTS.wear, armour);
             if (entity.isAlive()) entity.wear(armour);
         });
 
         socket.on(EVENTS.move, (direction) => {
+            log.debug(socket.id, EVENTS.move, direction);
             if (entity.isAlive()) {
                 const startRoom = server.getRoom(entity.getPos());
                 const newPos = server.moveEntity(entity, direction);
@@ -90,10 +102,12 @@ export class ConnectionServer {
         });
 
         socket.on(EVENTS.dead, () => {
+            log.debug(socket.id, EVENTS.dead, entity);
             entity.kill();
         });
 
         socket.on(EVENTS.disconnect, () => {
+            log.debug(socket.id, EVENTS.disconnect, entity);
             server.deleteEntity(entity);
         });
     }
@@ -116,7 +130,7 @@ export class ConnectionServer {
 
     reset(properties: ConnectionProps = {}): void {
         this.entityServer.reset(properties);
-        // console.log('Server reset');
+        log.debug('Server reset');
     }
 
     private getItemStatesForRoom(position: Location): { [pos: string]: ItemState[] } {
