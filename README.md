@@ -15,6 +15,10 @@ This is the prototype for a distributed multiplayer dungeon crawl game, with a d
 
 `npm install` to get all the code dependencies.
 
+then compile the code:
+
+`npm run build`
+
 ## Running the server
 
 The main server is started with `npm start` and this will fire up a server that you can then point a browser to and start playing.
@@ -22,6 +26,19 @@ The main server is started with `npm start` and this will fire up a server that 
 (You may have to let "node" accept incoming network connections)
 
 However, all monsters in the game are run as separate microservices. You need to set the `ENV` variable `export ROLE="MONSTERS"` before running `npm start` in another shell.
+
+You can start various parts of the service using the following values for `ROLE`:
+
+- `MONSTERS` starts just the monster bots
+- `FRONTEND` starts just the web frontend
+- `BACKEND` starts just the connection server and cave
+- `SERVER` starts the frontend and backend
+
+If no value is set for `ROLE` then the default behaviour is to start everything.
+
+## DEBUGGING
+
+You can set the `ENV` variable `DEBUG` to `true` to switch on verbose logging.
 
 ## Connect to the server from a browser
 
