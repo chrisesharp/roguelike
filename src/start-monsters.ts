@@ -3,23 +3,26 @@ import { Bots } from './monsters/index';
 import { EVENTS } from './common/events';
 import { Bot } from './monsters/bot';
 import { StartOpts } from './server';
+import * as fs from 'fs';
+import * as process from 'process';
 
 const defaultAddr = process.env.server || "http://0.0.0.0:3000";
 
 let deployable: MonsterRoster[] = [];
 
 export type MonsterRoster = {type:string, frequency:number};
-export interface StartMonsterOpts extends StartOpts {
-    monsters?:MonsterRoster[], 
+export interface StartMonsterOpts {
+    monsters:MonsterRoster[], 
 }
 
-export async function startMonsters(options:StartMonsterOpts = {}): Promise<Bot[][]> {
+export async function startMonsters(options:StartOpts = {}): Promise<Bot[][]> {
     const serverAddr = (options.frontend?.host && options.frontend?.port) ? `http://${options.frontend?.host}:${options.frontend?.port}` : defaultAddr;
+    const filepath = options.config || process.env.CONFIG || './src/server/config/monsters.json';
+    const configFile = fs.readFileSync(filepath, 'utf8');
+    const config = JSON.parse(configFile);
 
     return new Promise((resolve) => {
-        if (options?.monsters) {
-            deployable = options?.monsters;
-        }
+        deployable = config.monsters;
         if (deployable.length == 0) {
             Object.entries(Bots).forEach(([type, info]) => {
                 const freq = Math.max(1, Math.round(Math.random() * info.numberOccurring));

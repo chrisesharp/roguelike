@@ -1,17 +1,17 @@
 import { Server, StartOpts } from './server';
 import { BackendServer } from './backend-server';
 import { FrontendServer } from './frontend-server';
-import { startMonsters, StartMonsterOpts, MonsterRoster } from './start-monsters';
+import { startMonsters } from './start-monsters';
 import { Bot } from './monsters/bot';
 import { Logger } from './common/logger';
 const log = new Logger();
 
 export async function start(role?:string, portNum?:string):Promise<Server|Bot[][]> {
     const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json'; 
+    const monsterPath = process.env.MONSTERS || './src/server/config/monsters.json';
     const port = portNum ?? process.env.PORT ?? process.env.npm_package_config_port ?? '3000';
     const host = '0.0.0.0';
-    const monsters = process.env.monsters;
-    const mOpts:StartMonsterOpts = (monsters) ? {monsters: JSON.parse(monsters) as MonsterRoster[], host:host, port:port} : {};
+    const mOpts:StartOpts = {config: monsterPath, host:host, port:port};
 
     log.info(`Running start with ${role}, ${port}`);
     switch(role) {

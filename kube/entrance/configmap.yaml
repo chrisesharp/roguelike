@@ -6,7 +6,7 @@ data:
   entrance.json: |
     {
     "cave_id": 0,
-    "gateways": "http://roguelike/caves",
+    "gateways": "http://entrance-roguelike/caves",
     "width":15,
     "height":10,
     "depth":3,

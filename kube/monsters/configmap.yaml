@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monsters-roguelike
+data:
+  monsters.json: |
+    {
+      "monsters": [
+                  {
+                    "type": "orc", 
+                    "frequency": 5
+                  },
+                  {
+                    "type": "goblin",
+                    "frequency": 5
+                  }
+                ]
+    }

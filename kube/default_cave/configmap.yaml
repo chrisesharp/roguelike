@@ -6,7 +6,7 @@ data:
   defaults.json: |
     {
       "cave_id": 1,
-      "gateways": "http://roguelike/caves",
+      "gateways": "http://entrance-roguelike/caves",
       "width":40,
       "height":40,
       "depth":3,

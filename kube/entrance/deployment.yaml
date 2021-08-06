@@ -18,6 +18,8 @@ spec:
       - name: roguelike
         image: image-registry.openshift-image-registry.svc:5000/roguelike/roguelike:0.0.5
         env:
+          - name: ROLE
+            value: "SERVER"
           - name: CONFIG
             value: "/usr/src/app/config/entrance/entrance.json"
         ports:
