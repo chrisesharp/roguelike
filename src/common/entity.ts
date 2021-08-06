@@ -12,8 +12,8 @@ interface EntitySpecificState {
     hp: number;
     maxHP: number;
     hunger: number;
-    currentArmour?: ItemState; // Could be an explicit interface with wearable: true?
-    currentWeapon?: ItemState; // Could be an explicit interface with wieldable: true?
+    currentArmour: ItemState | undefined; // Could be an explicit interface with wearable: true?
+    currentWeapon: ItemState | undefined; // Could be an explicit interface with wieldable: true?
     inventory: ItemState[];
 }
 
@@ -121,16 +121,16 @@ export class Entity extends Item {
         this.hitPoints = state.hp ?? this.hitPoints;
         this.maxHitPoints = state.maxHP ?? this.maxHitPoints;
         this.hungerLevel = state.hunger ?? this.hungerLevel;
-        this.currentArmour = state.currentArmour ? new Item(state.currentArmour) : this.currentArmour;
-        this.currentWeapon = state.currentWeapon ? new Item(state.currentWeapon) : this.currentWeapon;
+        this.currentArmour = state.currentArmour ? new Item(state.currentArmour) : undefined;
+        this.currentWeapon = state.currentWeapon ? new Item(state.currentWeapon) : undefined;
         this.inventory = state.inventory?.map(i => new Item(i)) || [];
     }
 
     serialize(): EntityState {
         const state: EntitySpecificState = {
             alive: this.alive,
-            currentArmour: this.currentArmour?.serialize(),
-            currentWeapon: this.currentWeapon?.serialize(),
+            currentArmour: this.currentArmour?.serialize() ?? undefined,
+            currentWeapon: this.currentWeapon?.serialize() ?? undefined,
             hp: this.hitPoints,
             maxHP: this.maxHitPoints,
             hunger: this.hungerLevel,

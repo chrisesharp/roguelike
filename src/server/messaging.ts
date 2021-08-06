@@ -22,12 +22,12 @@ export class Messaging {
     }
 
     sendToRoom(room: number, cmd: string, data: unknown): void {
-        log.debug(`messaging.sendToRoom()| ${room}, ${cmd}, ${data}`);
+        log.debug(`messaging.sendToRoom()| ${room}, ${cmd}`, data);
         this.backend.in(String(room)).emit(cmd, data);
     }
 
     sendToAll(cmd: string, data: unknown): void {
-        log.debug(`messaging.sendToAll()| ${cmd}, ${data}`);
+        log.debug(`messaging.sendToAll()| ${cmd}`, data);
         this.backend.emit(cmd, data);
     }
 
@@ -41,12 +41,12 @@ export class Messaging {
     // }
 
     sendMessageToId(id: string, cmd: string, data: unknown): void {
-        log.debug(`messaging.sendToId()| ${id}, ${cmd}, ${data}`);
+        log.debug(`messaging.sendToId()| ${id}, ${cmd}`, data);
         this.backend.to(id).emit(cmd, data);
     }
 
     sendMessageToEntity(entity: Entity, cmd: string, data: unknown): void {
-        log.debug(`messaging.sendToEntity()| ${entity.id}, ${cmd}, ${data}`);
+        log.debug(`messaging.sendToEntity()| ${entity.id}, ${cmd}`, data);
         this.sendMessageToId(entity.id, cmd, data);
     }
 }

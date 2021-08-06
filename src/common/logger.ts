@@ -17,7 +17,7 @@ export class Logger {
         if (this.debugMode) { 
             console.log(`${this.service}| DEBUG | ${message}`);
             objects.forEach( (o) => {
-                console.log(`${this.service}| DEBUG |`,o);
+                console.log(o);
             });
         }
     }

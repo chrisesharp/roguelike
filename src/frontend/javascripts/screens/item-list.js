@@ -48,8 +48,7 @@ export default class ItemListScreen extends Screen {
                 } else if (this.items[i].getName() === this.player.getWeapon()) {
                     suffix = ' (wielding)';
                 }
-                display.drawText(0, row++,  option + ' ' + selectionState + ' ' +
-                    this.items[i].getDescription() + suffix);
+                display.drawText(0, row++,  `${option} ${selectionState} ${this.items[i].getDescription()} ${suffix}`);
             }
         }
     }
