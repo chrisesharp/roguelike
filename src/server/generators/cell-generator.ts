@@ -3,7 +3,7 @@
 
 import * as ROT from 'rot-js';
 import { Tile } from '../../common/tile';
-import { floorTile, nullTile, wallTile } from '../server-tiles';
+import { floorTile, nullTile, wallTile, graniteTile } from '../server-tiles';
 import { emptyMap } from '../../common/map';
 import { MapGenerator } from '.';
 
@@ -26,8 +26,19 @@ export class CellGenerator implements MapGenerator {
             this.generator.create();
         }
         this.generator.create(function(x,y,v) {
-            map[y][x] = v !== 0 ? floorTile : wallTile;
+            map[y][x] = (v !== 0) ? floorTile : wallTile;
         });
+
+        this.sealEdges(map);
         return map;
+    }
+
+    sealEdges(map: Tile[][]): void {
+        for (let y = 0; y < this.height; y++) {
+            map[y][0] =  map[y][this.width - 1] = graniteTile;
+        }
+        for (let x = 0; x < this.width; x++) {
+            map[0][x] = map[this.height - 1][x] = graniteTile;
+        }
     }
 }

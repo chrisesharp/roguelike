@@ -16,6 +16,13 @@ export const wallTile = new Tile({
     description: 'A cave wall'
 });
 
+export const graniteTile = new Tile({
+    char: '#',
+    foreground: 'grey',
+    diggable: false,
+    description: 'A cave wall'
+});
+
 export const stairsUpTile = new Tile({
     char: '<',
     foreground: 'white',
