@@ -507,22 +507,23 @@ describe('monster connects to server', () => {
       if (!bot2started) {
         bot2started = true;
         bot2.startBot({startPos:pos1});
-      }
-      if (bot2started && event === EVENTS.items) {
-        const dropped = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
-        if (dropped.length) {
-          corpseDropped = true;
+      } else {
+        if (event === EVENTS.items) {
+          const dropped = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
+          if (dropped.length) {
+            corpseDropped = true;
+          }
         }
-      }
-      if (bot2started && event === EVENTS.delete) {
-        bot1Stopped = true;
-      }
+        if (event === EVENTS.delete) {
+          bot1Stopped = true;
+        }
 
-      if (bot1Stopped && corpseDropped) {
-        bot1.stop();
-        const corpse = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
-        expect(corpse.length).toBe(1);
-        done();
+        if (bot1Stopped && corpseDropped) {
+          bot1.stop();
+          const corpse = bot1.getClient().getItemsAt(pos1.x, pos1.y, pos1.z).filter(i=>i.getDescription()==="goblin corpse");
+          expect(corpse.length).toBe(1);
+          done();
+        }
       }
     });
     bot1.setBrain(mockBrain1);
