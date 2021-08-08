@@ -157,6 +157,16 @@ export class EntityServer {
         });
     }
 
+    digWall(entity: ServerEntity, pos:Location): boolean {
+        const tile = this.cave.getMap().getTile(pos.x, pos.y, pos.z);
+        if (entity.tryDigging(tile)) {
+            this.cave.getMap().addTile(pos.x, pos.y, pos.z, Tiles.floorTile);
+            return true;
+        }
+        this.sendMessage(entity, MSGTYPE.INF, Messages.NO_DIG());
+        return false;
+    }
+
     moveEntity(entity: ServerEntity, direction: DIRS): Location | undefined {
         const delta = getMovement(direction);
         const position = (entity.isAlive()) ? this.tryMove(entity, delta) : undefined;

@@ -34,4 +34,5 @@ export const Messages = {
     USE_ITEM: (verb: string, item: Item): string => `You are ${verb}ing ${item.describeThe()}.`,
     NO_USE: (verb: string, itemName: string): string => `You don't have any ${itemName} to ${verb}.`,
     TELEPORT: (): string => 'Your world spins as you are teleported to somewhere else!',
+    NO_DIG: (): string => 'You are unable to dig there.',
 }

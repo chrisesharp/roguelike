@@ -1,4 +1,5 @@
 import { Item } from '../../common/item';
+import { Tile } from '../../common/tile';
 import { Location } from "../../common/movement";
 import { Entity, EntityProperties } from '../../common/entity';
 import { MSGTYPE, Messages } from '../messages';
@@ -70,6 +71,11 @@ export class ServerEntity extends Entity {
     tryToHit(other: Entity): boolean {
         this.exertion(1);
         return this.rules.toHitRoll(this, other);
+    }
+
+    tryDigging(tile: Tile): boolean {
+        this.exertion(2);
+        return (this.isWielding() && tile.isDiggable());
     }
 
     hitFor(damage: number): void {

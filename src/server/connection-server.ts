@@ -75,6 +75,16 @@ export class ConnectionServer {
             if (entity.isAlive()) server.dropItem(entity, itemName);
         });
 
+        socket.on(EVENTS.dig, (pos) => {
+            log.debug(socket.id, EVENTS.dig, pos);
+            if (entity.isAlive()) {
+                const dug = server.digWall(entity, pos);
+                if (dug) {
+                    socket.emit(EVENTS.map, server.getMapState(entity));
+                }
+            }
+        });
+
         socket.on(EVENTS.eat, (food) => {
             log.debug(socket.id, EVENTS.eat, food);
             if (entity.isAlive()) entity.eat(food);
