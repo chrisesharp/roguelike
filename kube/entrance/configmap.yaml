@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: server-entrance-roguelike
+data:
+  entrance.json: |
+    {
+    "cave_id": 0,
+    "gateways": "http://entrance-roguelike/caves",
+    "width":15,
+    "height":10,
+    "depth":3,
+    "generator" : "FileGenerator",
+    "maps":"./src/server/config/maps/entrance",
+    "cavepath": "/usr/src/app/config/caves/caves.json"
+    }

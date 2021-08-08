@@ -1,0 +1,10 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: entrance-roguelike
+spec:
+  to:
+    kind: Service
+    name: entrance-roguelike-service
+  port:
+    targetPort: 3000

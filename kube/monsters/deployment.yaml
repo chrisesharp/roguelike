@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monsters-roguelike-deployment
+  labels:
+    app: monsters-roguelike
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: monsters-roguelike
+  template:
+    metadata:
+      labels:
+        app: monsters-roguelike
+    spec:
+      containers:
+      - name: roguelike
+        image: image-registry.openshift-image-registry.svc:5000/roguelike/roguelike:0.0.5
+        env:
+          - name: ROLE
+            value: "MONSTERS"
+          - name: server
+            value: "http://roguelike"
+        # resources:
+        #   requests:
+        #     memory: "64Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        volumeMounts:
+        - name: monsters
+          mountPath: "/usr/src/app/config/monsters"
+          readOnly: true
+      volumes:
+      - name: monsters
+        configMap:
+          name: monsters-roguelike

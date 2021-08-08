@@ -9,6 +9,7 @@ export const EVENTS = {
     map: 'map',
     take: 'take',
     drop: 'drop',
+    dig: 'dig',
     eat: 'eat',
     wear: 'wear',
     wield: 'wield',

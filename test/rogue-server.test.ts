@@ -14,6 +14,7 @@ import { Dagger } from '../dist/server/items/dagger';
 import { Apple } from '../dist/server/items/apple';
 import { Chainmail } from '../dist/server/items/chainmail';
 import { Location } from '../dist/common/movement';
+import { TileState } from '../dist/common/tile';
 import { AddressInfo } from 'net';
 
 let socket: Socket;
@@ -502,6 +503,27 @@ describe('basic socket.io API', () => {
         socket.on(EVENTS.message, (msg: string[]) => {
             expect(msg).toEqual(['You don\'t have any chainmail to wear.']);
             expect(wearer.getAC()).toBe(10);
+            done();
+        });
+    });
+
+    it('should not dig if not armed', (done) => {
+        app.entityServer.cave.getMap().addTile(1,1,0, Tiles.wallTile);
+        socket.emit(EVENTS.dig, {x:1, y:1, z:0});
+        socket.on(EVENTS.message, (msg: string[]) => {
+            expect(msg).toEqual(['You are unable to dig there.']);
+            done();
+        });
+    });
+
+    it('should dig if armed', (done) => {
+        const wielder = app.entityServer.entities.getEntity(socket.id)!;
+        wielder.inventory.push(rock);
+        wielder.currentWeapon = rock;
+        app.entityServer.cave.getMap().addTile(1,1,0, Tiles.wallTile);
+        socket.emit(EVENTS.dig, {x:1, y:1, z:0});
+        socket.on(EVENTS.map, (message: { tiles: TileState[][][] }) => {
+            expect(message.tiles[0][1][1].walkable).toBe(true);
             done();
         });
     });

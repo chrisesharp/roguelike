@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caves-roguelike
+data:
+  caves.json: |
+    [
+      {
+          "id": 0,
+          "name": "Starting Cave",
+          "url": "http://entrance-roguelike"
+      },
+      {
+          "id": 1,
+          "name": "Kreepy Kavern",
+          "url": "http://roguelike"
+      }
+    ]

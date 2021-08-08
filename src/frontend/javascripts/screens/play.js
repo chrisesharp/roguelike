@@ -7,6 +7,7 @@ import  LoseScreen  from './lose.js';
 import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
 import { Glyph } from '../../../common/glyph';
+import { getMovement } from '../../../common/movement';
 
 
 class PlayScreen {
@@ -22,7 +23,7 @@ class PlayScreen {
     enter() {
         this.screenWidth = game.getScreenWidth();
         this.screenHeight = game.getScreenHeight();
-        this.map = game.getMap();
+        // this.map = game.getMap();
         this.player = game.getEntity();
         this.player.setPos(game.getEntrance());
     }
@@ -41,11 +42,11 @@ class PlayScreen {
         this.renderStats();
     }
 
-    getScreenOffsets() {
+    getScreenOffsets(map) {
         let topLeftX = Math.max(0, this.player.getPos().x - (this.screenWidth / 2));
-        topLeftX = Math.min(topLeftX, Math.max(0, this.map.getWidth() - this.screenWidth));
+        topLeftX = Math.min(topLeftX, Math.max(0, map.getWidth() - this.screenWidth));
         let topLeftY = Math.max(0, this.player.getPos().y - (this.screenHeight / 2));
-        topLeftY = Math.min(topLeftY, Math.max(0, this.map.getHeight() - this.screenHeight));
+        topLeftY = Math.min(topLeftY, Math.max(0, map.getHeight() - this.screenHeight));
         return {
             x: topLeftX,
             y: topLeftY
@@ -56,7 +57,7 @@ class PlayScreen {
         let visibleCells = {};
         let level = this.player.getPos().z;
         let viewDist = this.player.getSightRadius();
-        let map = this.map;
+        let map = game.getMap();
         map.getFov(level).compute(
             this.player.getPos().x, this.player.getPos().y, viewDist, 
             function(x, y, radius, visibility) {
@@ -68,7 +69,7 @@ class PlayScreen {
     }
 
     renderMap(display, map, visibleCells, z) {
-        let topLeft = this.getScreenOffsets();
+        let topLeft = this.getScreenOffsets(map);
         for (let x = topLeft.x; x < topLeft.x + this.screenWidth; x++) {
             for (let y = topLeft.y; y < topLeft.y + this.screenHeight; y++) {
                 if (map.isExplored(x, y, z)) {
@@ -139,6 +140,12 @@ class PlayScreen {
 
     move(direction) {
         game.move(direction);
+    }
+
+    dig(direction) {
+        const pos = this.player.getPos();
+        const delta = getMovement(direction);
+        game.client.dig({x:pos.x + delta.x, y:pos.y + delta.y, z:pos.z + delta.z });
     }
 
     gameOver() {

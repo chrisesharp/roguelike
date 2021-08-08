@@ -138,6 +138,10 @@ export class EntityClient {
         this.socket?.emit(EVENTS.drop, item.getName());
     }
 
+    dig(pos: Location): void {
+        this.socket?.emit(EVENTS.dig, pos);
+    }
+
     eat(item: Item): void {
         this.socket?.emit(EVENTS.eat, item.getName());
     }

@@ -1,9 +1,13 @@
 FROM node:14
+RUN adduser node root
 WORKDIR /usr/src/app
-RUN chown node:node /usr/src/app
-COPY --chown=node:node package*.json ./
-RUN npm install
-COPY --chown=node:node . .
-EXPOSE 3000 8080
-CMD [ "npm", "start" ]
+RUN chown node:root /usr/src/app
+COPY --chown=node:root package*.json ./
+COPY --chown=node:root . .
 USER node
+RUN npm install
+RUN npm run build
+RUN chmod -R 775 /usr/src/app
+RUN chown -R node:root /usr/src/app
+EXPOSE 3000
+CMD [ "npm", "start" ]

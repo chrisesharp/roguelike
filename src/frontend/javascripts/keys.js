@@ -33,11 +33,12 @@ export const wHandler = function(input) {
     }
 }
 
+
 const KEYDOWN = [];
-KEYDOWN.push({key:KEYS.VK_LEFT, func: function() { this.move(DIRS.WEST);} });
-KEYDOWN.push({key:KEYS.VK_RIGHT, func: function() { this.move(DIRS.EAST);} });
-KEYDOWN.push({key:KEYS.VK_UP,    func: function() { this.move(DIRS.NORTH);} });
-KEYDOWN.push({key:KEYS.VK_DOWN,  func: function() { this.move(DIRS.SOUTH);} });
+KEYDOWN.push({key:KEYS.VK_LEFT,  func: function(input) { if (input.shiftKey) this.dig(DIRS.WEST); else this.move(DIRS.WEST); } });
+KEYDOWN.push({key:KEYS.VK_RIGHT, func: function(input) { if (input.shiftKey) this.dig(DIRS.EAST); else this.move(DIRS.EAST); } });
+KEYDOWN.push({key:KEYS.VK_UP,    func: function(input) { if (input.shiftKey) this.dig(DIRS.NORTH); else this.move(DIRS.NORTH); } });
+KEYDOWN.push({key:KEYS.VK_DOWN,  func: function(input) { if (input.shiftKey) this.dig(DIRS.SOUTH); else this.move(DIRS.SOUTH); } });
 KEYDOWN.push({key:KEYS.VK_I,     func: function() { this.showItemsSubScreen(Screens.inventoryScreen, this.player.getInventory(),'You are not carrying anything.');} });
 KEYDOWN.push({key:KEYS.VK_D,     func: function() { this.showItemsSubScreen(Screens.dropScreen, this.player.getInventory(),'You have nothing to drop.');} });
 KEYDOWN.push({key:KEYS.VK_E,     func: function() { this.showItemsSubScreen(Screens.eatScreen, this.player.getInventory(),'You have nothing to eat.');} });
