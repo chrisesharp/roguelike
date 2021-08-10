@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: server-entrance-roguelike
+  name: entrance-roguelike
 data:
   entrance.json: |
     {
