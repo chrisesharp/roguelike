@@ -24,6 +24,8 @@ spec:
       {{- include "entrance-roguelike.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
       labels:
         {{- include "entrance-roguelike.labels" . | nindent 8 }}
     spec:

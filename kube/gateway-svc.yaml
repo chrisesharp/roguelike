@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: roguelike
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - roguelike-gateway
+  http:
+  - match:
+    - uri:
+        exact: /caves
+    - uri:
+        exact: /health
+    - uri:
+        exact: /roles
+    route:
+    - destination:
+        host: ui
+        port:
+          number: 3000

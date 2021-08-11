@@ -2,9 +2,9 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: {{ include "entrance-roguelike.name" . }}
+  name: roguelike
   labels:
-    {{- include "entrance-roguelike.labels" . | nindent 4 }}
+    roguelike
 spec:
   source:
     type: Git
