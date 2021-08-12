@@ -1,6 +1,6 @@
 {
     "cave_id": 0,
-    "gateway": "http://cave-gateways/",
+    "gateways": "http://cave-gateways",
     "width":15,
     "height":10,
     "depth":3,

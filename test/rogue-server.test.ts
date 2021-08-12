@@ -30,7 +30,7 @@ const defaultMap = {
     width: 4,
     height: 5,
     entrance: { x: 0, y: 0, z: 0 },
-    gateway: 'test_url',
+    gateways: 'test_url',
 };
 
 interface Keyed<V> {

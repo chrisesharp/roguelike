@@ -32,7 +32,7 @@ const defaultMap = {
   "height":5,
   "depth":3,
   "entrance": {"x":0,"y":0,"z":0},
-  "gateway": "test_url"
+  "gateways": "test_url"
 };
 
 const nullMap = new GameMap({

@@ -6,7 +6,7 @@ data:
   defaults.json: |
     {
       "cave_id": 1,
-      "gateway": "http://entrance/caves",
+      "gateways": "http://entrance/caves",
       "width":40,
       "height":40,
       "depth":3,

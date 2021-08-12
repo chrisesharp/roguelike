@@ -23,6 +23,7 @@ build:
     ## ImageStreamTag publishes to the internal registry
     ## DockerImage publishes to an external registry (referred to by image.name and image.tag)
     kind: ImageStreamTag
+    name: roguelike
     ## Push secret name, used only if kind == "DockerImage"
     pushSecret:
 

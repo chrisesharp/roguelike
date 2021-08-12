@@ -32,7 +32,7 @@ spec:
   output:
     to:
       kind: {{ .Values.build.output.kind }}
-      name: {{ include "entrance-roguelike.imageName" . }}
+      name: {{ .Values.build.output.name }}
   {{- if and (eq .Values.build.output.kind "DockerImage") .Values.build.output.pushSecret }}
     pushSecret:
       name: {{ .Values.build.output.pushSecret }}

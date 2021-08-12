@@ -23,7 +23,7 @@ interface ConnectResponse {
 
 export interface EntityServerTemplate extends CaveTemplate {
     cave_id?: number;
-    gateway?: string;
+    gateways?: string;
 }
 
 export function serializeCaveItems(itemsByLocation: CaveItems): { [pos: string]: ItemState[] } {
@@ -48,13 +48,15 @@ export class EntityServer {
         this.cave = new Cave(template);
         this.repo = new EntityFactory(this);
         this.entities = new State(this.repo);
-        this.connectGateways(template.gateway);
+        this.connectGateways(template.gateways);
     }
 
     private async connectGateways(endpoint = 'test_url'): Promise<void> {
         if (endpoint === 'test_url') {
             return this.connectGatewayEndpoints([endpoint]);
         }
+
+        endpoint =  (process.env.DOMAIN) ? `${endpoint}.${process.env.DOMAIN}/caves` : "http://localhost:3000/caves";
 
         try {
             const result = await axios.get<ConnectResponse[]>(`${endpoint}`, { timeout: 2500 });

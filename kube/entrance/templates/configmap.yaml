@@ -6,7 +6,7 @@ data:
   entrance.json: |
     {
     "cave_id": 0,
-    "gateway": "http://entrance/caves",
+    "gateways": "http://entrance/caves",
     "width":15,
     "height":10,
     "depth":3,
