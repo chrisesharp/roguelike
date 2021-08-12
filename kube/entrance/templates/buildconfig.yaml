@@ -4,7 +4,7 @@ kind: BuildConfig
 metadata:
   name: roguelike
   labels:
-    roguelike
+   {{- include "entrance-roguelike.labels" . | nindent 4 }}
 spec:
   source:
     type: Git
@@ -15,12 +15,9 @@ spec:
     contextDir: {{ .Values.build.contextDir }}
 {{- end }}
   strategy:
-    type: Source
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        namespace: {{ .Values.build.source.namespace }}
-        name: {{ .Values.build.source.name }}
+    type: Docker
+    dockerStrategy:
+
   {{- if .Values.build.pullSecret }}
       pullSecret:
         name: {{ .Values.build.pullSecret }}
@@ -32,7 +29,7 @@ spec:
   output:
     to:
       kind: {{ .Values.build.output.kind }}
-      name: {{ .Values.build.output.name }}
+      name: {{ .Values.image.name }}:{{ .Values.image.tag }}
   {{- if and (eq .Values.build.output.kind "DockerImage") .Values.build.output.pushSecret }}
     pushSecret:
       name: {{ .Values.build.output.pushSecret }}

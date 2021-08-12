@@ -4,7 +4,7 @@ kind: ImageStream
 metadata:
   name: roguelike
   labels:
-    roguelike
+   {{- include "entrance-roguelike.labels" . | nindent 4 }}
 spec:
   lookupPolicy:
     local: true

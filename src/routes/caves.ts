@@ -25,7 +25,7 @@ export default function (app: Application): void {
     router.get('/', function (req, res) {
         caves.forEach(element => {
             if (element?.url) {
-                element.url =  (process.env.DOMAIN) ? `${element.url}.${process.env.DOMAIN}/` : "http://localhost:3000";
+                element.url =  (process.env.DOMAIN) ? `${element.url}${process.env.DOMAIN}/` : "http://localhost:3000";
             }
         });
         res.json(caves);
