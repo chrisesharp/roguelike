@@ -56,7 +56,7 @@ export class EntityServer {
             return this.connectGatewayEndpoints([endpoint]);
         }
 
-        endpoint =  (process.env.DOMAIN) ? `${endpoint}.${process.env.DOMAIN}/caves` : "http://localhost:3000/caves";
+        endpoint =  (process.env.PRODUCTION) ? `${endpoint}${process.env.DOMAIN}/caves` : "http://localhost:3000/caves";
 
         try {
             const result = await axios.get<ConnectResponse[]>(`${endpoint}`, { timeout: 2500 });

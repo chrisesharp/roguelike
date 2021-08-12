@@ -7,7 +7,9 @@ COPY --chown=node:root . .
 USER node
 RUN npm install
 RUN npm run build
-RUN chmod -R 775 /usr/src/app
-RUN chown -R node:root /usr/src/app
+RUN chmod -R 775 /usr/src/app/.cache
+RUN chown -R node:root /usr/src/app/.cache
+RUN chmod -R 775 /usr/src/app/dist
+RUN chown -R node:root /usr/src/app/dist
 EXPOSE 3000
 CMD [ "npm", "start" ]

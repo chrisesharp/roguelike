@@ -19,15 +19,15 @@ const config: CaveConfig = JSON.parse(configFile);
 const cavepath = config.cavepath || './src/server/config/caves.json';
 const caveFile = fs.readFileSync(cavepath, 'utf8');
 const caves: CaveEntry[] = JSON.parse(caveFile);
+caves.forEach(element => {
+    if (element?.url) {
+        element.url =  (process.env.DOMAIN) ? `${element.url}${process.env.DOMAIN}/` : "http://localhost:3000";
+    }
+});
 
 export default function (app: Application): void {
     const router = Router();
     router.get('/', function (req, res) {
-        caves.forEach(element => {
-            if (element?.url) {
-                element.url =  (process.env.DOMAIN) ? `${element.url}${process.env.DOMAIN}/` : "http://localhost:3000";
-            }
-        });
         res.json(caves);
     });
 
