@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: server-roguelike
+  name: cave-roguelike
 data:
   defaults.json: |
     {
       "cave_id": 1,
-      "gateways": "http://entrance-roguelike/caves",
+      "gateways": "http://entrance/caves",
       "width":40,
       "height":40,
       "depth":3,

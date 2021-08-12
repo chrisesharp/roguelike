@@ -8,11 +8,11 @@ data:
       {
           "id": 0,
           "name": "Starting Cave",
-          "url": "http://entrance-roguelike"
+          "url": "http://entrance"
       },
       {
           "id": 1,
           "name": "Kreepy Kavern",
-          "url": "http://roguelike"
+          "url": "http://cave1"
       }
     ]

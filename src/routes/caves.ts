@@ -6,17 +6,28 @@ interface CaveConfig {
     cavepath?: string
 }
 
+type CaveEntry = {
+    id: number,
+    name: string,
+    url: string
+}
+
 const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
 const configFile = fs.readFileSync(filepath, 'utf8');
 const config: CaveConfig = JSON.parse(configFile);
 
 const cavepath = config.cavepath || './src/server/config/caves.json';
 const caveFile = fs.readFileSync(cavepath, 'utf8');
-const caves: unknown = JSON.parse(caveFile);
+const caves: CaveEntry[] = JSON.parse(caveFile);
 
 export default function (app: Application): void {
     const router = Router();
     router.get('/', function (req, res) {
+        caves.forEach(element => {
+            if (element?.url) {
+                element.url =  (process.env.DOMAIN) ? `${element.url}${process.env.DOMAIN}/` : "http://localhost:3000";
+            }
+        });
         res.json(caves);
     });
 
