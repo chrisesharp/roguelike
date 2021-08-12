@@ -17,7 +17,9 @@ spec:
   strategy:
     type: Docker
     dockerStrategy:
-
+      from:
+        kind: "ImageStreamTag"
+        name: "nodejs:14"
   {{- if .Values.build.pullSecret }}
       pullSecret:
         name: {{ .Values.build.pullSecret }}
