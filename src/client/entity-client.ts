@@ -113,6 +113,7 @@ export class EntityClient {
         if (properties && properties.url) {
             this.properties.url = properties.url;
         }
+        log.debug(`Reconnecting to cave at ${this.properties.url}`);
         this.state = new State();
         this.disconnectFromServer();
         this.connectToServer(this.properties);

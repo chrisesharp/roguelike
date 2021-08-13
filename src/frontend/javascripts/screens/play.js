@@ -23,9 +23,7 @@ class PlayScreen {
     enter() {
         this.screenWidth = game.getScreenWidth();
         this.screenHeight = game.getScreenHeight();
-        // this.map = game.getMap();
         this.player = game.getEntity();
-        this.player.setPos(game.getEntrance());
     }
 
     exit() { 

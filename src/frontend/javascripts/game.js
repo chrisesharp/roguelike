@@ -196,7 +196,7 @@ class Game {
     }
 
     switchScreen(screen) {
-        if (this.currentScreen) {
+        if (this.currentScreen && this.currentScreen !== screen) {
             this.currentScreen.exit();
         }
         this.currentScreen = screen;
