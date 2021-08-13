@@ -4,6 +4,8 @@
 
 echo "Removing cavern-service configmap"
 oc delete -f caves-configmap.yaml
+echo "Uninstalling monsters"
+helm uninstall monsters
 echo "Uninstalling cavern-service"
 helm uninstall cavern-service
 echo "Uninstalling entrance"

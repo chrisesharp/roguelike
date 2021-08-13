@@ -12,4 +12,6 @@ echo "Installing cave1"
 helm upgrade cave1 default_cave/ --install
 echo "Installing cave2"
 helm upgrade cave2 default_cave/ --install
+echo "Installing monsters"
+helm upgrade monsters monsters/ --install --set server="http://cave1:3000"
 echo "Finished"

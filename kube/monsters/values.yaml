@@ -108,8 +108,8 @@ deploy:
       value: "MONSTERS"
     - name: CONFIG
       value: "/usr/src/app/config/default/monsters.json"
-    - name: server
-      value: "http://cave1:3000"
+    # - name: server
+    #   value: "http://cave1:3000"
 
   ## Freeform envFrom for the Quarkus app. More information: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
   envFrom:

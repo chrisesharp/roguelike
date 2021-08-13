@@ -89,6 +89,7 @@ export class State {
     }
 
     removeEntity(entity: Entity): void {
+        // TODO delete value by id
         const key = this.posToKey(entity.getPos());
         if (this.entities.get(key)?.id == entity.id) {
             this.entities.delete(key);

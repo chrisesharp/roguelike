@@ -56,6 +56,8 @@ spec:
 {{- end }}
 {{- if .Values.deploy.env }}
           env:
+            - name: server
+              value: {{ .Values.server }}
             {{- tpl (toYaml .Values.deploy.env) . | nindent 12 }}
 {{- end }}
 {{- if .Values.deploy.envFrom }}
