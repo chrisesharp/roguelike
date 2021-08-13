@@ -5,14 +5,5 @@ metadata:
 data:
   defaults.json: |
     {
-      "cave_id": 1,
-      "gateways": "http://entrance/caves",
-      "width":40,
-      "height":40,
-      "depth":3,
-      "itemTypes": {"rock":3,"apple":3,"chainmail":3},
-      "itemTypes1": {"rock":2,"dagger":2},
-      "generator" : "CellGenerator",
-      "regionSize": "20",
       "cavepath": "/usr/src/app/config/caves/caves.json"
     }

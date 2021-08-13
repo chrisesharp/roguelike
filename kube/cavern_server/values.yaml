@@ -108,6 +108,10 @@ deploy:
       value: "BACKEND"
     - name: CONFIG
       value: "/usr/src/app/config/default/defaults.json"
+    - name: DOMAIN
+      value: 3000
+    # - name: DEBUG
+    #   value: 'true'
 
   ## Freeform envFrom for the Quarkus app. More information: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
   envFrom:
