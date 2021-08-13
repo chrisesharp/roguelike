@@ -102,7 +102,7 @@ export class EntityServer {
                 if (corpse) items.push(corpse);
             }
             items.forEach(item => this.dropItem(entity, item));
-            this.messaging.sendToAll(EVENTS.delete, entity.getPos());
+            this.messaging.sendToAll(EVENTS.delete, entity);
             this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
             this.entities.removeEntity(entity);
         }

@@ -89,12 +89,10 @@ export class State {
     }
 
     removeEntity(entity: Entity): void {
-        this.removeEntityAt(entity.getPos());
-    }
-
-    removeEntityAt(pos: Location): void {
-        const key = this.posToKey(pos);
-        this.entities.delete(key);
+        const key = this.posToKey(entity.getPos());
+        if (this.entities.get(key)?.id == entity.id) {
+            this.entities.delete(key);
+        } 
     }
 
     moveEntity(entity: Entity, dest: Location): void {

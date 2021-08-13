@@ -56,9 +56,9 @@ export class EntityClient {
             callback(EVENTS.message, message);
         });
 
-        socket.on(EVENTS.delete, (pos: Location) => {
-            this.state.removeEntityAt(pos);
-            callback(EVENTS.delete, pos);
+        socket.on(EVENTS.delete, (entity: EntityState) => {
+            this.state.removeEntity(new Entity(entity));
+            callback(EVENTS.delete, entity);
         });
 
         socket.on(EVENTS.map, (map: MapState) => {
