@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: entrance-roguelike
+  name: {{ include "entrance-roguelike.name" . }}
 data:
-  entrance.json: |
+  defaults.json: |
     {
     "cave_id": 0,
     "gateways": "http://entrance/caves",

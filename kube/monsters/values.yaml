@@ -87,12 +87,12 @@ deploy:
       # destinationCACertificate:
 
   ## Freeform Liveness Probe. More information: https://docs.openshift.com/container-platform/4.6/applications/application-health.html#application-health-about_application-health
-  livenessProbe:
-    httpGet:
-      path: /health
-      port: ui
+  # livenessProbe:
+  #   httpGet:
+  #     path: /health
+  #     port: ui
   ## If you don't want a livenessProbe, override like this in your values file
-  # livenessProbe: ''
+  livenessProbe: ''
 
   ## Freeform Readiness Probe. More information: https://docs.openshift.com/container-platform/4.6/applications/application-health.html#application-health-about_application-health
   # readinessProbe:
@@ -100,14 +100,16 @@ deploy:
   #     path: /
   #     port: http
   ## If you don't want a readinessProbe, override like this in your values file
-  # readinessProve: ''
+  readinessProbe: ''
 
   ## Freeform env for the Quarkus app. More information: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
   env:
     - name: ROLE
-      value: "SERVER"
+      value: "MONSTERS"
     - name: CONFIG
-      value: "/usr/src/app/config/default/defaults.json"
+      value: "/usr/src/app/config/default/monsters.json"
+    - name: server
+      value: "http://cave1:3000"
 
   ## Freeform envFrom for the Quarkus app. More information: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
   envFrom:
@@ -128,18 +130,12 @@ deploy:
   - name: default
     mountPath: "/usr/src/app/config/default"
     readOnly: true
-  - name: caves
-    mountPath: "/usr/src/app/config/caves"
-    readOnly: true
 
   ## Freeform volumes. More information: https://kubernetes.io/docs/concepts/storage/volumes/
   volumes:
-  # - name: entrance
+  # - name: default
   #   configMap:
   #     name: entrance-roguelike
-  - name: caves
-    configMap:
-      name: caves-roguelike
 
   ## Freeform init containers: More information: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   initContainers:

@@ -14,5 +14,10 @@ data:
           "id": 1,
           "name": "Kreepy Kavern",
           "url": "http://cave1"
+      },
+      {
+          "id": 2,
+          "name": "Dismal Dungeon",
+          "url": "http://cave2"
       }
     ]

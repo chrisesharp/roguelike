@@ -109,7 +109,7 @@ deploy:
     - name: CONFIG
       value: "/usr/src/app/config/default/defaults.json"
     - name: DOMAIN
-      value: 3000
+      value: ":3000"
     # - name: DEBUG
     #   value: 'true'
 

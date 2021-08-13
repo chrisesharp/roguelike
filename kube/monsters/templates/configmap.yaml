@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: monsters-roguelike
+  name: {{ include "monsters-roguelike.name" . }}
 data:
   monsters.json: |
     {

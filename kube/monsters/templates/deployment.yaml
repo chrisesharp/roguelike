@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "entrance-roguelike.name" . }}
+  name: {{ include "monsters-roguelike.name" . }}
   labels:
-    {{- include "entrance-roguelike.labels" . | nindent 4 }}
+    {{- include "monsters-roguelike.labels" . | nindent 4 }}
 {{- if and .Values.build.enabled (eq .Values.build.output.kind "ImageStreamTag") }}
   annotations:
     image.openshift.io/triggers: |-
@@ -11,7 +11,7 @@ metadata:
         {
           "from":{
             "kind":"ImageStreamTag",
-            "name":"{{ include "entrance-roguelike.imageName" . }}"
+            "name":"{{ include "monsters-roguelike.imageName" . }}"
           },
           "fieldPath":"spec.template.spec.containers[0].image"
         }
@@ -21,13 +21,13 @@ spec:
   replicas: {{ .Values.deploy.replicas }}
   selector:
     matchLabels:
-      {{- include "entrance-roguelike.selectorLabels" . | nindent 6 }}
+      {{- include "monsters-roguelike.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
         sidecar.istio.io/inject: "true"
       labels:
-        {{- include "entrance-roguelike.labels" . | nindent 8 }}
+        {{- include "monsters-roguelike.labels" . | nindent 8 }}
     spec:
 {{- if .Values.deploy.initContainers }}
       initContainers:
@@ -35,7 +35,7 @@ spec:
 {{- end }}
       containers:
         - name: {{ .Values.image.name }}
-          image: {{ include "entrance-roguelike.imageName" . }}
+          image: {{ include "monsters-roguelike.imageName" . }}
           ports:
 {{- range .Values.deploy.ports }}
             - name: {{ .name }}
@@ -56,8 +56,6 @@ spec:
 {{- end }}
 {{- if .Values.deploy.env }}
           env:
-            - name: DOMAIN
-              value: {{  .Values.domain }}
             {{- tpl (toYaml .Values.deploy.env) . | nindent 12 }}
 {{- end }}
 {{- if .Values.deploy.envFrom }}
@@ -74,7 +72,7 @@ spec:
       volumes:
         - name: default
           configMap:
-            name: {{ include "entrance-roguelike.name" . }}
+            name: {{ include "monsters-roguelike.name" . }}
 {{- if .Values.deploy.volumes }}
         {{- tpl (toYaml .Values.deploy.volumes) . | nindent 8 }}
 {{- end }}

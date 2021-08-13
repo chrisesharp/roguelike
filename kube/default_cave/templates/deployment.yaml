@@ -70,11 +70,9 @@ spec:
         {{- tpl (toYaml .Values.deploy.extraContainers) . | nindent 8 }}
 {{- end }}
       volumes:
-{{- if .Values.deploy.applicationProperties.enabled }}
-        - name: application-properties
+        - name: default
           configMap:
             name: {{ include "cave-roguelike.name" . }}
-{{- end }}
 {{- if .Values.deploy.volumes }}
         {{- tpl (toYaml .Values.deploy.volumes) . | nindent 8 }}
 {{- end }}

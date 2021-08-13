@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: cave-roguelike
+  name: {{ include "cave-roguelike.name" . }}
 data:
   defaults.json: |
     {
