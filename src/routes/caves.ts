@@ -20,15 +20,12 @@ const serviceAddr = "http://cavern-service:3000";
 const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
 const configFile = fs.readFileSync(filepath, 'utf8');
 const config: CaveConfig = JSON.parse(configFile);
+const re = new RegExp("(^https?:\/\/)|[:.]");
 
 const cavepath = config.cavepath || './src/server/config/caves.json';
 const caveFile = fs.readFileSync(cavepath, 'utf8');
 const caves: CaveEntry[] = JSON.parse(caveFile);
-caves.forEach(element => {
-    if (element?.url) {
-        element.url =  (process.env.DOMAIN) ? `${element.url}${process.env.DOMAIN}` : "http://localhost:3000";
-    }
-});
+caves.map(fixURL);
 
 export default function (app: Application): void {
     const router = Router();
@@ -39,7 +36,11 @@ export default function (app: Application): void {
             axios.get(`${serviceAddr}/caves`,{
                 timeout: 2500
             }).then( (result) => {
-                res.json(result.data);
+                log.debug("Received result:",result.data);
+                const response: CaveEntry[] = result.data;
+                response.map(fixURL);
+                log.debug("Returning processed result:",response);
+                res.json(response);
             }).catch( (err) => {
                 log.debug("something went wrong ", err);
                 res.json(caves);
@@ -51,4 +52,17 @@ export default function (app: Application): void {
     });
 
     app.use("/caves", router);
+}
+
+
+function fixURL(element:CaveEntry): CaveEntry {
+    if (element?.url) {
+        if (process.env.DOMAIN) {
+            const parts = element.url.split(re);
+            element.url =  parts[1] + parts[2] + process.env.DOMAIN;
+        } else {
+            element.url = "http://localhost:3000";
+        }
+    }
+    return element;
 }
