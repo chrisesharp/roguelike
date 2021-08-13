@@ -173,7 +173,7 @@ class PlayScreen {
     }
 
     showLookScreen() {
-        let offsets = this.getScreenOffsets();
+        let offsets = this.getScreenOffsets(game.getMap());
         lookScreen.setup(this.player, offsets.x, offsets.y);
         this.setSubScreen(lookScreen);
     }
