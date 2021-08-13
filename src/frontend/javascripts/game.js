@@ -29,7 +29,6 @@ class Game {
         this.title = " NodeJS Roguelike ";
         this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
-        this.ready = false;
 
         let bindEventToScreen = (event) => {
             window.addEventListener(event, function(e) {
@@ -97,10 +96,7 @@ class Game {
     mapAvailable(map) {
         this.map = new ExplorerMap(map);
         this.map.setupFov();
-        if (!this.ready) {
-            this.ready = true;
-            this.switchScreen(playScreen);
-        }
+        this.switchScreen(playScreen);
     }
 
     getMap() {
