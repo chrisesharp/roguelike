@@ -45,7 +45,7 @@ export default function (app: Application): void {
                 res.json(caves);
             });
         } else {
-            log.debug("Returning local file", serviceAddr);
+            log.debug("Returning local file", caves);
             res.json(caves);   
         }
     });
