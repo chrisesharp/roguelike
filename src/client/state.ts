@@ -2,12 +2,14 @@ import { Entity, EntityState } from '../common/entity';
 import { Item, ItemState } from '../common/item';
 import { Location } from "../common/movement";
 import _ from 'underscore';
+// import {Mutex, MutexInterface} from 'async-mutex';
 
 export class State {
     private entity = new Entity();
     private readonly entities = new Map<string, Entity>();
     private readonly others = new Map<string, Entity>();
     private readonly items = new Map<string, Item[]>();
+    // private mutex: MutexInterface = new Mutex();
 
     constructor() {
         this.addEntity(this.entity);
@@ -89,7 +91,6 @@ export class State {
     }
 
     removeEntity(entity: Entity): void {
-        // TODO delete value by id
         const key = this.posToKey(entity.getPos());
         if (this.entities.get(key)?.id == entity.id) {
             this.entities.delete(key);
