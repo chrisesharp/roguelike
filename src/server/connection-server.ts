@@ -15,9 +15,10 @@ export class ConnectionServer {
     private open = true;
     private readonly messaging: Messaging;
     readonly entityServer: EntityServer;
+    private serverPrefix = process.env.CAVEID || "";
 
     constructor(http: http.Server, template: EntityServerTemplate) {
-        this.messaging = new Messaging(http, socket => this.connection(socket));
+        this.messaging = new Messaging(http, this.serverPrefix, socket => this.connection(socket));
         this.entityServer = new EntityServer(this.messaging, template);
     }
 
@@ -128,13 +129,13 @@ export class ConnectionServer {
     }
 
     enterRoom(socket: Socket, entity: ServerEntity, room: string): void {
-        socket.join(room);
-        socket.broadcast.to(room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
+        socket.join(this.serverPrefix+room);
+        socket.broadcast.to(this.serverPrefix+room).emit(EVENTS.message, Messages.ENTER_ROOM(entity.describeA()));
         socket.emit(EVENTS.items, this.getItemStatesForRoom(entity.getPos()));
     }
 
     leaveRoom(socket: Socket, entity: ServerEntity, room: string): void {
-        socket.leave(room);
+        socket.leave(this.serverPrefix+room);
 
     }
 

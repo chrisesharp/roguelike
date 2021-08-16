@@ -8,9 +8,11 @@ const pingFreqInMs = 250;
 export class Messaging {
     private readonly backend: Server;
     private readonly pinger: NodeJS.Timeout;
+    private readonly prefix: string;
 
-    constructor(http: http.Server, callback: (socket: Socket) => void) {
+    constructor(http: http.Server, prefix: string, callback: (socket: Socket) => void) {
         this.backend = new Server(http);
+        this.prefix = prefix;
         this.backend.on('connection', (socket) => callback(socket));
         this.pinger = setInterval(() => this.backend.emit('ping'), pingFreqInMs);
     }
@@ -22,8 +24,8 @@ export class Messaging {
     }
 
     sendToRoom(room: number, cmd: string, data: unknown): void {
-        log.debug(`messaging.sendToRoom()| ${room}, ${cmd}`, data);
-        this.backend.in(String(room)).emit(cmd, data);
+        log.debug(`messaging.sendToRoom()| ${this.prefix}${room}, ${cmd}`, data);
+        this.backend.in(this.prefix+String(room)).emit(cmd, data);
     }
 
     sendToAll(cmd: string, data: unknown): void {
@@ -37,7 +39,7 @@ export class Messaging {
     }
 
     // sendMessageToRoom(room: string, ...message: string[]): void {
-    //     this.backend.in(room).emit('message', message); 
+    //     this.backend.in(this.prefix+room).emit('message', message); 
     // }
 
     sendMessageToId(id: string, cmd: string, data: unknown): void {
