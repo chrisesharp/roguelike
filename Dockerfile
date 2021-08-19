@@ -8,6 +8,7 @@ USER node
 ENV NO_UPDATE_NOTIFIER true
 RUN npm install
 RUN npm run build
+RUN mkdir -p /usr/src/app/.cache
 RUN chmod -R 775 /usr/src/app/.cache
 RUN chown -R node:root /usr/src/app/.cache
 RUN chmod -R 775 /usr/src/app/dist
