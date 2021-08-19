@@ -2,11 +2,11 @@
     "monsters": [
                     {
                         "type": "orc", 
-                        "frequency": 5
+                        "frequency": 0
                     },
                     {
                         "type": "goblin",
-                        "frequency": 5
+                        "frequency": 1
                     }
                 ]
   }

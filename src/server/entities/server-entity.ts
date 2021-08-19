@@ -4,6 +4,9 @@ import { Location } from "../../common/movement";
 import { Entity, EntityProperties } from '../../common/entity';
 import { MSGTYPE, Messages } from '../messages';
 import { Rules, RulesProperties } from '../rules';
+import { Logger } from '../../common/logger';
+
+const log = new Logger();
 
 export type Messenger = (subject: ServerEntity, msgType: MSGTYPE, msg: string) => void;
 
@@ -33,6 +36,7 @@ export class ServerEntity extends Entity {
     }
 
     handleCollision(other: ServerEntity | Item[]): void {
+        log.debug(`ServerEntity.handleCollision()| ${this.id} hits `,other);
         if (other instanceof Array) {
             const msg = (other.length === 1) ? Messages.SINGLE_ITEM(other[0]) : Messages.MULTIPLE_ITEMS();
             this.messenger(this, MSGTYPE.INF, msg);

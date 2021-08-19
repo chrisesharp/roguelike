@@ -83,6 +83,7 @@ export class EntityServer {
     }
 
     createEntity(id: string, prototype: ServerEntityProperties & { pos: string | Location }): ServerEntity {
+        log.debug(`EntityServer.createEntity()| ${id}`, prototype);
         if (typeof prototype.pos === 'string') {
             prototype.pos = JSON.parse(prototype.pos);
             if (prototype.pos.x == undefined || prototype.pos.y == undefined) {
@@ -95,6 +96,7 @@ export class EntityServer {
     }
 
     deleteEntity(entity: ServerEntity): void {
+        log.debug(`EntityServer.deleteEntity()| ${entity.id}`, entity);
         if (this.entities.getEntity(entity.id)) {
             const items:(Item|string)[] = entity.getInventory().map(i => i.getName());
             if (!entity.isAlive()) {
@@ -121,6 +123,7 @@ export class EntityServer {
     }
 
     sendMessage(entity: ServerEntity, type: MSGTYPE, ...message: string[]): void {
+        log.debug(`EntityServer.sendMessage()| ${type}`,entity, message);
         this.messaging.sendMessageToEntity(entity, EVENTS.message, message);
         if (type === MSGTYPE.UPD) {
             const cmd = (entity.isAlive()) ? EVENTS.update : EVENTS.dead;
@@ -132,6 +135,7 @@ export class EntityServer {
     }
 
     async takeItem(entity: ServerEntity, itemName: string): Promise<void> {
+        log.debug(`EntityServer.takeItem()| ${itemName}`, entity);
         const { x, y, z } = entity.getPos();
         await this.mutex.runExclusive( () => {
             const items = this.cave.getItemsAt(x, y, z);
@@ -148,6 +152,7 @@ export class EntityServer {
     }
 
     async dropItem(entity: ServerEntity, itemName: string | Item): Promise<void> {
+        log.debug(`EntityServer.dropItem()| ${itemName}`, entity);
         await this.mutex.runExclusive( () => {
             const item = (itemName instanceof Item) ? itemName : entity.dropItem(itemName);
             if (item) {
@@ -170,7 +175,11 @@ export class EntityServer {
     }
 
     moveEntity(entity: ServerEntity, direction: DIRS): Location | undefined {
+        log.debug(`EntityServer.moveEntity()| ${direction}`, entity);
         const delta = getMovement(direction);
+        if ((delta.x + delta.y + delta.z) === 0) {
+            return;
+        }
         const position = (entity.isAlive()) ? this.tryMove(entity, delta) : undefined;
         if (position) {
             entity.setPos(position);
@@ -180,6 +189,7 @@ export class EntityServer {
     }
 
     tryMove(entity: ServerEntity, delta: Location): Location | undefined {
+        log.debug(`EntityServer.tryMove()| (${delta.x},${delta.y},${delta.z})`, entity);
         const x = entity.getPos().x + delta.x;
         const y = entity.getPos().y + delta.y;
         const z = entity.getPos().z + delta.z;

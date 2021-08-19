@@ -6,6 +6,9 @@ import { EVENTS } from "../common/events";
 import { EntityClient } from "../client/entity-client";
 import { Entity } from "../common/entity";
 import { GameMap } from "../common/map";
+import { Logger } from '../common/logger';
+
+const log = new Logger();
 
 function distance(pos1:Location, pos2:Location) {
     return Math.abs(pos1.x - pos2.x) + Math.abs(pos1.y - pos2.y);
@@ -25,6 +28,7 @@ export class GoblinBrain extends Brain {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ready(event: string, data?: unknown): void {
+        log.debug(`GoblinBrain.ready()| ${event}`,data);
         switch(event) {
             case EVENTS.dead:
                 this.client.disconnectFromServer();
