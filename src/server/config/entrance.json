@@ -3,7 +3,7 @@
     "gateways": "http://cave-gateways",
     "width":15,
     "height":10,
-    "depth":3,
+    "depth":2,
     "generator" : "FileGenerator",
     "maps":"./src/server/config/maps/entrance"
 }
