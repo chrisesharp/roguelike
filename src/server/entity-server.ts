@@ -131,9 +131,9 @@ export class EntityServer {
         }
     }
 
-    takeItem(entity: ServerEntity, itemName: string): void {
+    async takeItem(entity: ServerEntity, itemName: string): Promise<void> {
         const { x, y, z } = entity.getPos();
-        this.mutex.runExclusive( () => {
+        await this.mutex.runExclusive( () => {
             const items = this.cave.getItemsAt(x, y, z);
             const item = items.find(o => o.getName() === itemName);
             if (item && entity.tryTake(item)) {
@@ -147,8 +147,8 @@ export class EntityServer {
         });
     }
 
-    dropItem(entity: ServerEntity, itemName: string | Item): void {
-        this.mutex.runExclusive( () => {
+    async dropItem(entity: ServerEntity, itemName: string | Item): Promise<void> {
+        await this.mutex.runExclusive( () => {
             const item = (itemName instanceof Item) ? itemName : entity.dropItem(itemName);
             if (item) {
                 const room = this.cave.getRegion(entity.getPos());
