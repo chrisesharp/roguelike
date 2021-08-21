@@ -10,7 +10,6 @@ import { Display, dispOpts } from './display';
 import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
 
-const stats = document.getElementById('stats_pane');
 const hostname = location.host;
 const BASE_URL = 'http://'+hostname;
 const DEFAULT_ROLES = [
@@ -23,6 +22,10 @@ const DEFAULT_CAVE = [
 class Game {
     constructor() {
         this.currentScreen = null;
+        this.nameInput= null;
+        this.roleINput = null;
+        this.caveInput = null;
+
         this.screenWidth =  dispOpts.width,
         this.screenHeight = dispOpts.height - 1,
         this.display = new Display(dispOpts);
@@ -48,48 +51,46 @@ class Game {
         this.switchScreen(loginScreen);
     }
 
-    initRoles(roleField, rolePrototype) {
-        this.roleField = roleField;
-        this.rolePrototype = rolePrototype;
+    initRoles(roleField) {
+        this.origRoleInput = roleField.clone();
         axios.get(`${BASE_URL}/roles`,{
                 timeout: 2500
             }).then( (result) => {
-                game.updateRolesOptions(result.data);
-            }).catch( () => {
-                game.updateRolesOptions(DEFAULT_ROLES);
+                game.updateRolesOptions(result.data, roleField);
+            }).catch( (err) => {
+                console.log("Err:",err);
+                game.updateRolesOptions(DEFAULT_ROLES. roleField);
             });
     }
 
-    initCaves(caveField, caveURL) {
-        this.caveField = caveField;
-        this.caveURL = caveURL;
+    initCaves(caveField) {
+        this.origCaveInput = caveField.clone();
         axios.get(`${BASE_URL}/caves`,{
                 timeout: 2500
             }).then( (result) => {
-                game.updateCaveOptions(result.data);
-            }).catch( () => {
-                game.updateCaveOptions(DEFAULT_CAVE);
+                game.updateCaveOptions(result.data, caveField);
+            }).catch( (err) => {
+                console.log("Err:",err);
+                game.updateCaveOptions(DEFAULT_CAVE, caveField);
             });
     }
 
-    updateRolesOptions(roles) {
-        this.roleField.removeChild(this.rolePrototype);
+    updateRolesOptions(roles, roleField) {
         roles.forEach((role) => {
-            let newRole = this.rolePrototype.cloneNode(false);
-            newRole.value = role.type;
-            newRole.innerHTML = role.name;
-            this.roleField.appendChild(newRole);
+            const newRole = $("<option></option>");
+            newRole.addClass("role");
+            newRole.val(role.type);
+            newRole.text(role.name);
+            roleField.append(newRole)
         });
     }
 
-    updateCaveOptions(caves) {
-        this.caveField.removeChild(this.caveURL);
+    updateCaveOptions(caves, caveField) {
         caves.forEach((cave) => {
-            let newCave = this.caveURL.cloneNode(false);
-            newCave.value = cave.url;
-            newCave.id = cave.id;
-            newCave.innerHTML = cave.name;
-            this.caveField.appendChild(newCave);
+            const newCave = $(`<option id=${cave.id}></option>`);
+            newCave.val(cave.url);
+            newCave.text(cave.name);
+            caveField.append(newCave);
         });
     }
 
@@ -211,52 +212,68 @@ class Game {
     }
 
     updateStats(stats) {
-        game.statsField.innerHTML = stats;
+        game.statsField.find("#hp").text(`HP:${stats.hp}/${stats.max}`);
+        game.statsField.find("#ac").text(`AC:${stats.ac}`);
+        game.statsField.find("#lvl").text(`LVL:${stats.lvl}`);
+        game.statsField.find("#gp").text(`GP:${stats.gp}`);
+        game.statsField.find("#hunger").text(`${stats.hunger}`);
     }
 
     setNameField(nameInput, roleInput, caveInput) {
-        let name = nameInput.value;
-        let role = roleInput.value;
-        let cave = caveInput.value;
-        this.nameField.innerHTML = `${name} (${role})`;
+        let name = nameInput.val();
+        let role = roleInput.val();
+        let cave = caveInput.val();
+        this.nameField.text(`${name} (${role})`);
         return {name:name, role:role, url:cave};
     }
 
     getNameField() {
-        return this.nameField.querySelector("#name_input");
+        return this.nameField.find("#name_input");
     }
 
     getRoleField() {
-        return this.nameField.querySelector("#role_input");
+        return this.nameField.find("#role_input");
     }
     
     getCaveField() {
-        return this.nameField.querySelector("#cave_input");
+        return this.nameField.find("#cave_input");
     }
 
     hideInputFields(...fields) {
         fields.forEach(field => {
-            field.style.display = "none";
+            field.remove();
         });
     }
 
     unhideInputFields() {
-        //TODO reset input fields
+        const name = $('#name');
+        name.text("");
+        const nameInput = $('<input class="centred" id="name_input" type="text" placeholder="Your name" ></input>');
+        if (name.children().length === 0) {
+            name.append(nameInput);
+            name.append(this.origRoleInput);
+            name.append(this.origCaveInput);
+            game.initRoles(this.origRoleInput);
+            game.initCaves(this.origCaveInput);
+        }
     }
 
     updateName() {
-        let nameInput = this.getNameField();
-        let roleInput = this.getRoleField();
-        let caveInput = this.getCaveField();
+        const nameInput = this.getNameField();
+        const roleInput = this.getRoleField();
+        const caveInput = this.getCaveField();
         this.hideInputFields(nameInput, roleInput);
         return this.setNameField(nameInput, roleInput, caveInput);
     }
 
     updateMessages(text) {
-        let newMessage = messagePrototype.cloneNode(false);
-        newMessage.innerHTML = text;
-        this.messageField.appendChild(newMessage);
-        this.messageField.scrollTop = this.messageField.scrollHeight;
+        const newMessage = $('<scroll-page class="message"></scroll-page>').text(text);
+        this.messageField.append(newMessage);
+        this.messageField.scrollTop(this.messageField.prop("scrollHeight"));
+    }
+
+    clearMessageField() {
+        this.messageField.empty();
     }
 
     getScreen() {
@@ -270,25 +287,20 @@ class Game {
 
 export const game = new Game();
 
-const playfield = document.getElementById('playfield');
-const roleField = document.getElementById('role_input');
-const rolePrototype = document.getElementsByClassName('role')[0];
-const caveField = document.getElementById('cave_input');
-const caveURL = document.getElementsByClassName('cave')[0];
-const name = document.getElementById('name');
-const messages = document.getElementById('messages');
-const messagePrototype = document.getElementsByClassName('message')[0];
+const stats = $('#stats_pane');
+const name = $('#name');
+const messages = $('#messages');
 const status1 = document.getElementById('frontend-status');
 const status2 = document.getElementById('backend-status');
 const frontendMonitor = new ServerHealth("Front-End", `${BASE_URL}/health`);
 const backendMonitor = new ServerHealth("Back-End", `${BASE_URL}/health`);
 
-window.onload =  async () => {
-    playfield.appendChild(game.getDisplay().getContainer());
+$(document).ready(() => {
+    $('#playfield').append(game.getDisplay().getContainer());
     frontendMonitor.initServerHealth(status1);
     backendMonitor.initServerHealth(status2);
-    game.initRoles(roleField, rolePrototype);
-    game.initCaves(caveField, caveURL);
-    name.querySelector("#name_input").focus();
+    game.initRoles($('#role_input'));
+    game.initCaves($('#cave_input'));
+    $("#name_input").focus();
     game.start(name, messages, stats);
-};
+});

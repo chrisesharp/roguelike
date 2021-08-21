@@ -41,7 +41,7 @@ select {
 }
 .div-table-col-left {
   display: table-cell;
-  width: 100px;
+  width: 150px;
   text-align: left;
   vertical-align: top;
 }
@@ -53,7 +53,7 @@ select {
 #messages {
   scroll-behavior: smooth;
   display: block;
-  height: 160px;
+  height: 350px;
   overflow-y: scroll;
 }
 

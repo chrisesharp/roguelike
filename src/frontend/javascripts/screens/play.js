@@ -115,8 +115,7 @@ class PlayScreen {
         const lvl = this.player.getLevel();
         const gp = 0;
         const hunger = this.player.getHunger().getDescription();
-        let statsHTML = `<hr>HP: ${hp}/${max}<hr>AC: ${ac}<hr>Lvl: ${lvl}<hr>GP: ${gp}<hr>${hunger}`; 
-        game.updateStats(statsHTML);
+        game.updateStats({hp:hp,max:max,ac:ac, lvl:lvl,gp:gp, hunger:hunger });
     }
 
     handleInput(inputType, inputData) {

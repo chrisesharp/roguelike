@@ -97,5 +97,5 @@ export const dispOpts = {
     //     ",": [120, 30]
     // },
     width: 40,
-    height: 25
+    height: 40
 }

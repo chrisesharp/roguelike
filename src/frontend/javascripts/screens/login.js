@@ -13,6 +13,8 @@ export default class LoginScreen extends Screen {
 
     enter() {
         game.unhideInputFields();
+        game.clearMessageField();
+        this.ended = false;
     }
 
     exit() {
@@ -24,7 +26,7 @@ export default class LoginScreen extends Screen {
     
     render(display) {
         let opts = display.getOptions();
-        let centreX = Math.floor(opts.width/2)
+        let centreX = Math.floor(opts.width*0.7)
         let centreY = Math.floor(opts.height/2)
         let banner = "#";
         let enter = "Press [Enter] to start";
@@ -50,9 +52,9 @@ export default class LoginScreen extends Screen {
     }
     
     handleInput(inputType, inputData) {
-        let name = game.getNameField();
+        let name = game.getNameField().val();
         if (inputType === 'keydown' && isReturnKey(inputData)) {
-            if (name.value) {
+            if (name) {
                 this.exit();
             } else {
                 this.message = "You need a name...";

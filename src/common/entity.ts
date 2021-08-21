@@ -45,7 +45,7 @@ export class Entity extends Item {
         this.alive = properties.alive ?? true;
         this.role = properties.role || 'unknown';
         this.type = properties.type;
-        this.level = properties.level ?? 0;
+        this.level = properties.level ?? 1;
         this.speed = properties.speed ?? 1000;
         this.sight = properties.sight ?? 10;
         this.maxHitPoints = properties.maxHP ?? 1;
