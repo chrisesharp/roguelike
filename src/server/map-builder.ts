@@ -68,7 +68,18 @@ export class MapBuilder extends GameMap {
     }
 
     private newGateways(): Location[][] {
-        return Array.from({ length: this.getDepth() }, () => []);
+        return Array.from({ length: this.getDepth() }, () => []) as Location[][];
+    }
+
+    injectGateways(): void {
+        const level = randomIndexes(this.getDepth())[0];
+        try {
+            const pos = this.getRandomFloorPosition(level);
+            this.gateways[level].push(pos);
+            this.addGateway(pos.x, pos.y, level);
+        } catch (err) {
+            // noop
+        }
     }
 
     getGateways(): Location[][] {
@@ -82,6 +93,7 @@ export class MapBuilder extends GameMap {
             this.setupRegions(z);
         }
         this.connectAllRegionsVertically();
+        this.injectGateways();
         return this;
     }
 
