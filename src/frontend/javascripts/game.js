@@ -174,6 +174,10 @@ class Game {
     }
 
     refresh(event, data) {
+        if (event === EVENTS.reconnect) {
+            this.currentScreen.showTeleportScreen();
+            return;
+        }
         if (event === EVENTS.reset) {
             console.log("Reset called in game");
         }
@@ -234,6 +238,10 @@ class Game {
         fields.forEach(field => {
             field.style.display = "none";
         });
+    }
+
+    unhideInputFields() {
+        //TODO reset input fields
     }
 
     updateName() {

@@ -2,11 +2,9 @@
 
 import Screen from './screen.js';
 import { game } from '../game.js';
-import { isReturnKey } from '../keys.js';
-import { loginScreen } from './login.js';
 import { Color } from '../display.js';
 
-export class LoseScreen extends Screen {
+export class TeleportScreen extends Screen {
     setup(player) {
         this.player = player;
     }
@@ -17,7 +15,7 @@ export class LoseScreen extends Screen {
         let centreX = Math.floor(opts.width/2)
         let height = opts.height;
         let delta = Math.floor(255/height);
-        let message = "You lose!"
+        let message = "Teleporting!"
         let x = (centreX - message.length/2);
         for (let y = 0; y < height; y++) {
             let r = 255 - (y * delta);
@@ -29,12 +27,8 @@ export class LoseScreen extends Screen {
     }
 
     handleInput(inputType, inputData) {
-        if (inputType === 'keydown' && isReturnKey(inputData)) {
-            game.getScreen().setSubScreen(undefined);
-            game.switchScreen(loginScreen);
-            game.refresh();
-        }
+        // do nothing until we land
     }
 };
 
-export const loseScreen = new LoseScreen();
+export const teleportScreen = new TeleportScreen();

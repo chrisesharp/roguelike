@@ -3,7 +3,8 @@
 import { Color } from '../display.js';
 import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
-import  LoseScreen  from './lose.js';
+import { loseScreen }  from './lose.js';
+import { teleportScreen }  from './teleport.js';
 import { pickupScreen } from './item-list.js';
 import { lookScreen } from './target.js';
 import { Glyph } from '../../../common/glyph';
@@ -24,6 +25,7 @@ class PlayScreen {
         this.screenWidth = game.getScreenWidth();
         this.screenHeight = game.getScreenHeight();
         this.player = game.getEntity();
+        this.subScreen = null;
     }
 
     exit() { 
@@ -118,13 +120,6 @@ class PlayScreen {
     }
 
     handleInput(inputType, inputData) {
-        if (this.gameEnded) {
-            if (isReturnKey(inputData)) {
-                game.switchScreen(new LoseScreen());
-            }
-            return;
-        }
-
         if (this.subScreen) {
             this.subScreen.handleInput(inputType, inputData);
             return;
@@ -148,7 +143,19 @@ class PlayScreen {
 
     gameOver() {
         this.gameEnded = true;
+        this.showLoseScreen();
     }
+
+    showTeleportScreen() {
+        teleportScreen.setup(this.player);
+        this.setSubScreen(teleportScreen);
+    }
+
+    showLoseScreen() {
+        loseScreen.setup(this.player);
+        this.setSubScreen(loseScreen);
+    }
+
     setSubScreen(subScreen) {
         this.subScreen = subScreen;
         game.refresh();

@@ -11,6 +11,10 @@ export default class LoginScreen extends Screen {
         this.message = "Enter your name below";
     }
 
+    enter() {
+        game.unhideInputFields();
+    }
+
     exit() {
         if (!this.ended) {
             game.connectToServer();
