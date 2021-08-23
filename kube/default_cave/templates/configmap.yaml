@@ -10,8 +10,9 @@ data:
       "width":40,
       "height":40,
       "depth":3,
-      "itemTypes": {"rock":3,"apple":3,"chainmail":3},
-      "itemTypes1": {"rock":2,"dagger":2},
+      "itemTypes": {"rock":3,"apple":3,"leather":3},
+      "itemTypes1": {"rock":2,"dagger":2, "chainmail":2},
+      "itemTypes2": {"plate":1, "mushroom":3,"sword":1},
       "generator" : "CellGenerator",
       "regionSize": "20",
       "cavepath": "/usr/src/app/config/caves/caves.json"
