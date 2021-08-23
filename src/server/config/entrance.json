@@ -1,6 +1,6 @@
 {
     "cave_id": 0,
-    "gateways": "http://cave-gateways",
+    "gateways": "http://localhost:3000/caves",
     "width":15,
     "height":10,
     "depth":2,
