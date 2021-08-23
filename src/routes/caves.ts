@@ -57,7 +57,10 @@ export default function (app: Application): void {
 
 function fixURL(element:CaveEntry): CaveEntry {
     if (element?.url) {
-        if (process.env.DOMAIN && !element.url.includes(process.env.DOMAIN)) {
+        if (process.env.DOMAIN && element.url.includes(process.env.DOMAIN)) {
+            return element;
+        }
+        if (process.env.DOMAIN) {
             const parts = element.url.split(re);
             element.url =  parts[1] + parts[2] + process.env.DOMAIN;
         } else {
