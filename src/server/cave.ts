@@ -3,6 +3,8 @@ import { Location } from "../common/movement";
 import _ from 'underscore';
 import { ItemFactory, ItemTypeFrequency } from './item-factory';
 import { MapBuilder, MapBuilderTemplate, Position } from './map-builder';
+import { Logger } from '../common/logger';
+const log = new Logger();
 
 export const DEFAULT_SIZE = Object.freeze({
     width: 50,
@@ -86,10 +88,13 @@ export class Cave {
     } 
 
     getGatewayPositions(): Location[][] {
+        log.debug("Cave.getGatewayPositions()");
+        log.debug("Cave.getGatewayPositions() returns ", this.map.getGateways());
         return this.map.getGateways();
     }
 
     addGateway(properties: Gateway): void {
+        log.debug("Cave.addGateway() | ", properties);
         const pos = properties.pos;
         const url = properties.url;
         if (pos && url) {

@@ -52,11 +52,10 @@ export class EntityServer {
     }
 
     private async connectGateways(endpoint = 'test_url'): Promise<void> {
+        log.debug("EntityServer.connectGateways() | ", endpoint);
         if (endpoint === 'test_url') {
             return this.connectGatewayEndpoints([endpoint]);
         }
-
-        endpoint =  (process.env.PRODUCTION) ? `${endpoint}${process.env.DOMAIN}/caves` : "http://localhost:3000/caves";
 
         try {
             const result = await axios.get<ConnectResponse[]>(`${endpoint}`, { timeout: 2500 });
@@ -70,6 +69,7 @@ export class EntityServer {
     }
 
     private connectGatewayEndpoints(urls: string[]): void {
+        log.debug("EntityServer.connectGatewayEndpoints() | ", urls);
         let index = 0;
         if (urls.length > 0) {
             this.cave.getGatewayPositions().forEach(positions => {
