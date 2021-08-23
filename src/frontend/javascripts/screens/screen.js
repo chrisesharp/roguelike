@@ -28,7 +28,7 @@ export default class Screen {
         this.width = opts.width;
         this.height = opts.height;
         let text = this.captionFunction();
-        let offset = this.width / 2 - text.length / 2
+        let offset = Math.floor(this.width / 2 - text.length / 2);
         display.drawText(offset, 0, text);
         for (let i=offset; i < offset + text.length; i++) {
             display.drawText(i, 1, '=');

@@ -48,8 +48,8 @@ class PlayScreen {
         let topLeftY = Math.max(0, this.player.getPos().y - (this.screenHeight / 2));
         topLeftY = Math.min(topLeftY, Math.max(0, map.getHeight() - this.screenHeight));
         return {
-            x: topLeftX,
-            y: topLeftY
+            x: Math.floor(topLeftX),
+            y: Math.floor(topLeftY)
         };
     }
 
