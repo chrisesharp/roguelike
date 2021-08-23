@@ -9,6 +9,7 @@ import { EVENTS } from '../../common/events';
 import { Display, dispOpts } from './display';
 import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
+import { GameMap } from '../../common/map';
 
 const hostname = location.host;
 const BASE_URL = 'http://'+hostname;
@@ -33,9 +34,9 @@ class Game {
         this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
 
-        let bindEventToScreen = (event) => {
+        const bindEventToScreen = (event) => {
             window.addEventListener(event, function(e) {
-                if (game.currentScreen !== null) {
+                if (!$('#chatText').is(":focus") && game.currentScreen !== null) {
                     game.currentScreen.handleInput(event, e);
                 }
             });
@@ -243,6 +244,17 @@ class Game {
         fields.forEach(field => {
             field.remove();
         });
+        this.addChatButton();
+    }
+
+    addChatButton() {
+        const chat = $('.chat');
+        chat.append("<input type='text' id='chatText'>");
+        chat.append("<button type='button' id='chatButton'>Shout!</button>");
+        $('#chatButton').on("click", ()=> {
+            const message = $("#chatText").val();
+            game.client.sendMessage(message);
+        });
     }
 
     unhideInputFields() {
@@ -295,7 +307,7 @@ const status2 = document.getElementById('backend-status');
 const frontendMonitor = new ServerHealth("Front-End", `${BASE_URL}/health`);
 const backendMonitor = new ServerHealth("Back-End", `${BASE_URL}/health`);
 
-$(document).ready(() => {
+$(() => {
     $('#playfield').append(game.getDisplay().getContainer());
     frontendMonitor.initServerHealth(status1);
     backendMonitor.initServerHealth(status2);

@@ -157,6 +157,10 @@ export class EntityClient {
         this.socket?.emit(EVENTS.wear, armour);
     }
 
+    sendMessage(message: string): void {
+        this.socket?.emit(EVENTS.message, message);
+    }
+
     getEntity(): Entity {
         return this.state.getEntity();
     }
