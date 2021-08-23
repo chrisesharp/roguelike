@@ -3,7 +3,7 @@ import { Item, ItemProperties } from '../../common/item';
 export class LeatherArmour extends Item {
     constructor(properties: ItemProperties = {}) {
         super(Object.assign({}, properties, {
-            name: 'leather armpour',
+            name: 'leather armour',
             details: 'thick padded leather',
             wearable: true,
             ac: -1,

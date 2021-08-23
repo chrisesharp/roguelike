@@ -46,6 +46,10 @@ export class ConnectionServer {
     }
 
     registerEventHandlers(socket: Socket, entity: ServerEntity, server: EntityServer): void {
+        socket.on(EVENTS.message, (message) => {
+            const room = socket.rooms.values().next();
+            socket.broadcast.to(this.serverPrefix+room).emit(EVENTS.message, message);
+        });
         socket.on(EVENTS.getEntities, () => {
             log.debug(socket.id, EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
             socket.emit(EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
