@@ -9,7 +9,7 @@ import { EVENTS } from '../../common/events';
 import { OurDisplay, dispOpts } from './display';
 import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
-import { GameMap } from '../../common/map';
+// import { GameMap } from '../../common/map';
 
 const hostname = location.host;
 const BASE_URL = 'http://'+hostname;
@@ -101,6 +101,8 @@ class Game {
             newCave.text(cave.name);
             caveField.append(newCave);
         });
+        const elswhere = $(`<option id="-99">Other URL</option>`);
+        caveField.append(elswhere);
     }
 
     mapAvailable(map) {
@@ -245,7 +247,9 @@ class Game {
     }
     
     getCaveField() {
-        return this.nameField.find("#cave_input");
+        const cave = this.nameField.find("#cave_input").find(':selected');
+        const otherURL = this.nameField.find("#other_url");
+        return (cave.attr('id') < 0) ? otherURL : cave;
     }
 
     hideInputFields(...fields) {
@@ -269,10 +273,23 @@ class Game {
         const name = $('#name');
         name.text("");
         const nameInput = $('<input class="centred" id="name_input" type="text" placeholder="Your name" ></input>');
+        const otherURL = $('<input class="centred" id="other_url" type="text">');
+        otherURL.hide();
+
+        this.origCaveInput.on('change', (event) => {
+            const idx = event.currentTarget.options.selectedIndex;
+            const selected = $(event.currentTarget.options[idx]).attr('id');
+            if (selected < 0) {
+                otherURL.show();
+            } else {
+                otherURL.hide();
+            }
+        });
         if (name.children().length === 0) {
             name.append(nameInput);
             name.append(this.origRoleInput);
             name.append(this.origCaveInput);
+            name.append(otherURL);
             game.initRoles(this.origRoleInput);
             game.initCaves(this.origCaveInput);
         }
