@@ -102,10 +102,12 @@ export class EntityServer {
             if (!entity.isAlive()) {
                 const corpse = entity.dropCorpse();
                 if (corpse) items.push(corpse);
+                this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
+            } else {
+                this.messaging.sendToAll(EVENTS.message, Messages.LEAVE_ROOM(entity.describeA()));
             }
             items.forEach(item => this.dropItem(entity, item));
             this.messaging.sendToAll(EVENTS.delete, entity.serialize());
-            this.messaging.sendToAll(EVENTS.message, Messages.LEFT_DUNGEON(entity.describeA()));
             this.entities.removeEntity(entity);
         }
     }
