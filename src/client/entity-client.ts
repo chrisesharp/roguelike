@@ -58,6 +58,7 @@ export class EntityClient {
 
         socket.on(EVENTS.delete, (entity: EntityState) => {
             this.state.removeEntity(new Entity(entity));
+            this.socket?.emit(EVENTS.getItems);
             callback(EVENTS.delete, entity);
         });
 

@@ -197,7 +197,7 @@ export class EntityServer {
         const tile = this.cave.getMap().getTile(x, y, entity.getPos().z);
 
         const target = this.entities.getEntityAt(newPos);
-        if (target) {
+        if (target && !tile.isGateway()) {
             entity.handleCollision(target);
             return;
         }
