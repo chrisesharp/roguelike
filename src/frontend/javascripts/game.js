@@ -101,7 +101,7 @@ class Game {
             newCave.text(cave.name);
             caveField.append(newCave);
         });
-        const elswhere = $(`<option id="-99">Other URL</option>`);
+        const elswhere = $(`<option id="-99">Other Location</option>`);
         caveField.append(elswhere);
     }
 
