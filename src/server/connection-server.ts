@@ -48,8 +48,15 @@ export class ConnectionServer {
     registerEventHandlers(socket: Socket, entity: ServerEntity, server: EntityServer): void {
         socket.on(EVENTS.message, (message) => {
             const rooms = socket.rooms.values();
-            rooms.next(); // first is sender
-            const room = rooms.next().value;
+            log.debug(socket.id, EVENTS.message);
+            let room;
+            for (const id of rooms) {
+                if (id !== socket.id) {
+                    room = id;
+                    break;
+                }
+            }
+            log.debug(socket.id, EVENTS.message, `forwarding to room ${this.serverPrefix+room}`);
             socket.emit(EVENTS.message, `You shout "${message}"`);
             socket.broadcast.to(this.serverPrefix+room).emit(EVENTS.message, `${entity.describeA()} shouted "${message}"`);
         });
