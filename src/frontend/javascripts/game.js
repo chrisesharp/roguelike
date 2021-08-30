@@ -6,7 +6,7 @@ import ExplorerMap from './explorer-map';
 import { EntityClient } from '../../client/entity-client';
 import { EVENTS } from '../../common/events';
 
-import { Display, dispOpts } from './display';
+import { OurDisplay, dispOpts } from './display';
 import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
 import { GameMap } from '../../common/map';
@@ -50,7 +50,7 @@ class Game {
             const tileset = document.getElementById("tileset");
             dispOpts.tileSet = tileset;
         }
-        this.display = new Display(dispOpts);
+        this.display = new OurDisplay(dispOpts);
     }
 
     start(nameField, messageField, statsField) {

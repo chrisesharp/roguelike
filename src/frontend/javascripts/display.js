@@ -1,6 +1,19 @@
 "use strict";
 
-export { Path, Display, Map, Util, Scheduler, Engine, FOV, KEYS, RNG, Color}  from 'rot-js';
+import { Display } from 'rot-js';
+import { Glyph } from '../../common/glyph';
+
+export { Path, Map, Util, Scheduler, Engine, FOV, KEYS, RNG, Color}  from 'rot-js';
+
+export class OurDisplay extends Display {
+    draw(x, y, glyph, fg=null, bg=null) {
+        if (glyph instanceof Glyph) {
+            super.draw(x, y, glyph.getChar(), glyph.getForeground(), glyph.getBackground());
+        } else {
+            super.draw(x, y, glyph, fg, bg);
+        }
+    }
+}
 
 export const dispOpts = {
     layout: "rect",

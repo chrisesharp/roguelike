@@ -74,11 +74,7 @@ class PlayScreen {
             for (let y = topLeft.y; y < topLeft.y + this.screenHeight; y++) {
                 if (map.isExplored(x, y, z)) {
                     let glyph = this.getColouredGlyph(map, visibleCells, x, y, z);
-                    display.draw(x - topLeft.x,
-                                 y - topLeft.y, 
-                                 glyph.getChar(), 
-                                 glyph.getForeground(), 
-                                 glyph.getBackground());
+                    display.draw(x - topLeft.x, y - topLeft.y, glyph);
                 }
             }
         }
