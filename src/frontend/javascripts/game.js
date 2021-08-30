@@ -313,6 +313,6 @@ $(() => {
     backendMonitor.initServerHealth(status2);
     game.initRoles($('#role_input'));
     game.initCaves($('#cave_input'));
-    $("#name_input").focus();
     game.start(name, messages, stats);
+    $('input[id="name_input"]').trigger('focus');
 });

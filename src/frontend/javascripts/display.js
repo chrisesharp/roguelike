@@ -6,8 +6,8 @@ export { Path, Display, Map, Util, Scheduler, Engine, FOV, KEYS, RNG, Color}  fr
 
 export const dispOpts = {
     layout: "rect",
-    fontFamily: "arial",
-    fontSize: 16,
+    fontFamily: "helvetica",
+    fontSize: 20,
     // tileWidth: 10,
     // tileHeight: 10,
     // tileSet: tileSet,
