@@ -30,7 +30,7 @@ class Game {
         this.screenWidth =  dispOpts.width,
         this.screenHeight = dispOpts.height - 1,
         this.display = null;
-        this.title = " NodeJS Roguelike ";
+        this.title = " Kaverns & Kubernetes ";
         this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
 
