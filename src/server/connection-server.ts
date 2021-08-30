@@ -49,16 +49,13 @@ export class ConnectionServer {
         socket.on(EVENTS.message, (message) => {
             const rooms = socket.rooms.values();
             log.debug(socket.id, EVENTS.message);
-            let room;
-            for (const id of rooms) {
-                if (id !== socket.id) {
-                    room = id;
-                    break;
+            socket.emit(EVENTS.message, `You shout "${message}"`);
+            for (const room of rooms) {
+                if (room !== socket.id) {
+                    log.debug(socket.id, EVENTS.message, `forwarding to room ${room}`);
+                    socket.broadcast.to(room).emit(EVENTS.message, `${entity.describeA()} shouted "${message}"`);
                 }
             }
-            log.debug(socket.id, EVENTS.message, `forwarding to room ${this.serverPrefix+room}`);
-            socket.emit(EVENTS.message, `You shout "${message}"`);
-            socket.broadcast.to(this.serverPrefix+room).emit(EVENTS.message, `${entity.describeA()} shouted "${message}"`);
         });
 
         socket.on(EVENTS.getEntities, () => {
