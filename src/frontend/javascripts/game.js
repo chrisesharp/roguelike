@@ -263,9 +263,17 @@ class Game {
         const chat = $('.chat');
         chat.append("<input type='text' id='chatText'>");
         chat.append("<button type='button' id='chatButton'>Shout!</button>");
+        chat.on('keypress',(e)=>{
+            if(e.which === 13) {
+                const message = $("#chatText").val();
+                game.client.sendMessage(message);
+                $("#chatText").val("");
+            }
+        });
         $('#chatButton').on("click", ()=> {
             const message = $("#chatText").val();
             game.client.sendMessage(message);
+            $("#chatText").val("");
         });
     }
 
