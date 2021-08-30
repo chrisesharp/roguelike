@@ -29,7 +29,7 @@ class Game {
 
         this.screenWidth =  dispOpts.width,
         this.screenHeight = dispOpts.height - 1,
-        this.display = new Display(dispOpts);
+        this.display = null;
         this.title = " NodeJS Roguelike ";
         this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
@@ -43,6 +43,14 @@ class Game {
         };
         bindEventToScreen('keydown');
         bindEventToScreen('keypress');
+    }
+
+    initDisplay() {
+        if (dispOpts.layout === 'tile') {
+            const tileset = document.getElementById("tileset");
+            dispOpts.tileSet = tileset;
+        }
+        this.display = new Display(dispOpts);
     }
 
     start(nameField, messageField, statsField) {
@@ -268,6 +276,7 @@ class Game {
             game.initRoles(this.origRoleInput);
             game.initCaves(this.origCaveInput);
         }
+        $('input[id="name_input"]').trigger('focus');
     }
 
     updateName() {
@@ -308,11 +317,11 @@ const frontendMonitor = new ServerHealth("Front-End", `${BASE_URL}/health`);
 const backendMonitor = new ServerHealth("Back-End", `${BASE_URL}/health`);
 
 $(() => {
-    $('#playfield').append(game.getDisplay().getContainer());
-    frontendMonitor.initServerHealth(status1);
-    backendMonitor.initServerHealth(status2);
-    game.initRoles($('#role_input'));
-    game.initCaves($('#cave_input'));
-    game.start(name, messages, stats);
-    $('input[id="name_input"]').trigger('focus');
+        game.initDisplay();
+        $('#playfield').append(game.getDisplay().getContainer());
+        frontendMonitor.initServerHealth(status1);
+        backendMonitor.initServerHealth(status2);
+        game.initRoles($('#role_input'));
+        game.initCaves($('#cave_input'));
+        game.start(name, messages, stats);
 });

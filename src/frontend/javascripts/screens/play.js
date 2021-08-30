@@ -76,7 +76,9 @@ class PlayScreen {
                     let glyph = this.getColouredGlyph(map, visibleCells, x, y, z);
                     display.draw(x - topLeft.x,
                                  y - topLeft.y, 
-                                 glyph.getChar(), glyph.getForeground(), glyph.getBackground());
+                                 glyph.getChar(), 
+                                 glyph.getForeground(), 
+                                 glyph.getBackground());
                 }
             }
         }
@@ -96,8 +98,11 @@ class PlayScreen {
             }
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);
+            foreground.push(0.9);
         }
-        return new Glyph({"char": glyph.getChar(), "foreground":Color.toRGB(foreground),"background":glyph.getBackground()});
+        const background = Color.fromString(glyph.getBackground());
+        background.push(0.5);
+        return new Glyph({"char": glyph.getChar(), "foreground":Color.toRGB(foreground),"background":Color.toRGB(background)});
     }
 
     renderMessages() {
