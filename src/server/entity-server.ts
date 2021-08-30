@@ -136,6 +136,10 @@ export class EntityServer {
         }
     }
 
+    sendToAll(cmd: string, data: unknown): void {
+        this.messaging.sendToAll(cmd, data);
+    }
+
     async takeItem(entity: ServerEntity, itemName: string): Promise<void> {
         log.debug(`EntityServer.takeItem()| ${itemName}`, entity);
         const { x, y, z } = entity.getPos();
@@ -273,7 +277,11 @@ export class EntityServer {
         this.cave = new Cave(this.template);
     }
 
-    getMessaging(): Messaging {
-        return this.messaging;
+    stop(): void {
+        this.messaging.stop();
     }
+
+    // getMessaging(): Messaging {
+    //     return this.messaging;
+    // }
 }

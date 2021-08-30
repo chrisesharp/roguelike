@@ -412,7 +412,7 @@ describe('monster connects to server', () => {
     mockBrain.setReadyFn( (event:string) => {
       if (event === EVENTS.map) {
         app.entityServer.entities.addEntity("mock", proto);
-        app.entityServer.getMessaging().sendToAll("position",{id:"mock", pos:pos});
+        app.entityServer.sendToAll("position",{id:"mock", pos:pos});
       }
       if (event === EVENTS.entities) {
         if (count) {
