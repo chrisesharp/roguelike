@@ -13,6 +13,8 @@ for (const key in Players) {
   ROLES.push({type:role, name:Role})
 }
 
+ROLES.push({type: "spectator", name: "Spectator"});
+
 export default function (app: Application): void {
   const router = Router();
   router.get('/', function (req, res, next) { // eslint-disable-line @typescript-eslint/no-unused-vars

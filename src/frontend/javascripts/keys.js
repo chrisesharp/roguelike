@@ -62,3 +62,15 @@ export const getHandler = function(inputType, inputData) {
     }
     return handler;
 }
+
+export const getSpectatorHandler = function(inputType, inputData) {
+    let handler = null;
+    if (inputType === 'keydown') {
+        if (inputData.keyCode === KEYS.VK_UP) {
+            handler = { func: function() { this.spectatePreviousPlayer() }};
+        } else if (inputData.keyCode === KEYS.VK_DOWN) {
+            handler = { func: function() { this.spectateNextPlayer() }};
+        }
+    }
+    return handler;
+}

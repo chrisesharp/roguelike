@@ -114,7 +114,15 @@ export class Cave {
         return this.map;
     }
 
-    getItems(level: number): CaveItems {
+    getItems(): CaveItems {
+        return Object.keys(this.items)
+            .reduce<CaveItems>((item, key) => {
+                item[key] = this.items[key];
+                return item;
+            }, {});
+    }
+
+    getItemsForRoom(level: number): CaveItems {
         return Object.keys(this.items)
             .filter(key => key.split(',')[2] === `${level})`)
             .reduce<CaveItems>((item, key) => {

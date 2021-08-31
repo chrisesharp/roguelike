@@ -117,14 +117,14 @@ describe('cave creation', () => {
 
     it('should have 0 number of items', () => {
         const cave = new Cave(template);
-        const items = cave.getItems(0);
+        const items = cave.getItemsForRoom(0);
         expect(Object.keys(items).length).toBe(0);
     });
 
     it('should have 1 number of items', () => {
         template.itemTypes = { "rock": 1 };
         const cave = new Cave(template);
-        const items = cave.getItems(0);
+        const items = cave.getItemsForRoom(0);
         expect(Object.keys(items).length).toBe(1);
     });
 
@@ -132,7 +132,7 @@ describe('cave creation', () => {
         (template as any).itemTypes0 = { 'rock': 1, 'dagger': 1 };
         (template as any).itemTypes1 = { 'rock': 1, 'dagger': 1 };
         const cave = new Cave(template);
-        const items = cave.getItems(0);
+        const items = cave.getItemsForRoom(0);
         let hasDagger = false;
         let hasRock = false;
         Object.keys(items).forEach(key => {
@@ -152,7 +152,7 @@ describe('cave creation', () => {
     it('should have a one dagger where non-existent types requested', () => {
         template.itemTypes = { 'dagger': 1, 'non-thing': 1 };
         const cave = new Cave(template);
-        const items = cave.getItems(0);
+        const items = cave.getItemsForRoom(0);
         let hasDagger = 0;
         Object.keys(items).forEach(key => {
             items[key].forEach(item => {
@@ -167,7 +167,7 @@ describe('cave creation', () => {
     it('should have two daggers and no rocks', () => {
         (template as any).itemTypes0 = { 'rock': 0, 'dagger': 2, 'non-thing': 1 };
         const cave = new Cave(template);
-        const items = cave.getItems(0);
+        const items = cave.getItemsForRoom(0);
         let hasDagger = 0;
         let hasRock = 0;
         Object.keys(items).forEach(key => {

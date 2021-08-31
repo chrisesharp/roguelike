@@ -9,6 +9,7 @@ import { EVENTS } from '../../common/events';
 import { OurDisplay, dispOpts } from './display';
 import { loginScreen } from './screens/login';
 import { playScreen } from './screens/play.js'
+import { spectateScreen } from './screens/spectate.js';
 // import { GameMap } from '../../common/map';
 
 const hostname = location.host;
@@ -33,6 +34,7 @@ class Game {
         this.title = " Kaverns & Kubernetes ";
         this.client = new EntityClient(BASE_URL,(event, data) => {this.refresh(event, data);});
         this.messages = [];
+        this.spectatorOnly = false;
 
         const bindEventToScreen = (event) => {
             window.addEventListener(event, function(e) {
@@ -107,8 +109,12 @@ class Game {
 
     mapAvailable(map) {
         this.map = new ExplorerMap(map);
-        this.map.setupFov();
-        this.switchScreen(playScreen);
+        if (this.spectatorOnly) {
+            this.switchScreen(spectateScreen);
+        } else {
+            this.map.setupFov();
+            this.switchScreen(playScreen);
+        }
     }
 
     getMap() {
@@ -169,6 +175,9 @@ class Game {
             properties = this.updateName();
             properties.type = "player";
         }
+        if (properties.role === "spectator") {
+            this.spectatorOnly = true;
+        }
         backendMonitor.setServerURL(`${properties.url}/health`);
         this.client.connectToServer(properties);
     }
@@ -228,6 +237,10 @@ class Game {
         game.statsField.find("#lvl").text(`LVL:${stats.lvl}`);
         game.statsField.find("#gp").text(`GP:${stats.gp}`);
         game.statsField.find("#hunger").text(`${stats.hunger}`);
+    }
+
+    setStats(stats) {
+        game.statsField.html(stats);
     }
 
     setNameField(nameInput, roleInput, caveInput) {
@@ -328,6 +341,10 @@ class Game {
 
     getEntity() {
         return this.client.getEntity();
+    }
+
+    getOtherEntities() {
+        return this.client.getOtherEntities();
     }
 }
 
