@@ -6,19 +6,26 @@
 [BackendServer]++-1>[ConnectionServer]
 [app]-.-^[Express]
 [hs]-.-^[http.Server]
+
 [Server]^-.-[FrontendServer]
 [Server]^-.-[BackendServer]
 [Server]++-1>[port]
 [Server]++-1>[host]
-[Server]-.->[config]
-[Server]-.-1>[app]
-[Server]-.-1>[hs]
+[Server]-.-1>[config]
+[Server]++-1>[app]
+[Server]++-1>[hs]
+
 
 
 [config]-.-^[<<interface>>;StartOpts]
+[<<interface>>;StartOpts]-.-^[<<interface>>;EntityServerTemplate]
 
 [ConnectionServer]++-1>[EntityServer]
 [EntityServer]++-1>[Messaging]
+[EntityServer]++-1>[State]
+[EntityServer]++-1>[Cave]
+[Cave]++-1>[<<interface>>;Map]
+[MapBuilder]-.-^[<<interface>>;Map]
 
 [Messaging]-.-1>[hs]
 [routes]-.-1>[app]
