@@ -16,18 +16,17 @@ type CaveEntry = {
     url: string
 }
 
-const serviceAddr = "http://cavern-service:3000";
-const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
-const configFile = fs.readFileSync(filepath, 'utf8');
-const config: CaveConfig = JSON.parse(configFile);
 const re = new RegExp("(^https?:\/\/)|[:.]");
 
-const cavepath = config.cavepath || './src/server/config/caves.json';
-const caveFile = fs.readFileSync(cavepath, 'utf8');
-const caves: CaveEntry[] = JSON.parse(caveFile);
-caves.map(fixURL);
-
 export default function (app: Application): void {
+    const serviceAddr = "http://cavern-service:3000";
+    const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
+    const configFile = fs.readFileSync(filepath, 'utf8');
+    const config: CaveConfig = JSON.parse(configFile);
+    const cavepath = config.cavepath || './src/server/config/caves.json';
+    const caveFile = fs.readFileSync(cavepath, 'utf8');
+    const caves: CaveEntry[] = JSON.parse(caveFile);
+    caves.map(fixURL);
     const router = Router();
     router.get('/', function (req, res) {
         log.debug(`Receiving GET...our domain is ${process.env.DOMAIN}`);
@@ -46,14 +45,13 @@ export default function (app: Application): void {
                 res.json(caves);
             });
         } else {
-            log.debug("Returning local file", caves);
+            log.debug(`Returning local file ${filepath}`, caves);
             res.json(caves);   
         }
     });
 
     app.use("/caves", router);
 }
-
 
 function fixURL(element:CaveEntry): CaveEntry {
     if (element?.url) {

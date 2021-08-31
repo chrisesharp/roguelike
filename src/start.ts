@@ -13,7 +13,7 @@ export async function start(role?:string, portNum?:string):Promise<Server|Bot[][
     const host = '0.0.0.0';
     const mOpts:StartOpts = {config: monsterPath, host:host, port:port};
 
-    log.info(`Running start with ${role}, ${port}`);
+    log.info(`Running start with ${role}, ${port} using config file ${filepath}`);
     switch(role) {
         case "MONSTERS":
             log.info("...monsters!");

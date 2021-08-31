@@ -48,6 +48,7 @@ export abstract class Server {
 
 
 function getConfig(config?:string) {
+    log.debug(`getConfig() | ${config}`);
     const filepath = config || process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
     const file = fs.readFileSync(filepath, 'utf8');
     return JSON.parse(file);

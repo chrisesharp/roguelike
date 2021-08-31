@@ -9,6 +9,7 @@ let addr: string;
 let server:Server;
 
 beforeAll(async () => {
+    process.env.CONFIG = "./src/server/config/test.json";
     server = await start("BACKEND", "3001") as Server;
     addr = "http://0.0.0.0:3001";
     console.log("Addr:",addr);
