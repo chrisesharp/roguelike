@@ -37,7 +37,8 @@ describe('basic REST API', () => {
     it('should return roles', (done) => {
         const expected = [
             { type: 'warrior', name: 'Warrior' },
-            { type: 'wizard', name: 'Wizard' }
+            { type: 'wizard', name: 'Wizard' },
+            { type: 'spectator', name: 'Spectator' },
           ];
 
         axios.get(`${addr}/roles`,{

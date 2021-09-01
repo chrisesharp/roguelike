@@ -28,6 +28,11 @@ export class Messaging {
         this.backend.in(this.prefix+String(room)).emit(cmd, data);
     }
 
+    sendToSpectators(cmd: string, data: unknown): void {
+        log.debug(`messaging.sendToSpectators()| ${cmd}`, data);
+        this.backend.in('SPECTATORS').emit(cmd, data);
+    }
+
     sendToAll(cmd: string, data: unknown): void {
         log.debug(`messaging.sendToAll()| ${cmd}`, data);
         this.backend.emit(cmd, data);

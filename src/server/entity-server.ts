@@ -116,8 +116,12 @@ export class EntityServer {
         return this.entities.getEntities();
     }
 
+    getItems(): CaveItems {
+        return this.cave.getItems();
+    }
+
     getItemsForRoom(pos: Location): CaveItems {
-        return this.cave.getItems(this.getRoom(pos));
+        return this.cave.getItemsForRoom(this.getRoom(pos));
     }
 
     getRoom(pos: Location): number {
@@ -149,8 +153,10 @@ export class EntityServer {
             if (item && entity.tryTake(item)) {
                 const room = this.cave.getRegion(entity.getPos());
                 this.cave.removeItem(item);
-                const items = this.cave.getItems(room);
+                const items = this.cave.getItemsForRoom(room);
                 this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
+                this.messaging.sendToSpectators(EVENTS.items, serializeCaveItems(items));
+                this.messaging.sendToSpectators(EVENTS.entities, [entity.serialize()]);
             } else {
                 entity.messenger(entity, MSGTYPE.INF, Messages.CANT_TAKE());
             }
@@ -164,8 +170,10 @@ export class EntityServer {
             if (item) {
                 const room = this.cave.getRegion(entity.getPos());
                 this.cave.addItem(entity.getPos(), item);
-                const items = this.cave.getItems(room);
+                const items = this.cave.getItemsForRoom(room);
                 this.messaging.sendToRoom(room, EVENTS.items, serializeCaveItems(items));
+                this.messaging.sendToSpectators(EVENTS.items, serializeCaveItems(items));
+                this.messaging.sendToSpectators(EVENTS.entities, [entity.serialize()]);
             }
         });
     }
@@ -205,6 +213,7 @@ export class EntityServer {
         const target = this.entities.getEntityAt(newPos);
         if (target && !tile.isGateway()) {
             entity.handleCollision(target);
+            this.messaging.sendToSpectators(EVENTS.entities, [entity.serialize(), target.serialize()]);
             return;
         }
         

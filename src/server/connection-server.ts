@@ -27,6 +27,8 @@ export class ConnectionServer {
             const prototype = socket.handshake.auth as ServerEntityProperties & { pos: string | Location };
             if (!prototype.role) {
                 socket.emit(EVENTS.missingRole);
+            } else if (prototype.role === 'spectator') {
+                this.spectate(this.entityServer, socket);
             } else {
                 this.enter(this.entityServer, socket, prototype);
             }
@@ -151,9 +153,33 @@ export class ConnectionServer {
 
     }
 
+    spectate(server: EntityServer, socket: Socket) : void {
+        this.registerSpectatorEventHandlers(socket, server);
+        socket.emit(EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
+        socket.emit(EVENTS.items, this.getItemStates());
+        socket.join('SPECTATORS');
+    }
+
+    registerSpectatorEventHandlers(socket: Socket, server: EntityServer): void {       
+        socket.on(EVENTS.getMap, () => {
+            log.debug(socket.id, EVENTS.map, server.getMapState());
+            socket.emit(EVENTS.map, server.getMapState());
+        });
+
+        socket.on(EVENTS.getEntities, () => {
+            log.debug(socket.id, EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
+            socket.emit(EVENTS.entities, server.getEntities().map(entity => entity.serialize()));
+        });
+    }
+
     reset(properties: ConnectionProps = {}): void {
         this.entityServer.reset(properties);
         log.debug('Server reset');
+    }
+
+    private getItemStates(): { [pos: string]: ItemState[] } {
+        const items = this.entityServer.getItems();
+        return serializeCaveItems(items);
     }
 
     private getItemStatesForRoom(position: Location): { [pos: string]: ItemState[] } {
