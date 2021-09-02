@@ -104,19 +104,20 @@ deploy:
 
   ## Freeform env for the Quarkus app. More information: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
   env:
-    - name: ROLE
-      value: "BACKEND"
-    - name: CONFIG
-      value: "/usr/src/app/config/default/defaults.json"
-    - name: DOMAIN
-      value: ":3000"
-    # - name: DEBUG
-    #   value: 'true'
-
-  ## Freeform envFrom for the Quarkus app. More information: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
-  envFrom:
-  #  - configMapRef:
-  #      name: special-config
+    caverns:
+      - name: ROLE
+        value: "BACKEND"
+      - name: CONFIG
+        value: "/usr/src/app/config/default/defaults.json"
+      - name: DOMAIN
+        value: ":3000"
+      # - name: DEBUG
+      #   value: 'true'
+    entrance:
+      - name: ROLE
+        value: "SERVER"
+      - name: CONFIG
+        value: "/usr/src/app/config/default/defaults.json"
 
   ## Application properties file for configuring the Quarkus app
   applicationProperties:
@@ -129,21 +130,34 @@ deploy:
       ## Properties go here
   ## Freeform volume mounts. More information: https://kubernetes.io/docs/concepts/storage/volumes/
   volumeMounts:
-  - name: default
-    mountPath: "/usr/src/app/config/default"
-    readOnly: true
-  - name: caves
-    mountPath: "/usr/src/app/config/caves"
+    caverns:
+      - name: default
+        mountPath: "/usr/src/app/config/default"
+        readOnly: true
+      - name: caves
+        mountPath: "/usr/src/app/config/caves"
+        readOnly: true
+    entrance:
+      - name: default
+        mountPath: "/usr/src/app/config/default"
+        readOnly: true
+      - name: caves
+        mountPath: "/usr/src/app/config/caves"
     readOnly: true
 
   ## Freeform volumes. More information: https://kubernetes.io/docs/concepts/storage/volumes/
   volumes:
-  - name: default
-    configMap:
-      name: cavern-service-roguelike
-  - name: caves
-    configMap:
-      name: caves-roguelike
+    caverns:
+      - name: default
+        configMap:
+          name: cavern-service-roguelike
+      - name: caves
+        configMap:
+          name: caves-roguelike
+    entrance:
+      - name: caves
+        configMap:
+          name: caves-roguelike
 
   ## Freeform init containers: More information: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   initContainers:

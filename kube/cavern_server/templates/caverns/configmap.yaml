@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: cavern-service-roguelike
+  # name: {{ include "cavern-service-roguelike.name" . }}
 data:
   defaults.json: |
     {

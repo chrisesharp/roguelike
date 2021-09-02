@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cavern-service-roguelike.name" . }}
+  labels:
+    {{- include "cavern-service-roguelike.labels" . | nindent 4 }}
+{{- if and .Values.build.enabled (eq .Values.build.output.kind "ImageStreamTag") }}
+  annotations:
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from":{
+            "kind":"ImageStreamTag",
+            "name":"{{ include "cavern-service-roguelike.imageName" . }}"
+          },
+          "fieldPath":"spec.template.spec.containers[0].image"
+        }
+      ]
+{{- end }}
+spec:
+  replicas: {{ .Values.deploy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "cavern-service-roguelike.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        {{- include "cavern-service-roguelike.labels" . | nindent 8 }}
+    spec:
+{{- if .Values.deploy.initContainers }}
+      initContainers:
+        {{- tpl (toYaml .Values.deploy.initContainers) . | nindent 8 }}
+{{- end }}
+      containers:
+        - name: {{ .Values.image.name }}
+          image: {{ include "cavern-service-roguelike.imageName" . }}
+          ports:
+{{- range .Values.deploy.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .targetPort }}
+              protocol: {{ .protocol }}
+{{- end }}
+{{- if .Values.deploy.resources }}
+          resources:
+            {{- toYaml .Values.deploy.resources | nindent 12 }}
+{{- end }}
+{{- if .Values.deploy.livenessProbe }}
+          livenessProbe:
+            {{- tpl (toYaml .Values.deploy.livenessProbe) . | nindent 12 }}
+{{- end }}
+{{- if .Values.deploy.readinessProbe }}
+          readinessProbe:
+            {{- tpl (toYaml .Values.deploy.readinessProbe) . | nindent 12 }}
+{{- end }}
+          env:
+            {{- tpl (toYaml .Values.deploy.env.caverns) . | nindent 12 }}
+
+          volumeMounts:
+{{- if .Values.deploy.volumeMounts.caverns }}
+            {{- tpl (toYaml .Values.deploy.volumeMounts.caverns) . | nindent 12 }}
+{{- end }}
+      volumes:
+{{- if .Values.deploy.applicationProperties.enabled }}
+        - name: application-properties
+          configMap:
+            name: {{ include "cavern-service-roguelike.name" . }}
+{{- end }}
+{{- if .Values.deploy.volumes.caverns }}
+        {{- tpl (toYaml .Values.deploy.volumes.caverns) . | nindent 8 }}
+{{- end }}

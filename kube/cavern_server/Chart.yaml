@@ -1,5 +1,5 @@
 apiVersion: v2
-name: cavern-service-roguelike
+name: roguelike
 description: A Helm chart for starting the cavern REST service in Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
