@@ -19,7 +19,8 @@ type CaveEntry = {
 const re = new RegExp("(^https?:\/\/)|[:.]");
 
 export default function (app: Application): void {
-    const serviceAddr = "http://caverns:3000";
+    const serviceName = process.env.SERVICENAME || 'caverns';
+    const serviceAddr = `http://${serviceName}:3000` ;
     const filepath = process.env.CONFIG || process.env.npm_package_config_file || './src/server/config/defaults.json';
     const configFile = fs.readFileSync(filepath, 'utf8');
     const config: CaveConfig = JSON.parse(configFile);

@@ -1,5 +1,5 @@
 {{- define "cavern-service-roguelike.name" -}}
-caverns
+{{ .Values.servicename }}
 {{- end -}}
 
 {{- define "cavern-service-roguelike.labels" -}}

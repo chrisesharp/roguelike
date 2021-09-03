@@ -55,6 +55,8 @@ spec:
             {{- tpl (toYaml .Values.deploy.readinessProbe) . | nindent 12 }}
 {{- end }}
           env:
+            - name: SERVICENAME
+              value: {{ include "cavern-service-roguelike.name" . }}
             {{- tpl (toYaml .Values.deploy.env.caverns) . | nindent 12 }}
 
           volumeMounts:
