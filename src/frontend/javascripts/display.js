@@ -20,6 +20,9 @@ export const dispOpts = {
     fontFamily: "helvetica",
     fontSize: 20,
 
+    fgIntensity: 1.0,
+    bgIntensity: 0.4,
+    
     tileWidth: 10,
     tileHeight: 10,
     tileColorize: true,

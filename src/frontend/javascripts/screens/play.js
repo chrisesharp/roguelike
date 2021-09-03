@@ -1,6 +1,6 @@
 "use strict";
 
-import { Color } from '../display.js';
+import { Color, dispOpts } from '../display.js';
 import { game } from '../game.js';
 import { getHandler, isReturnKey } from '../keys.js';
 import { loseScreen }  from './lose.js';
@@ -10,6 +10,8 @@ import { lookScreen } from './target.js';
 import { Glyph } from '../../../common/glyph';
 import { getMovement } from '../../../common/movement';
 
+const fgIntensity = dispOpts.fgIntensity || 1.0 ;
+const bgIntensity = dispOpts.bgIntensity || 0.4 ;
 
 class PlayScreen {
     constructor() {
@@ -94,10 +96,10 @@ class PlayScreen {
             }
             let itemColour = Color.fromString(glyph.getForeground());
             foreground = Color.interpolate(foreground, itemColour, visibility);
-            foreground.push(0.9);
+            foreground.push(fgIntensity);
         }
         const background = Color.fromString(glyph.getBackground());
-        background.push(0.5);
+        background.push(bgIntensity);
         return new Glyph({"char": glyph.getChar(), "foreground":Color.toRGB(foreground),"background":Color.toRGB(background)});
     }
 
