@@ -66,9 +66,6 @@ spec:
 {{- if .Values.deploy.volumeMounts.entrance }}
             {{- tpl (toYaml .Values.deploy.volumeMounts.entrance) . | nindent 12 }}
 {{- end }}
-{{- if .Values.deploy.extraContainers }}
-        {{- tpl (toYaml .Values.deploy.extraContainers) . | nindent 8 }}
-{{- end }}
       volumes:
         - name: default
           configMap:

@@ -56,23 +56,18 @@ spec:
 {{- end }}
 {{- if .Values.deploy.env }}
           env:
-            {{- tpl (toYaml .Values.deploy.env) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.envFrom }}
-          envFrom:
-            {{- tpl (toYaml .Values.deploy.envFrom) . | nindent 12 }}
+            - name: CAVEID
+              value: {{ .Values.caveid }}/
+            {{- tpl (toYaml .Values.deploy.env.cave) . | nindent 12 }}
 {{- end }}
           volumeMounts:
-{{- if .Values.deploy.volumeMounts }}
-            {{- tpl (toYaml .Values.deploy.volumeMounts) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.extraContainers }}
-        {{- tpl (toYaml .Values.deploy.extraContainers) . | nindent 8 }}
+{{- if .Values.deploy.volumeMounts.cave }}
+            {{- tpl (toYaml .Values.deploy.volumeMounts.cave) . | nindent 12 }}
 {{- end }}
       volumes:
         - name: default
           configMap:
             name: {{ include "cave-roguelike.name" . }}
 {{- if .Values.deploy.volumes }}
-        {{- tpl (toYaml .Values.deploy.volumes) . | nindent 8 }}
+        {{- tpl (toYaml .Values.deploy.volumes.cave) . | nindent 8 }}
 {{- end }}

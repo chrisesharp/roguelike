@@ -46,35 +46,22 @@ spec:
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
 {{- end }}
-{{- if .Values.deploy.livenessProbe }}
-          livenessProbe:
-            {{- tpl (toYaml .Values.deploy.livenessProbe) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.readinessProbe }}
-          readinessProbe:
-            {{- tpl (toYaml .Values.deploy.readinessProbe) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.env }}
+          livenessProbe: ''
+          readinessProbe: ''
+{{- if .Values.deploy.env.monsters }}
           env:
             - name: server
               value: {{ .Values.server }}
-            {{- tpl (toYaml .Values.deploy.env) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.envFrom }}
-          envFrom:
-            {{- tpl (toYaml .Values.deploy.envFrom) . | nindent 12 }}
+            {{- tpl (toYaml .Values.deploy.env.monsters) . | nindent 12 }}
 {{- end }}
           volumeMounts:
-{{- if .Values.deploy.volumeMounts }}
-            {{- tpl (toYaml .Values.deploy.volumeMounts) . | nindent 12 }}
-{{- end }}
-{{- if .Values.deploy.extraContainers }}
-        {{- tpl (toYaml .Values.deploy.extraContainers) . | nindent 8 }}
+{{- if .Values.deploy.volumeMounts.monsters }}
+            {{- tpl (toYaml .Values.deploy.volumeMounts.monsters) . | nindent 12 }}
 {{- end }}
       volumes:
         - name: default
           configMap:
             name: {{ include "monsters-roguelike.name" . }}
-{{- if .Values.deploy.volumes }}
-        {{- tpl (toYaml .Values.deploy.volumes) . | nindent 8 }}
+{{- if .Values.deploy.volumes.monsters }}
+        {{- tpl (toYaml .Values.deploy.volumes.monsters) . | nindent 8 }}
 {{- end }}

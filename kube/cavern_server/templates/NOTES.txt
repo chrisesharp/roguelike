@@ -1,5 +1,5 @@
 {{- if .Release.IsInstall }}
-The Default Cave for Roguelike is building! To view the build logs, run:
+The Entrance Cave for Kaverns & Kubernetes is building! To view the build logs, run:
 
 oc logs bc/{{ include "cavern-service-roguelike.name" . }} --follow
 

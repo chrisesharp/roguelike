@@ -1,5 +1,5 @@
 {{- if .Release.IsInstall }}
-The Default Cave for Roguelike is building! To view the build logs, run:
+A Cave for Roguelike is building! To view the build logs, run:
 
 oc logs bc/{{ include "cave-roguelike.name" . }} --follow
 

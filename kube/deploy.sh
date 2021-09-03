@@ -12,15 +12,9 @@ echo "Installing cavern-service"
 helm upgrade kandk cavern_server/ --install --set domain=${DOMAIN} --set caveid="entrance/" --set servicename=${SVC_NAME}
 
 echo "Installing cave1"
-helm upgrade cave1 default_cave/ --install --set caveid="${CAVE_1}/"
+helm upgrade cave1 default_cave/ --install --set caveid="${CAVE_1}" --set server="http://${CAVE_1}:3000"
 
 echo "Installing cave2"
-helm upgrade cave2 default_cave/ --install --set caveid="${CAVE_2}/"
-
-echo "Installing monsters into cave 1"
-helm upgrade monsters1 monsters/ --install --set server="http://${CAVE_1}:3000"
-
-echo "Installing monsters into cave 1"
-helm upgrade monsters2 monsters/ --install --set server="http://${CAVE_2}:3000"
+helm upgrade cave2 default_cave/ --install --set caveid="${CAVE_2}" --set server="http://${CAVE_2}:3000"
 
 echo "Finished"
